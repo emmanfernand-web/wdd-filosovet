@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Layanan | Filosovet Petshop & Klinik Hewan</title>
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body><header class="site-header">
+  <div class="container nav-wrap">
+<a href="index.html" class="brand"><img src="assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo"> Filosovet</a>
+    <nav class="main-nav">
+      <a href="index.html" >Beranda</a>
+      <a href="daftar-layanan.html" class="active">Layanan</a>
+      <a href="booking.html" >Booking</a>
+      <a href="toko.html" >Toko</a>
+      <a href="profil-pelanggan.html" >Profil</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="keranjang.html" class="cart-link" title="Keranjang">🛒<span class="cart-count" style="display:none">0</span></a>
+      <a href="auth.html" class="btn-login">Masuk</a>
+      <button class="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+<section class="page-hero">
+  <div class="container">
+    <h1>Daftar Layanan Filosovet</h1>
+    <div class="breadcrumb"><a href="index.html">Beranda</a> / Layanan</div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <div class="tabs" id="layananTabs">
+      <button class="tab active" data-tab="medis">🩺 Klinik & Dokter Hewan</button>
+      <button class="tab" data-tab="grooming">✂️ Grooming</button>
+      <button class="tab" data-tab="hotel">🏨 Pet Hotel</button>
+    </div>
+
+    <!-- MEDIS -->
+    <div id="tab-medis" class="tab-panel">
+      <div class="card mb-4">
+        <div class="grid grid-2" style="align-items:center;gap:2.5rem">
+          <div>
+            <h2 class="mb-3">Klinik & Dokter Hewan</h2>
+            <p class="muted mb-3">Tim dokter hewan berpengalaman siap memberikan pelayanan medis menyeluruh, dari pemeriksaan rutin hingga tindakan lanjutan dengan penunjang diagnostik modern.</p>
+            <ul class="mb-4" style="display:grid;gap:.6rem">
+              <li>✅ Pemeriksaan umum & medical check-up</li>
+              <li>✅ Vaksinasi & sterilisasi</li>
+              <li>✅ USG, X-Ray, dan pemeriksaan laboratorium</li>
+              <li>✅ Tindakan medis ringan hingga lanjutan</li>
+              <li>✅ Surat rujukan digital bila diperlukan</li>
+            </ul>
+            <a href="booking.html?layanan=konsultasi" class="btn btn-primary">📅 Booking Konsultasi</a>
+          </div>
+          <div style="background:linear-gradient(135deg,#ecfeff,#f0fdfa);border-radius:20px;height:280px;display:grid;place-items:center;font-size:5rem">🩺</div>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><h3 class="mb-2">Konsultasi Umum</h3><p class="muted" style="font-size:.9rem">Pemeriksaan kesehatan menyeluruh dengan dokter hewan, termasuk resep obat bila diperlukan.</p><div class="product-price mt-2" style="margin-top:.8rem">Rp 150.000</div></div>
+        <div class="card"><h3 class="mb-2">Medical Check-Up</h3><p class="muted" style="font-size:.9rem">Paket pemeriksaan berkala: fisik, darah, dan profil kesehatan lengkap.</p><div class="product-price" style="margin-top:.8rem">Rp 350.000</div></div>
+        <div class="card"><h3 class="mb-2">Vaksinasi</h3><p class="muted" style="font-size:.9rem">Vaksin rutin anjing & kucing dengan kartu vaksin digital.</p><div class="product-price" style="margin-top:.8rem">Rp 180.000</div></div>
+      </div>
+    </div>
+
+    <!-- GROOMING -->
+    <div id="tab-grooming" class="tab-panel" style="display:none">
+      <div class="card mb-4">
+        <div class="grid grid-2" style="align-items:center;gap:2.5rem">
+          <div>
+            <h2 class="mb-3">Grooming Sehat & Anti-Jamur</h2>
+            <p class="muted mb-3">Setiap sesi grooming dimulai dengan pemeriksaan kesehatan awal oleh paramedis. Kami menyediakan grooming sehat dan grooming jamur dengan produk yang aman.</p>
+            <ul class="mb-4" style="display:grid;gap:.6rem">
+              <li>✅ Cek kesehatan sebelum grooming</li>
+              <li>✅ Grooming sehat (mandi, potong kuku, telinga)</li>
+              <li>✅ Grooming jamur dengan shampoo terapeutik</li>
+              <li>✅ Dapat digabung dengan vaksinasi</li>
+            </ul>
+            <a href="booking.html?layanan=grooming" class="btn btn-primary">📅 Booking Grooming</a>
+          </div>
+          <div style="background:linear-gradient(135deg,#ecfeff,#f0fdfa);border-radius:20px;height:280px;display:grid;place-items:center;font-size:5rem">✂️</div>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><h3 class="mb-2">Grooming Kucing</h3><p class="muted" style="font-size:.9rem">Mandi, blow-dry, sisir, potong kuku, bersih telinga.</p><div class="product-price" style="margin-top:.8rem">Rp 120.000</div></div>
+        <div class="card"><h3 class="mb-2">Grooming Anjing &lt;10kg</h3><p class="muted" style="font-size:.9rem">Lengkap dengan pemeriksaan kulit dan kutu dasar.</p><div class="product-price" style="margin-top:.8rem">Rp 150.000</div></div>
+        <div class="card"><h3 class="mb-2">Grooming Jamur</h3><p class="muted" style="font-size:.9rem">Treatment khusus anti-jamur + konsultasi perawatan lanjutan.</p><div class="product-price" style="margin-top:.8rem">Rp 220.000</div></div>
+      </div>
+    </div>
+
+    <!-- HOTEL -->
+    <div id="tab-hotel" class="tab-panel" style="display:none">
+      <div class="card mb-4">
+        <div class="grid grid-2" style="align-items:center;gap:2.5rem">
+          <div>
+            <h2 class="mb-3">Pet Hotel</h2>
+            <p class="muted mb-3">Penitipan hewan dengan fasilitas kandang bersih dan pengawasan paramedis 24 jam. Kondisi hewan diperbarui berkala dan dapat dipantau langsung melalui akun Anda.</p>
+            <ul class="mb-4" style="display:grid;gap:.6rem">
+              <li>✅ Syarat: bebas kutu, bebas cacing, vaksin lengkap</li>
+              <li>✅ Update foto & kondisi harian via website</li>
+              <li>✅ Jadwal makan dan aktivitas teratur</li>
+              <li>✅ Sistem waiting list saat kandang penuh</li>
+            </ul>
+            <a href="booking.html?layanan=hotel" class="btn btn-primary">📅 Ajukan Penitipan</a>
+          </div>
+          <div style="background:linear-gradient(135deg,#ecfeff,#f0fdfa);border-radius:20px;height:280px;display:grid;place-items:center;font-size:5rem">🏨</div>
+        </div>
+      </div>
+      <div class="grid grid-3">
+        <div class="card"><h3 class="mb-2">Kandang Reguler</h3><p class="muted" style="font-size:.9rem">Kandang standar bersih dengan jadwal makan 2x sehari.</p><div class="product-price" style="margin-top:.8rem">Rp 150.000 <span class="muted" style="font-size:.8rem;font-weight:400">/hari</span></div></div>
+        <div class="card"><h3 class="mb-2">Kandang Premium</h3><p class="muted" style="font-size:.9rem">Kandang lebih luas + mainan dan laporan foto harian.</p><div class="product-price" style="margin-top:.8rem">Rp 250.000 <span class="muted" style="font-size:.8rem;font-weight:400">/hari</span></div></div>
+        <div class="card"><h3 class="mb-2">Kandang Suite</h3><p class="muted" style="font-size:.9rem">Fasilitas terbaik dengan kamera monitoring untuk pemilik.</p><div class="product-price" style="margin-top:.8rem">Rp 400.000 <span class="muted" style="font-size:.8rem;font-weight:400">/hari</span></div></div>
+      </div>
+    </div>
+
+    <div class="card text-center" style="margin-top:2.5rem;background:linear-gradient(120deg,var(--primary-light),#fff)">
+      <h3 class="mb-2">Butuh konsultasi cepat?</h3>
+      <p class="muted mb-3">Tim kami siap membantu Anda memilih layanan yang tepat.</p>
+      <a href="auth.html" class="btn btn-primary btn-sm">Hubungi Kami</a>
+    </div>
+  </div>
+</section>
+<script>
+document.querySelectorAll('#layananTabs .tab').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('#layananTabs .tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+    document.getElementById('tab-' + t.dataset.tab).style.display = 'block';
+  });
+});
+</script>
+</body>
+</html><footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="brand" style="color:#fff;margin-bottom:.8rem"><span class="logo">🐾</span> Filosovet</div>
+      <p style="font-size:.9rem;max-width:300px">Petshop & Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
+    </div>
+    <div>
+      <h4>Layanan</h4>
+      <a href="daftar-layanan.html">Klinik & Dokter Hewan</a>
+      <a href="daftar-layanan.html">Grooming</a>
+      <a href="daftar-layanan.html">Pet Hotel</a>
+      <a href="toko.html">Toko & Farmasi</a>
+    </div>
+    <div>
+      <h4>Bantuan</h4>
+      <a href="booking.html">Cara Booking</a>
+      <a href="keranjang.html">Keranjang</a>
+      <a href="profil-pelanggan.html">Akun Saya</a>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <a href="#">📍 Jl. Petshop Raya No. 88</a>
+      <a href="#">📞 (021) 555-0123</a>
+      <a href="#">✉️ halo@filosovet.id</a>
+      <a href="#">🕐 Buka setiap hari 08.00–21.00</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop & Klinik Hewan. Seluruh hak cipta dilindungi.</div>
+</footer>
+<script src="js/main.js"></script>

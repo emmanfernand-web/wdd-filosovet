@@ -1,0 +1,56 @@
+/* ============================================================
+   FILOSOVET — shop.css (Toko & Keranjang)
+   ============================================================ */
+.shop-layout{display:grid;grid-template-columns:250px 1fr;gap:1.8rem;align-items:start}
+.filter-card{position:sticky;top:88px}
+.filter-card h3{margin-bottom:1rem;font-size:1.05rem}
+.filter-group{margin-bottom:1.4rem}
+.filter-check{display:flex;align-items:center;gap:.6rem;padding:.35rem 0;cursor:pointer;font-size:.92rem}
+.filter-check input{width:auto;accent-color:var(--primary)}
+.search-box{display:flex;gap:8px;margin-bottom:1.4rem}
+.search-box input{flex:1}
+
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.25rem}
+.product-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
+  display:flex;flex-direction:column;transition:.25s}
+.product-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
+.product-thumb{height:140px;display:grid;place-items:center;font-size:3rem;
+  background:linear-gradient(135deg,#ecfeff,#f0fdfa)}
+.product-body{padding:1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
+.product-cat{font-size:.72rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.4px}
+.product-name{font-weight:700;font-size:.95rem;line-height:1.35}
+.product-price{font-weight:800;color:var(--primary-dark);font-size:1.05rem}
+.product-stock{font-size:.78rem;font-weight:600}
+.product-stock.low{color:var(--danger)}
+.product-card .btn{margin-top:.4rem}
+
+/* Keranjang */
+.cart-layout{display:grid;grid-template-columns:1.7fr 1fr;gap:1.8rem;align-items:start}
+.cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:1rem;align-items:center;
+  padding:1rem 0;border-bottom:1px solid var(--border)}
+.cart-item:last-child{border-bottom:0}
+.cart-thumb{width:64px;height:64px;border-radius:12px;background:#f0fdfa;display:grid;place-items:center;font-size:1.8rem}
+.cart-name{font-weight:700;font-size:.95rem}
+.cart-price{font-size:.85rem;color:var(--muted)}
+.qty-control{display:flex;align-items:center;gap:.55rem}
+.qty-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:#fff;
+  font-weight:800;cursor:pointer;font-size:1rem;color:var(--primary)}
+.qty-btn:hover{background:var(--primary-light)}
+.qty-num{min-width:24px;text-align:center;font-weight:700}
+.cart-right{text-align:right}
+.line-total{font-weight:800}
+.remove-btn{background:none;border:0;color:var(--danger);cursor:pointer;font-size:.85rem;font-weight:600;margin-top:.3rem}
+
+.summary-card{position:sticky;top:88px}
+.summary-row{display:flex;justify-content:space-between;padding:.5rem 0;font-size:.95rem}
+.summary-row.total{border-top:1px solid var(--border);margin-top:.5rem;padding-top:.9rem;
+  font-weight:800;font-size:1.15rem;color:var(--primary-dark)}
+.promo-row{display:flex;gap:8px;margin:.6rem 0}
+.ship-options{margin:.8rem 0}
+.ship-options label{font-weight:500;font-size:.9rem;display:flex;gap:.5rem;align-items:center;margin-bottom:.4rem}
+.ship-options input{width:auto}
+
+@media (max-width:860px){
+  .shop-layout,.cart-layout{grid-template-columns:1fr}
+  .filter-card,.summary-card{position:static}
+}

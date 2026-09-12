@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Beranda | Filosovet Petshop & Klinik Hewan</title>
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/shop.css">
+</head>
+<body><header class="site-header">
+  <div class="container nav-wrap">
+<a href="index.html" class="brand"><img src="assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo"> Filosovet</a>
+    <nav class="main-nav">
+      <a href="index.html" class="active">Beranda</a>
+      <a href="daftar-layanan.html" >Layanan</a>
+      <a href="booking.html" >Booking</a>
+      <a href="toko.html" >Toko</a>
+      <a href="profil-pelanggan.html" >Profil</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="keranjang.html" class="cart-link" title="Keranjang">🛒<span class="cart-count" style="display:none">0</span></a>
+      <a href="auth.html" class="btn-login">Masuk</a>
+      <button class="hamburger" aria-label="Menu">☰</button>
+    </div>
+  </div>
+</header>
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-inner">
+    <div>
+      <span class="badge badge-teal" style="background:rgba(255,255,255,.15);color:#fff">🐶 Petshop & Klinik Hewan Terpercaya</span>
+      <h1>Rawat Kesehatan & Kebahagiaan Sahabat Berbulu Anda</h1>
+      <p class="lead">Booking dokter hewan, grooming, dan pet hotel secara online. Belanja kebutuhan hewan peliharaan dalam satu platform.</p>
+      <div class="hero-cta">
+        <a href="booking.html" class="btn btn-accent">📅 Booking Layanan</a>
+        <a href="toko.html" class="btn" style="background:#fff;color:var(--primary)">🛍️ Belanja Sekarang</a>
+      </div>
+      <div class="hero-stats">
+        <div><strong>2.500+</strong><span>Pasien Hewan</span></div>
+        <div><strong>4</strong><span>Lini Layanan</span></div>
+        <div><strong>4.9★</strong><span>Rating Pelanggan</span></div>
+      </div>
+    </div>
+    <div class="hero-art">🐕‍🦺🐈</div>
+  </div>
+</section>
+
+<!-- LAYANAN -->
+<section class="section">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Layanan Kami</span>
+      <h2>Empat Lini Layanan Terpadu</h2>
+      <p class="muted">Seluruh kebutuhan perawatan hewan peliharaan Anda tersedia dalam satu tempat, didukung tenaga profesional.</p>
+    </div>
+    <div class="grid grid-4">
+      <div class="card reveal">
+        <div class="card-icon">🩺</div>
+        <h3 class="mb-2">Klinik & Dokter Hewan</h3>
+        <p class="muted mb-3" style="font-size:.92rem">Pemeriksaan, diagnosis, USG, X-Ray, lab, hingga tindakan medis ringan hingga lanjutan.</p>
+        <a href="daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">✂️</div>
+        <h3 class="mb-2">Grooming</h3>
+        <p class="muted mb-3" style="font-size:.92rem">Grooming sehat & anti-jamur dengan pemeriksaan kesehatan awal serta vaksinasi.</p>
+        <a href="daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">🏨</div>
+        <h3 class="mb-2">Pet Hotel</h3>
+        <p class="muted mb-3" style="font-size:.92rem">Penitipan hewan dengan standar kesehatan ketat: bebas kutu, bebas cacing, vaksin lengkap.</p>
+        <a href="daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+      </div>
+      <div class="card reveal">
+        <div class="card-icon">💊</div>
+        <h3 class="mb-2">Toko & Farmasi</h3>
+        <p class="muted mb-3" style="font-size:.92rem">Makanan, obat-obatan, skincare, dan aksesoris — tersedia juga pembelian online.</p>
+        <a href="toko.html" class="btn btn-outline btn-sm">Belanja →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRODUK UNGGULAN -->
+<section class="section" style="background:#fff;border-top:1px solid var(--border);border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Produk Unggulan</span>
+      <h2>Paling Sering Dibeli</h2>
+    </div>
+    <div class="product-grid" id="featuredProducts"></div>
+    <div class="text-center mt" style="margin-top:2rem">
+      <a href="toko.html" class="btn btn-primary">Lihat Semua Produk →</a>
+    </div>
+  </div>
+</section>
+
+<!-- KENAPA KAMI -->
+<section class="section">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Kenapa Filosovet</span>
+      <h2>Perawatan Profesional yang Mudah Diakses</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card reveal text-center">
+        <div class="card-icon" style="margin:0 auto 1rem">📅</div>
+        <h3 class="mb-2">Booking Real-Time</h3>
+        <p class="muted" style="font-size:.92rem">Cek ketersediaan slot dokter, grooming, dan kandang pet hotel secara online tanpa antre.</p>
+      </div>
+      <div class="card reveal text-center">
+        <div class="card-icon" style="margin:0 auto 1rem">📋</div>
+        <h3 class="mb-2">Rekam Medis Digital</h3>
+        <p class="muted" style="font-size:.92rem">Riwayat pemeriksaan, vaksin, dan booking tersimpan rapi dan dapat diakses kapan pun.</p>
+      </div>
+      <div class="card reveal text-center">
+        <div class="card-icon" style="margin:0 auto 1rem">⚡</div>
+        <h3 class="mb-2">Notifikasi Otomatis</h3>
+        <p class="muted" style="font-size:.92rem">Konfirmasi booking, pengingat vaksin, dan pembaruan status layanan langsung ke akun Anda.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONI -->
+<section class="section" style="background:#fff;border-top:1px solid var(--border)">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="sec-tag">Testimoni</span>
+      <h2>Apa Kata Para Pawrents</h2>
+    </div>
+    <div class="grid grid-3">
+      <div class="card reveal">
+        <div class="mb-2" style="color:var(--accent)">★★★★★</div>
+        <p class="mb-3" style="font-size:.95rem">"Booking dokter online gampang banget, slot langsung kelihatan. Kucing saya ditangani dengan sangat hati-hati."</p>
+        <strong>Rania P.</strong> <span class="muted" style="font-size:.85rem">— pemilik kucing</span>
+      </div>
+      <div class="card reveal">
+        <div class="mb-2" style="color:var(--accent)">★★★★★</div>
+        <p class="mb-3" style="font-size:.95rem">"Anjing saya menginap 5 hari di pet hotel. Kondisi diperbarui tiap hari lewat website. Sangat tenang!"</p>
+        <strong>Dimas A.</strong> <span class="muted" style="font-size:.85rem">— pemilik anjing</span>
+      </div>
+      <div class="card reveal">
+        <div class="mb-2" style="color:var(--accent)">★★★★★</div>
+        <p class="mb-3" style="font-size:.95rem">"Belanja makanan dan obat cukup dari rumah, stok selalu lengkap dan cepat sampai."</p>
+        <strong>Sinta W.</strong> <span class="muted" style="font-size:.85rem">— pelanggan toko</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <h2 class="mb-2" style="font-size:1.7rem">Siap Memberikan yang Terbaik untuk Sahabat Anda?</h2>
+      <p class="mb-4" style="opacity:.92">Daftar sekarang dan jadwalkan kunjungan pertama Anda.</p>
+      <a href="auth.html" class="btn btn-accent">Buat Akun Gratis</a>
+      &nbsp;
+      <a href="booking.html" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Booking Langsung</a>
+    </div>
+  </div>
+</section>
+<script>
+// Produk unggulan (subset dari cart.js)
+document.addEventListener('DOMContentLoaded', () => {
+  const featured = PRODUCTS.slice(0, 4);
+  const grid = document.getElementById('featuredProducts');
+  grid.innerHTML = featured.map(p => `
+    <div class="product-card">
+      <div class="product-thumb">${p.icon}</div>
+      <div class="product-body">
+        <span class="product-cat">${p.cat}</span>
+        <div class="product-name">${p.name}</div>
+        <div class="product-price">${rupiah(p.price)}</div>
+        <button class="btn btn-primary btn-sm" onclick="addToCart(${p.id})">+ Keranjang</button>
+      </div>
+    </div>`).join('');
+});
+</script>
+<script src="js/cart.js"></script>
+</body>
+</html><footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="brand" style="color:#fff;margin-bottom:.8rem"><span class="logo">🐾</span> Filosovet</div>
+      <p style="font-size:.9rem;max-width:300px">Petshop & Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
+    </div>
+    <div>
+      <h4>Layanan</h4>
+      <a href="daftar-layanan.html">Klinik & Dokter Hewan</a>
+      <a href="daftar-layanan.html">Grooming</a>
+      <a href="daftar-layanan.html">Pet Hotel</a>
+      <a href="toko.html">Toko & Farmasi</a>
+    </div>
+    <div>
+      <h4>Bantuan</h4>
+      <a href="booking.html">Cara Booking</a>
+      <a href="keranjang.html">Keranjang</a>
+      <a href="profil-pelanggan.html">Akun Saya</a>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <a href="#">📍 Jl. Petshop Raya No. 88</a>
+      <a href="#">📞 (021) 555-0123</a>
+      <a href="#">✉️ halo@filosovet.id</a>
+      <a href="#">🕐 Buka setiap hari 08.00–21.00</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop & Klinik Hewan. Seluruh hak cipta dilindungi.</div>
+</footer>
+<script src="js/main.js"></script>

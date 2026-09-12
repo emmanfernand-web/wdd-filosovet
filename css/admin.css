@@ -1,0 +1,55 @@
+/* ============================================================
+   FILOSOVET — admin.css (Dashboard Admin)
+   ============================================================ */
+.admin-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
+.admin-sidebar{background:#0f172a;color:#cbd5e1;padding:1.5rem 1rem;position:sticky;top:0;height:100vh;overflow-y:auto}
+.admin-sidebar .brand{color:#fff;margin-bottom:1.8rem;font-size:1.1rem}
+.admin-sidebar .brand .logo{width:34px;height:34px;font-size:1.1rem}
+.admin-menu a{display:flex;gap:.7rem;align-items:center;padding:.65rem .9rem;border-radius:10px;
+  color:#cbd5e1;font-size:.92rem;font-weight:500;margin-bottom:.25rem}
+.admin-menu a:hover{background:#1e293b;color:#fff}
+.admin-menu a.active{background:var(--primary);color:#fff}
+.admin-main{padding:1.8rem 2.2rem;background:var(--bg)}
+.admin-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.6rem}
+.admin-topbar h1{font-size:1.4rem}
+.admin-user{display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:.9rem}
+.avatar{width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;
+  display:grid;place-items:center;font-weight:800}
+
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-bottom:1.6rem}
+.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.stat-card .stat-label{font-size:.82rem;color:var(--muted);font-weight:600}
+.stat-card .stat-value{font-size:1.7rem;font-weight:800;margin:.15rem 0}
+.stat-card .stat-delta{font-size:.8rem;font-weight:700}
+.stat-delta.up{color:#15803d}.stat-delta.down{color:var(--danger)}
+
+.alert-banner{background:var(--danger-bg);border:1px solid #fecaca;color:#991b1b;border-radius:var(--radius);
+  padding:1rem 1.3rem;display:flex;gap:.9rem;align-items:center;margin-bottom:1.4rem;font-weight:600;font-size:.92rem}
+.alert-banner .bell{font-size:1.3rem}
+
+.panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.4rem}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.panel-head h3{font-size:1.05rem}
+.panel-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:1.4rem}
+
+.bar-chart{display:flex;align-items:flex-end;gap:10px;height:180px;padding-top:.5rem}
+.bar{flex:1;background:linear-gradient(180deg,#14b8a6,var(--primary));border-radius:6px 6px 0 0;
+  position:relative;min-height:6px}
+.bar span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--muted)}
+.bar:hover{opacity:.85}
+.chart-wrap{padding-bottom:1.8rem}
+
+.status-chip{padding:.2rem .65rem;border-radius:999px;font-size:.74rem;font-weight:700}
+.status-selesai{background:#dcfce7;color:#166534}
+.status-proses{background:#fef3c7;color:#92400e}
+.status-menunggu{background:#dbeafe;color:#1d4ed8}
+.status-batal{background:var(--danger-bg);color:var(--danger)}
+
+@media (max-width:900px){
+  .admin-layout{grid-template-columns:1fr}
+  .admin-sidebar{position:static;height:auto;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+  .admin-menu{display:flex;flex-wrap:wrap;gap:.3rem}
+  .stat-grid{grid-template-columns:repeat(2,1fr)}
+  .panel-grid{grid-template-columns:1fr}
+}
+@media (max-width:560px){.stat-grid{grid-template-columns:1fr}}
