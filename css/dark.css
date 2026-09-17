@@ -1,0 +1,192 @@
+/* ============================================================
+   FILOSOVET — dark.css (High Contrast Dark Palette & Override)
+   ============================================================ */
+:root.dark-mode, 
+body.dark-mode {
+  --bg: #0b1329 !important;
+  --surface: #172036 !important;
+  --text: #f1f5f9 !important;
+  --muted: #94a3b8 !important;
+  --border: #283553 !important;
+  --primary-light: rgba(20, 184, 166, 0.2) !important;
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+  --shadow: 0 14px 36px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Background Global & Section Override (Mencegah Flashing & Bocor Putih) */
+html.dark-mode,
+body.dark-mode,
+html.dark-mode section,
+body.dark-mode section,
+html.dark-mode section[style*="background:#fff"],
+body.dark-mode section[style*="background:#fff"],
+html.dark-mode section[style*="background: #fff"],
+body.dark-mode section[style*="background: #fff"] {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+/* Header & Navbar Kapsul */
+html.dark-mode .site-header .nav-wrap {
+  background: rgba(23, 32, 54, 0.9) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6) !important;
+}
+
+html.dark-mode .main-nav {
+  background: rgba(255, 255, 255, 0.06) !important;
+}
+
+html.dark-mode .main-nav a {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .main-nav a:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+
+/* Fix Kontras Teks, Heading & Paragraf */
+html.dark-mode h1, html.dark-mode h2, html.dark-mode h3, html.dark-mode h4,
+html.dark-mode p, html.dark-mode span, html.dark-mode li, html.dark-mode label,
+html.dark-mode .sec-head h2, html.dark-mode .product-name {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .muted,
+html.dark-mode p.muted,
+html.dark-mode span.muted,
+html.dark-mode .breadcrumb {
+  color: #94a3b8 !important;
+}
+
+/* Override Kartu (Card), Container & Box */
+html.dark-mode .card,
+html.dark-mode .cart-link,
+html.dark-mode .product-card,
+html.dark-mode .filter-card,
+html.dark-mode .summary-card,
+html.dark-mode aside.card {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+/* Fix Container Ilustrasi & Gradient bawaan Inline HTML */
+html.dark-mode div[style*="background:linear-gradient"],
+html.dark-mode div[style*="background: linear-gradient"] {
+  background: linear-gradient(135deg, #1e293b, #0f172a) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .product-thumb {
+  background: #10192d !important;
+}
+
+html.dark-mode .card-icon {
+  background: rgba(20, 184, 166, 0.18) !important;
+  color: #5eead4 !important;
+}
+
+/* Fix Input Form & Select */
+html.dark-mode input,
+html.dark-mode select,
+html.dark-mode textarea {
+  background: #0b1329 !important;
+  color: #f8fafc !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode input::placeholder,
+html.dark-mode textarea::placeholder {
+  color: #64748b !important;
+}
+
+/* Fix Tabel & Record Medis */
+html.dark-mode .table-wrap {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode th {
+  background: #10192d !important;
+  color: #cbd5e1 !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode td {
+  border-color: var(--border) !important;
+  color: #e2e8f0 !important;
+}
+
+html.dark-mode tr:hover td {
+  background: rgba(255, 255, 255, 0.04) !important;
+}
+
+/* Fix Harga & Tag */
+html.dark-mode .product-price {
+  color: #2dd4bf !important;
+}
+
+html.dark-mode .sec-tag {
+  background: rgba(20, 184, 166, 0.2) !important;
+  color: #5eead4 !important;
+}
+
+/* Styling Tombol Toggle Dark Mode (Gambar PNG) */
+.theme-toggle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.25s ease;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--primary);
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+}
+
+html.dark-mode .theme-toggle-btn {
+  background: #172036 !important;
+  border-color: #283553 !important;
+}
+
+/* Fix Logo Size Inside Capsule Header */
+.brand {
+  display: flex !important;
+  align-items: center !important;
+  height: 100%;
+}
+.brand .logo {
+  width: 38px !important;
+  height: 38px !important;
+  max-height: 38px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  flex-shrink: 0 !important;
+}
+
+/* Fix Hero Text Contrast in Dark Mode */
+html.dark-mode .hero {
+  background: linear-gradient(135deg, #052421, #0f766e 65%, #0d9488) !important;
+  color: #ffffff !important;
+}
+html.dark-mode .hero h1,
+html.dark-mode .hero p.lead,
+html.dark-mode .hero-stats strong,
+html.dark-mode .hero-stats span {
+  color: #ffffff !important;
+}
+html.dark-mode .hero p.lead {
+  opacity: 0.95 !important;
+}
