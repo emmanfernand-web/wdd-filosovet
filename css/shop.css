@@ -1,56 +1,265 @@
 /* ============================================================
-   FILOSOVET — shop.css (Toko & Keranjang)
+   FILOSOVET — shop.css (Toko, Booking Grid & Keranjang Layout)
    ============================================================ */
-.shop-layout{display:grid;grid-template-columns:250px 1fr;gap:1.8rem;align-items:start}
-.filter-card{position:sticky;top:88px}
-.filter-card h3{margin-bottom:1rem;font-size:1.05rem}
-.filter-group{margin-bottom:1.4rem}
-.filter-check{display:flex;align-items:center;gap:.6rem;padding:.35rem 0;cursor:pointer;font-size:.92rem}
-.filter-check input{width:auto;accent-color:var(--primary)}
-.search-box{display:flex;gap:8px;margin-bottom:1.4rem}
-.search-box input{flex:1}
+.shop-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 2rem;
+  align-items: start;
+}
 
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:1.25rem}
-.product-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;
-  display:flex;flex-direction:column;transition:.25s}
-.product-card:hover{box-shadow:var(--shadow);transform:translateY(-3px)}
-.product-thumb{height:140px;display:grid;place-items:center;font-size:3rem;
-  background:linear-gradient(135deg,#ecfeff,#f0fdfa)}
-.product-body{padding:1rem;display:flex;flex-direction:column;gap:.4rem;flex:1}
-.product-cat{font-size:.72rem;font-weight:700;color:var(--primary);text-transform:uppercase;letter-spacing:.4px}
-.product-name{font-weight:700;font-size:.95rem;line-height:1.35}
-.product-price{font-weight:800;color:var(--primary-dark);font-size:1.05rem}
-.product-stock{font-size:.78rem;font-weight:600}
-.product-stock.low{color:var(--danger)}
-.product-card .btn{margin-top:.4rem}
+.filter-card {
+  position: sticky;
+  top: 100px;
+}
 
-/* Keranjang */
-.cart-layout{display:grid;grid-template-columns:1.7fr 1fr;gap:1.8rem;align-items:start}
-.cart-item{display:grid;grid-template-columns:64px 1fr auto;gap:1rem;align-items:center;
-  padding:1rem 0;border-bottom:1px solid var(--border)}
-.cart-item:last-child{border-bottom:0}
-.cart-thumb{width:64px;height:64px;border-radius:12px;background:#f0fdfa;display:grid;place-items:center;font-size:1.8rem}
-.cart-name{font-weight:700;font-size:.95rem}
-.cart-price{font-size:.85rem;color:var(--muted)}
-.qty-control{display:flex;align-items:center;gap:.55rem}
-.qty-btn{width:28px;height:28px;border-radius:8px;border:1px solid var(--border);background:#fff;
-  font-weight:800;cursor:pointer;font-size:1rem;color:var(--primary)}
-.qty-btn:hover{background:var(--primary-light)}
-.qty-num{min-width:24px;text-align:center;font-weight:700}
-.cart-right{text-align:right}
-.line-total{font-weight:800}
-.remove-btn{background:none;border:0;color:var(--danger);cursor:pointer;font-size:.85rem;font-weight:600;margin-top:.3rem}
+.filter-card h3 {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
 
-.summary-card{position:sticky;top:88px}
-.summary-row{display:flex;justify-content:space-between;padding:.5rem 0;font-size:.95rem}
-.summary-row.total{border-top:1px solid var(--border);margin-top:.5rem;padding-top:.9rem;
-  font-weight:800;font-size:1.15rem;color:var(--primary-dark)}
-.promo-row{display:flex;gap:8px;margin:.6rem 0}
-.ship-options{margin:.8rem 0}
-.ship-options label{font-weight:500;font-size:.9rem;display:flex;gap:.5rem;align-items:center;margin-bottom:.4rem}
-.ship-options input{width:auto}
+.filter-group {
+  margin-bottom: 1.4rem;
+}
 
-@media (max-width:860px){
-  .shop-layout,.cart-layout{grid-template-columns:1fr}
-  .filter-card,.summary-card{position:static}
+.filter-check {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0;
+  cursor: pointer;
+  font-size: 0.92rem;
+}
+
+.filter-check input {
+  width: auto;
+  accent-color: var(--primary);
+}
+
+.search-box {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 1.4rem;
+}
+
+.search-box input {
+  flex: 1;
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.4rem;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: var(--transition);
+}
+
+.product-card:hover {
+  box-shadow: var(--shadow);
+  transform: translateY(-4px);
+}
+
+.product-thumb {
+  height: 150px;
+  display: grid;
+  place-items: center;
+  font-size: 3.2rem;
+  background: linear-gradient(135deg, #ecfeff, #f0fdfa);
+}
+
+.product-body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
+}
+
+.product-cat {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.product-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.product-price {
+  font-weight: 800;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+.product-stock {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.product-stock.low {
+  color: var(--danger);
+}
+
+.product-card .btn {
+  margin-top: 0.6rem;
+}
+
+/* Layout 2 Kolom (Cart & Booking) */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 1.2rem;
+  align-items: center;
+  padding: 1.2rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cart-item:last-child {
+  border-bottom: 0;
+}
+
+.cart-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  background: #f0fdfa;
+  display: grid;
+  place-items: center;
+  font-size: 1.8rem;
+}
+
+.cart-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.cart-price {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.qty-control {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.qty-btn {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  font-weight: 800;
+  cursor: pointer;
+  font-size: 1rem;
+  color: var(--primary);
+  transition: var(--transition);
+}
+
+.qty-btn:hover {
+  background: var(--primary-light);
+}
+
+.qty-num {
+  min-width: 24px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.cart-right {
+  text-align: right;
+}
+
+.line-total {
+  font-weight: 800;
+}
+
+.remove-btn {
+  background: none;
+  border: 0;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-top: 0.3rem;
+}
+
+/* Summary Card (Ringkasan Booking / Belanja) */
+.summary-card {
+  position: sticky;
+  top: 100px;
+}
+
+.summary-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0.6rem 0;
+  font-size: 0.95rem;
+}
+
+.summary-row.total {
+  border-top: 1px solid var(--border);
+  margin-top: 0.6rem;
+  padding-top: 1rem;
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: var(--primary-dark);
+}
+
+.promo-row {
+  display: flex;
+  gap: 8px;
+  margin: 0.8rem 0;
+}
+
+.ship-options {
+  margin: 0.8rem 0;
+}
+
+.ship-options label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.4rem;
+}
+
+.ship-options input {
+  width: auto;
+}
+
+/* Media Queries */
+@media (max-width: 900px) {
+  .shop-layout,
+  .cart-layout {
+    grid-template-columns: 1fr !important;
+  }
+  .filter-card,
+  .summary-card {
+    position: static !important;
+  }
 }
