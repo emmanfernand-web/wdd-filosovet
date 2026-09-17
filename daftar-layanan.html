@@ -4,9 +4,23 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daftar Layanan | Filosovet Petshop & Klinik Hewan</title>
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/dark.css">
-
+<!-- CSS Utama -->
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/shop.css">
+  
+  <!-- CSS Komponen Terpisah -->
+  <link rel="stylesheet" href="components/header.css">
+  <link rel="stylesheet" href="components/footer.css">
+  
+  <!-- CSS Mode Malam -->
+  <link rel="stylesheet" href="css/dark.css">
+<script>
+  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark-mode');
+  } else {
+    document.documentElement.classList.remove('dark-mode');
+  }
+</script>
 </head>
 <body>
 <div id="header-placeholder"></div>

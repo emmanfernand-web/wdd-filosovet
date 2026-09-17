@@ -1,51 +1,79 @@
 /* ============================================================
-   FILOSOVET — dark-mode.js (Safe Component Binding)
+   FILOSOVET — dark-mode.js (Fixed State Synchronization)
    ============================================================ */
-(function() {
-  const isDark = localStorage.getItem('fv_theme') === 'dark' || 
-    (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches);
 
-  if (isDark) {
+// 1. Langsung terapkan tema dari localStorage saat script dimuat
+(function applyInitialTheme() {
+  const savedTheme = localStorage.getItem('fv_theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  
+  if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
     document.documentElement.classList.add('dark-mode');
+  } else {
+    document.documentElement.classList.remove('dark-mode');
   }
 })();
 
+// 2. Fungsi utama untuk mengelola tombol saklar
 function initDarkModeToggle() {
   const PATH_LIGHT_ICON = 'assets/dark_mode/light.png';
   const PATH_DARK_ICON = 'assets/dark_mode/dark.png';
 
   const navActions = document.querySelector('.nav-actions');
-  if (!navActions || document.querySelector('.theme-toggle-btn')) return; // Mencegah penggandaan tombol
+  if (!navActions) return;
 
-  const toggleBtn = document.createElement('button');
-  toggleBtn.className = 'theme-toggle-btn';
-  toggleBtn.setAttribute('title', 'Ganti Mode Tampilan');
-  
-  const toggleImg = document.createElement('img');
-  toggleImg.style.cssText = 'width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s ease;';
-  
-  const isDark = document.documentElement.classList.contains('dark-mode');
-  toggleImg.src = isDark ? PATH_LIGHT_ICON : PATH_DARK_ICON;
-  toggleImg.alt = isDark ? 'Mode Terang' : 'Mode Gelap';
+  // Buat tombol jika belum ada di navbar
+  let toggleBtn = document.querySelector('.theme-toggle-btn');
+  if (!toggleBtn) {
+    toggleBtn = document.createElement('button');
+    toggleBtn.className = 'theme-toggle-btn';
+    toggleBtn.setAttribute('title', 'Ganti Mode Tampilan');
+    
+    const toggleImg = document.createElement('img');
+    toggleImg.style.cssText = 'width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s ease;';
+    toggleBtn.appendChild(toggleImg);
+    
+    navActions.insertBefore(toggleBtn, navActions.firstChild);
+  }
 
-  toggleBtn.appendChild(toggleImg);
-  navActions.insertBefore(toggleBtn, navActions.firstChild);
+  const toggleImg = toggleBtn.querySelector('img');
 
-  toggleBtn.addEventListener('click', () => {
-    document.documentElement.classList.toggle('dark-mode');
-    if (document.body) document.body.classList.toggle('dark-mode');
+  // Update tampilan ikon saklar
+  function updateIcon() {
+    const isDark = document.documentElement.classList.contains('dark-mode');
+    if (toggleImg) {
+      toggleImg.src = isDark ? PATH_LIGHT_ICON : PATH_DARK_ICON;
+      toggleImg.alt = isDark ? 'Mode Terang' : 'Mode Gelap';
+    }
+  }
 
-    const activeDark = document.documentElement.classList.contains('dark-mode');
-    localStorage.setItem('fv_theme', activeDark ? 'dark' : 'light');
+  // Set ikon awal sesuai kondisi halaman
+  updateIcon();
 
-    toggleImg.style.transform = 'scale(0.8) rotate(180deg)';
-    setTimeout(() => {
-      toggleImg.src = activeDark ? PATH_LIGHT_ICON : PATH_DARK_ICON;
-      toggleImg.style.transform = 'scale(1) rotate(0deg)';
-    }, 150);
-  });
+  // Handler klik saklar
+  toggleBtn.onclick = () => {
+    const isDarkNow = document.documentElement.classList.contains('dark-mode');
+    
+    // HANYA ubah tag <html> agar tidak pernah bentrok dengan <body>
+    if (isDarkNow) {
+      document.documentElement.classList.remove('dark-mode');
+      localStorage.setItem('fv_theme', 'light');
+    } else {
+      document.documentElement.classList.add('dark-mode');
+      localStorage.setItem('fv_theme', 'dark');
+    }
+
+    // Efek animasi rotasi tombol
+    if (toggleImg) {
+      toggleImg.style.transform = 'scale(0.8) rotate(180deg)';
+      setTimeout(() => {
+        updateIcon();
+        toggleImg.style.transform = 'scale(1) rotate(0deg)';
+      }, 150);
+    }
+  };
 }
 
-// Jalankan saat DOM awal & saat komponen header selesai di-fetch
+// Jalankan saat DOM awal & saat header dinamis selesai di-fetch
 document.addEventListener('DOMContentLoaded', initDarkModeToggle);
 document.addEventListener('componentsLoaded', initDarkModeToggle);

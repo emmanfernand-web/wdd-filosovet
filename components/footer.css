@@ -1,0 +1,71 @@
+/* ============================================================
+   FILOSOVET — components/footer.css (Footer Layout & Branding)
+   ============================================================ */
+
+.site-footer {
+  background: #0f172a;
+  color: #cbd5e1;
+  margin-top: 100px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr 1fr 1.3fr;
+  gap: 2rem;
+  padding: 72px 0 40px;
+}
+
+.site-footer h4 {
+  color: #fff;
+  margin-bottom: 1.2rem;
+  font-size: 1.05rem;
+}
+
+.site-footer a {
+  color: #94a3b8;
+  display: block;
+  margin-bottom: 0.6rem;
+  font-size: 0.92rem;
+  transition: var(--transition, all 0.25s ease);
+}
+
+.site-footer a:hover {
+  color: #5eead4;
+  transform: translateX(4px);
+}
+
+.footer-bottom {
+  border-top: 1px solid #1e293b;
+  padding: 1.5rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+/* Footer Brand */
+.site-footer .brand {
+  display: flex !important;
+  align-items: center !important;
+  height: auto !important;
+  margin-bottom: 0.8rem !important;
+  color: #ffffff !important;
+  font-weight: 800;
+  font-size: 1.25rem;
+}
+
+.site-footer .brand .logo {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  object-fit: cover !important;
+  margin-right: 10px !important;
+}
+
+/* Responsive Footer */
+@media (max-width: 900px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .footer-grid { grid-template-columns: 1fr; }
+}

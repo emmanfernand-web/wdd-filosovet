@@ -1,8 +1,9 @@
 /* ============================================================
-   FILOSOVET — dark.css (High Contrast Dark Palette & Overrides)
+   FILOSOVET — dark.css (High Contrast Dark Palette & Dynamic Fix)
    ============================================================ */
 :root.dark-mode, 
-body.dark-mode {
+body.dark-mode,
+html.dark-mode {
   --bg: #0b1329 !important;
   --surface: #172036 !important;
   --text: #f1f5f9 !important;
@@ -13,28 +14,25 @@ body.dark-mode {
   --shadow: 0 14px 36px rgba(0, 0, 0, 0.5) !important;
 }
 
+/* Background Global & Section Overrides */
 html.dark-mode,
 body.dark-mode,
 html.dark-mode section,
-body.dark-mode section,
-html.dark-mode section[style*="background:#fff"],
-body.dark-mode section[style*="background:#fff"],
-html.dark-mode section[style*="background: #fff"],
-body.dark-mode section[style*="background: #fff"] {
+body.dark-mode section {
   background-color: var(--bg) !important;
   color: var(--text) !important;
   border-color: var(--border) !important;
 }
 
-/* Header & Navbar Kapsul */
+/* FIX UTAMA: Navbar Kapsul Langsung Berubah Real-Time Tanpa Refresh */
 html.dark-mode .site-header .nav-wrap {
-  background: rgba(23, 32, 54, 0.9) !important;
+  background: rgba(23, 32, 54, 0.92) !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
   box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6) !important;
 }
 
 html.dark-mode .main-nav {
-  background: rgba(255, 255, 255, 0.06) !important;
+  background: rgba(255, 255, 255, 0.08) !important;
 }
 
 html.dark-mode .main-nav a {
@@ -42,7 +40,30 @@ html.dark-mode .main-nav a {
 }
 
 html.dark-mode .main-nav a:hover {
-  background: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+/* FIX Kotak Ilustrasi & Element Berlatar Putih Inline */
+html.dark-mode div[style*="background"],
+html.dark-mode [style*="background: #fff"],
+html.dark-mode [style*="background:#fff"],
+html.dark-mode [style*="background: white"],
+html.dark-mode [style*="background:white"] {
+  background: var(--surface) !important;
+  color: var(--text) !important;
+  border-color: var(--border) !important;
+}
+
+/* Fix Tab & Pill Button */
+html.dark-mode .tab {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--muted) !important;
+}
+
+html.dark-mode .tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
   color: #ffffff !important;
 }
 
@@ -56,11 +77,12 @@ html.dark-mode .sec-head h2, html.dark-mode .product-name {
 html.dark-mode .muted,
 html.dark-mode p.muted,
 html.dark-mode span.muted,
-html.dark-mode .breadcrumb {
+html.dark-mode .breadcrumb,
+html.dark-mode .breadcrumb a {
   color: #94a3b8 !important;
 }
 
-/* Override Kartu (Card), Container & Box */
+/* Override Kartu (Card), Container, Cart & Box */
 html.dark-mode .card,
 html.dark-mode .cart-link,
 html.dark-mode .product-card,
@@ -144,6 +166,7 @@ html.dark-mode .sec-tag {
   color: #5eead4 !important;
 }
 
+/* Tombol Toggle Dark Mode */
 .theme-toggle-btn {
   width: 44px;
   height: 44px;
@@ -170,7 +193,9 @@ html.dark-mode .theme-toggle-btn {
   border-color: #283553 !important;
 }
 
-html.dark-mode .hero {
+/* Fix Hero Contrast */
+html.dark-mode .hero,
+html.dark-mode .page-hero {
   background: linear-gradient(135deg, #041f1c, #0f766e 65%, #0d9488) !important;
   color: #ffffff !important;
 }
@@ -178,10 +203,7 @@ html.dark-mode .hero {
 html.dark-mode .hero h1,
 html.dark-mode .hero p.lead,
 html.dark-mode .hero-stats strong,
-html.dark-mode .hero-stats span {
+html.dark-mode .hero-stats span,
+html.dark-mode .page-hero h1 {
   color: #ffffff !important;
-}
-
-html.dark-mode .hero p.lead {
-  opacity: 0.95 !important;
 }

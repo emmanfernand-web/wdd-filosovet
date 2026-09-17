@@ -2,7 +2,7 @@
    FILOSOVET — cart.js (katalog produk & keranjang)
    ============================================================ */
 const PRODUCTS = [
-  { id: 1,  name: 'Dry Food Kucing Premium 1,5kg', cat: 'makanan',  price: 185000, stock: 24, icon: '🍗', sold: 312 },
+  { id: 1,  name: 'Dry Food Kucing Premium 1,5kg',  cat: 'makanan',  price: 185000, stock: 24, icon: '🍗', sold: 312 },
   { id: 2,  name: 'Dry Food Anjing Adult 3kg',      cat: 'makanan',  price: 265000, stock: 18, icon: '🦴', sold: 245 },
   { id: 3,  name: 'Wet Food Kucing Tuna 85g',       cat: 'makanan',  price: 22000,  stock: 60, icon: '🥫', sold: 580 },
   { id: 4,  name: 'Snack Dental Stick Anjing',      cat: 'makanan',  price: 48000,  stock: 0,  icon: '🦷', sold: 150 },
