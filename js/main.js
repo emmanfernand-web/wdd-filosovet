@@ -1,30 +1,28 @@
 /* ============================================================
-   FILOSOVET — main.js (Fixed Component Loader & Race-Condition Fix)
+   FILOSOVET — main.js (Fixed Component & Reveal Observer)
    ============================================================ */
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Muat Header & Footer (Auto fallback path jika folder components/ atau root)
-  await loadComponent('#header-placeholder', ['components/header.html']);
-  await loadComponent('#footer-placeholder', ['components/footer.html']);
+  // 1. Muat Header & Footer Dinamis
+  await loadComponent('#header-placeholder', ['components/header.html', 'header.html']);
+  await loadComponent('#footer-placeholder', ['components/footer.html', 'footer.html']);
 
-  // 2. Tandai Link Navigasi yang Aktif Sesuai Halaman
+  // 2. Inisialisasi Fitur Utama
   setActiveNavLink();
-
-  // 3. Inisialisasi Fitur Navbar Setelah HTML Selesai Dimuat
   initHeaderScroll();
   initHamburger();
   updateCartBadge();
   initFooterYear();
+  initReveal(); // Perbaikan animasi reveal
 
-  // 4. Panggil Ulang Dark Mode Switcher (Jika dark-mode.js terpasang)
+  // 3. Trigger Dark Mode jika script terpasang
   if (typeof initDarkModeToggle === 'function') {
     initDarkModeToggle();
   }
   
-  // Kirim Custom Event bahwa Komponen Header/Footer Sudah Ready
   document.dispatchEvent(new CustomEvent('componentsLoaded'));
 });
 
-// Fungsi pemanggil file HTML terpisah dengan Fallback Path
+// Fungsi pemanggil file HTML terpisah
 async function loadComponent(selector, filePaths) {
   const el = document.querySelector(selector);
   if (!el) return;
@@ -35,13 +33,32 @@ async function loadComponent(selector, filePaths) {
       const res = await fetch(path);
       if (res.ok) {
         el.innerHTML = await res.text();
-        return; // Berhasil dimuat, keluar fungsi
+        return;
       }
-    } catch (err) {
-      // Mengabaikan error fetch lokal untuk mencobapath selanjutnya
-    }
+    } catch (err) {}
   }
-  console.warn(`Gagal memuat komponen untuk ${selector}. Pastikan membuka web menggunakan Live Server.`);
+}
+
+// Inisialisasi Observer Animasi Scroll (Reveal Fix)
+function initReveal() {
+  const reveals = document.querySelectorAll('.reveal');
+  
+  if (!('IntersectionObserver' in window)) {
+    // Fallback jika browser tidak mendukung observer
+    reveals.forEach(el => el.classList.add('visible'));
+    return;
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+
+  reveals.forEach(el => observer.observe(el));
 }
 
 // Highlights Navigasi Aktif
@@ -57,7 +74,7 @@ function setActiveNavLink() {
   });
 }
 
-// Efek Scroll pada Header Kapsul
+// Efek Scroll Header Kapsul
 function initHeaderScroll() {
   const header = document.querySelector('.site-header');
   if (!header) return;
@@ -67,7 +84,7 @@ function initHeaderScroll() {
   });
 }
 
-// Hamburger Menu (Mobile)
+// Hamburger Menu Mobile
 function initHamburger() {
   const burger = document.querySelector('.hamburger');
   const nav = document.querySelector('.main-nav');

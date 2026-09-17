@@ -4,13 +4,25 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Booking Layanan | Filosovet Petshop & Klinik Hewan</title>
-<link rel="stylesheet" href="css/style.css">
-<link rel="stylesheet" href="css/dark.css">
 
+<!-- Pre-script Anti Flashing Dark Mode -->
+<script>
+  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark-mode');
+  }
+</script>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/shop.css">
+<link rel="stylesheet" href="css/dark.css">
 </head>
 <body>
+
+<!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
-<section class="page-hero">
+
+<!-- HERO SUB PAGE (Padding Atas 150px Agar Tidak Tertutup Navbar) -->
+<section class="page-hero" style="padding-top: 150px;">
   <div class="container">
     <h1>Booking Layanan</h1>
     <div class="breadcrumb"><a href="index.html">Beranda</a> / Booking</div>
@@ -19,7 +31,7 @@
 
 <section class="section">
   <div class="container">
-    <!-- PILIH LAYANAN -->
+    <!-- 1. PILIH LAYANAN -->
     <div class="card mb-4">
       <h3 class="mb-3">1️⃣ Pilih Layanan</h3>
       <div class="tabs" id="serviceTabs">
@@ -34,22 +46,23 @@
       </div>
     </div>
 
-    <div class="cart-layout">
+    <!-- 2 COLUMN LAYOUT (KIRI: FORM, KANAN: RINGKASAN) -->
+    <div class="cart-layout" style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 1.8rem; align-items: start;">
       <div>
-        <!-- TANGGAL -->
+        <!-- 2. TANGGAL -->
         <div class="card mb-4">
           <h3 class="mb-3">2️⃣ Pilih Tanggal <span class="badge badge-teal" id="selectedDateLabel"></span></h3>
           <div class="tabs" id="dateTabs"></div>
         </div>
 
-        <!-- SLOT -->
+        <!-- 3. SLOT -->
         <div class="card mb-4">
           <h3 class="mb-3">3️⃣ Pilih Slot Waktu <span class="muted" style="font-size:.85rem;font-weight:400">(abu-abu = penuh)</span></h3>
           <div class="tabs" id="slotGrid"></div>
           <p id="slotHint" class="muted mt-2" style="margin-top:.8rem;font-size:.88rem"></p>
         </div>
 
-        <!-- DATA HEWAN -->
+        <!-- 4. DATA HEWAN -->
         <div class="card">
           <h3 class="mb-3">4️⃣ Data Hewan & Keluhan</h3>
           <div class="form-row">
@@ -67,17 +80,29 @@
         </div>
       </div>
 
-      <!-- RINGKASAN -->
+      <!-- RINGKASAN STICKY (SISI KANAN) -->
       <div>
-        <div class="card summary-card">
+        <div class="card summary-card" style="position: sticky; top: 100px;">
           <h3 class="mb-3">📋 Ringkasan Booking</h3>
-          <div class="summary-row"><span>Layanan</span><strong id="sumService">—</strong></div>
-          <div class="summary-row"><span>Tipe</span><strong id="sumType">—</strong></div>
-          <div class="summary-row"><span>Tanggal</span><strong id="sumDate">—</strong></div>
-          <div class="summary-row"><span>Waktu</span><strong id="sumTime">—</strong></div>
-          <div class="summary-row"><span>Hewan</span><strong id="sumPet">—</strong></div>
-          <div class="summary-row total"><span>Estimasi Biaya</span><span id="sumPrice">Rp 0</span></div>
-          <button class="btn btn-primary btn-block" id="btnConfirm" style="margin-top:1rem">✅ Konfirmasi Booking</button>
+          <div class="summary-row" style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed var(--border);">
+            <span>Layanan</span><strong id="sumService">—</strong>
+          </div>
+          <div class="summary-row" style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed var(--border);">
+            <span>Tipe</span><strong id="sumType">—</strong>
+          </div>
+          <div class="summary-row" style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed var(--border);">
+            <span>Tanggal</span><strong id="sumDate">—</strong>
+          </div>
+          <div class="summary-row" style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed var(--border);">
+            <span>Waktu</span><strong id="sumTime">—</strong>
+          </div>
+          <div class="summary-row" style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed var(--border);">
+            <span>Hewan</span><strong id="sumPet">—</strong>
+          </div>
+          <div class="summary-row total" style="display: flex; justify-content: space-between; padding: 1rem 0 0.5rem; font-weight: 800; font-size: 1.15rem; color: var(--primary);">
+            <span>Estimasi Biaya</span><span id="sumPrice">Rp 0</span>
+          </div>
+          <button class="btn btn-primary btn-block" id="btnConfirm" style="margin-top:1.2rem; width: 100%;">✅ Konfirmasi Booking</button>
           <p class="muted text-center mt-2" style="margin-top:.8rem;font-size:.8rem">Slot akan dikunci selama 15 menit setelah konfirmasi.</p>
         </div>
       </div>
@@ -86,19 +111,23 @@
 </section>
 
 <!-- MODAL SUKSES -->
-<div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:200;place-items:center">
+<div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:2000;place-items:center;backdrop-filter:blur(4px);">
   <div class="card" style="max-width:420px;width:92%;text-align:center">
     <div style="font-size:3.5rem;margin-bottom:.8rem">🎉</div>
     <h3 class="mb-2">Booking Berhasil!</h3>
     <p class="muted mb-3" id="modalText">Detail booking telah dikirim dan dapat dilihat di halaman Profil.</p>
     <div class="form-group text-left"><label>Kode Booking</label><input type="text" id="bookingCode" readonly style="font-weight:800;color:var(--primary)"></div>
-    <a href="profil-pelanggan.html" class="btn btn-primary btn-block">Lihat Riwayat Saya</a>
-    <button class="btn btn-outline btn-block mt-2" onclick="document.getElementById('bookingModal').style.display='none'" style="margin-top:.6rem">Tutup</button>
+    <a href="profil-pelanggan.html" class="btn btn-primary btn-block" style="width: 100%;">Lihat Riwayat Saya</a>
+    <button class="btn btn-outline btn-block mt-2" onclick="document.getElementById('bookingModal').style.display='none'" style="margin-top:.6rem; width: 100%;">Tutup</button>
   </div>
 </div>
+
+<!-- PLACEHOLDER FOOTER -->
+<div id="footer-placeholder"></div>
+
+<!-- SCRIPTS -->
 <script src="js/booking.js"></script>
+<script src="js/main.js"></script>
 <script src="js/dark-mode.js"></script>
 </body>
 </html>
-<div id="footer-placeholder"></div>
-<script src="js/main.js"></script>

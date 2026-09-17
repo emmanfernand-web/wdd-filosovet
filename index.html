@@ -163,12 +163,11 @@
 <!-- PLACEHOLDER FOOTER -->
 <div id="footer-placeholder"></div>
 
-<!-- SCRIPT PENGHUBUNG (Urutan Harus Tepat) -->
+<!-- SCRIPTS -->
 <script src="js/cart.js"></script>
 <script src="js/main.js"></script>
 <script src="js/dark-mode.js"></script>
 <script>
-  // Render Produk Unggulan Setelah cart.js Dimuat Sempurna
   document.addEventListener('DOMContentLoaded', () => {
     if (typeof PRODUCTS !== 'undefined') {
       const featured = PRODUCTS.slice(0, 4);
