@@ -12,7 +12,8 @@
   const BREAKPOINT = 900;   // matches the CSS media query in index.css
   const DURATION = 500;     // ms — transition speed between sections
   const WHEEL_THRESHOLD = 2;
-  const GESTURE_QUIET_MS = 150; // no wheel events for this long = gesture truly ended
+  const GESTURE_QUIET_MS = 150;  // no wheel events for this long = gesture truly ended
+  const MAX_LOCK_MS = DURATION + 200; // hard cap so the lock can never hang indefinitely
   const TOUCH_THRESHOLD = 40;
 
   let sections = [];
@@ -21,6 +22,7 @@
   let isAnimating = false;
   let gestureLocked = false;
   let unlockTimer = null;
+  let hardUnlockTimer = null;
   let touchStartY = 0;
   let rafId = null;
 
@@ -71,11 +73,22 @@
     rafId = requestAnimationFrame(step);
   }
 
-  function scheduleUnlock() {
+  function releaseLock() {
+    gestureLocked = false;
     clearTimeout(unlockTimer);
-    unlockTimer = setTimeout(() => {
-      gestureLocked = false;
-    }, GESTURE_QUIET_MS);
+    clearTimeout(hardUnlockTimer);
+  }
+
+  function refreshQuietTimer() {
+    clearTimeout(unlockTimer);
+    unlockTimer = setTimeout(releaseLock, GESTURE_QUIET_MS);
+  }
+
+  function lockGesture() {
+    gestureLocked = true;
+    clearTimeout(hardUnlockTimer);
+    hardUnlockTimer = setTimeout(releaseLock, MAX_LOCK_MS); // never refreshed — hard ceiling
+    refreshQuietTimer();
   }
 
   function goToSection(index) {
@@ -91,11 +104,13 @@
       if (Math.abs(e.deltaY) < WHEEL_THRESHOLD) return;
 
       e.preventDefault();
-      scheduleUnlock(); // every event in this gesture (incl. momentum) refreshes the lock
 
-      if (isAnimating || gestureLocked) return;
-      gestureLocked = true;
+      if (isAnimating || gestureLocked) {
+        refreshQuietTimer(); // keep swallowing the momentum tail, but hard cap still applies
+        return;
+      }
 
+      lockGesture();
       currentIndex = getCurrentIndex();
       goToSection(e.deltaY > 0 ? currentIndex + 1 : currentIndex - 1);
     },
