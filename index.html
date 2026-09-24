@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Beranda | Filosovet Petshop & Klinik Hewan</title>
 
-<!-- Pre-script Anti Flashing Dark Mode -->
-<script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark-mode');
-  }
-</script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Beranda | Filosovet Petshop & Klinik Hewan</title>
+
+  <!-- Pre-script Anti Flashing Dark Mode -->
+  <script>
+    if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
 
   <!-- CSS Utama -->
   <link rel="stylesheet" href="css/style.css">
@@ -19,170 +20,195 @@
   <!-- CSS Komponen Terpisah -->
   <link rel="stylesheet" href="css/components/header.css">
   <link rel="stylesheet" href="css/components/footer.css">
-  
+
   <!-- CSS Mode Malam -->
   <link rel="stylesheet" href="css/dark.css">
 </head>
+
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+  <!-- PLACEHOLDER NAVBAR -->
+  <div id="header-placeholder"></div>
 
-<!-- HERO SECTION -->
-<section class="hero">
-  <div class="container hero-inner">
-    <div>
-      <span class="badge badge-teal" style="background:rgba(255,255,255,.15);color:#fff">🐶 Petshop & Klinik Hewan Terpercaya</span>
-      <h1>Rawat Kesehatan & Kebahagiaan Sahabat Berbulu Anda</h1>
-      <p class="lead">Booking dokter hewan, grooming, dan pet hotel secara online. Belanja kebutuhan hewan peliharaan dalam satu platform.</p>
-      <div class="hero-cta">
-        <a href="pages/booking.html" class="btn btn-accent">📅 Booking Layanan</a>
-        <a href="pages/toko.html" class="btn" style="background:#fff;color:var(--primary)">🛍️ Belanja Sekarang</a>
+  <!-- HERO SECTION -->
+  <section class="hero">
+    <div class="container hero-inner">
+      <div>
+        <span class="badge badge-teal" style="background:rgba(255,255,255,.15);color:#fff">🐶 Petshop & Klinik Hewan
+          Terpercaya</span>
+        <h1>Rawat Kesehatan & Kebahagiaan Sahabat Berbulu Anda</h1>
+        <p class="lead">Booking dokter hewan, grooming, dan pet hotel secara online. Belanja kebutuhan hewan peliharaan
+          dalam satu platform.</p>
+        <div class="hero-cta">
+          <a href="pages/booking.html" class="btn btn-accent">📅 Booking Layanan</a>
+          <a href="pages/toko.html" class="btn" style="background:#fff;color:var(--primary)">🛍️ Belanja Sekarang</a>
+        </div>
+        <div class="hero-stats">
+          <div><strong>2.500+</strong><span>Pasien Hewan</span></div>
+          <div><strong>4</strong><span>Lini Layanan</span></div>
+          <div><strong>4.9★</strong><span>Rating Pelanggan</span></div>
+        </div>
       </div>
-      <div class="hero-stats">
-        <div><strong>2.500+</strong><span>Pasien Hewan</span></div>
-        <div><strong>4</strong><span>Lini Layanan</span></div>
-        <div><strong>4.9★</strong><span>Rating Pelanggan</span></div>
-      </div>
+      <div class="hero-art">🐕‍🦺🐈</div>
     </div>
-    <div class="hero-art">🐕‍🦺🐈</div>
-  </div>
-</section>
+  </section>
 
-<!-- LAYANAN KAMI -->
-<section class="section">
-  <div class="container">
-    <div class="sec-head reveal">
-      <span class="sec-tag">Layanan Kami</span>
-      <h2>Empat Lini Layanan Terpadu</h2>
-      <p class="muted">Seluruh kebutuhan perawatan hewan peliharaan Anda tersedia dalam satu tempat, didukung tenaga profesional.</p>
+  <!-- LAYANAN KAMI -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Layanan Kami</span>
+        <h2>Empat Lini Layanan Terpadu</h2>
+        <p class="muted">Seluruh kebutuhan perawatan hewan peliharaan Anda tersedia dalam satu tempat, didukung tenaga
+          profesional.</p>
+      </div>
+      <div class="grid grid-4">
+        <div class="card card-service reveal">
+          <div class="card-img-wrap">
+            <img src="assets/images/clinic.jpeg" alt="Klinik & Dokter Hewan" class="card-img">
+          </div>
+          <h3 class="mb-2">Klinik & Dokter Hewan</h3>
+          <p class="muted mb-3" style="font-size:.92rem">Pemeriksaan, diagnosis, USG, X-Ray, lab, hingga tindakan medis
+            ringan hingga lanjutan.</p>
+          <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+        </div>
+        <div class="card card-service reveal">
+          <div class="card-img-wrap">
+            <img src="assets/images/grooming.jpeg" alt="Grooming" class="card-img">
+          </div>
+          <h3 class="mb-2">Grooming</h3>
+          <p class="muted mb-3" style="font-size:.92rem">Grooming sehat & anti-jamur dengan pemeriksaan kesehatan awal
+            serta vaksinasi.</p>
+          <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+        </div>
+        <div class="card card-service reveal">
+          <div class="card-img-wrap">
+            <img src="assets/images/pet_hotel.jpeg" alt="Pet Hotel" class="card-img">
+          </div>
+          <h3 class="mb-2">Pet Hotel</h3>
+          <p class="muted mb-3" style="font-size:.92rem">Penitipan hewan dengan standar kesehatan ketat: bebas kutu,
+            bebas cacing, vaksin lengkap.</p>
+          <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+        </div>
+        <div class="card card-service reveal">
+          <div class="card-img-wrap">
+            <img src="assets/images/pet_store.jpeg" alt="Toko & Farmasi" class="card-img">
+          </div>
+          <h3 class="mb-2">Toko & Farmasi</h3>
+          <p class="muted mb-3" style="font-size:.92rem">Makanan, obat-obatan, skincare, dan aksesoris — tersedia juga
+            pembelian online.</p>
+          <a href="pages/toko.html" class="btn btn-outline btn-sm">Belanja →</a>
+        </div>
+      </div>
     </div>
-    <div class="grid grid-4">
-      <div class="card reveal">
-        <div class="card-icon">🩺</div>
-        <h3 class="mb-2">Klinik & Dokter Hewan</h3>
-        <p class="muted mb-3" style="font-size:.92rem">Pemeriksaan, diagnosis, USG, X-Ray, lab, hingga tindakan medis ringan hingga lanjutan.</p>
-        <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon">✂️</div>
-        <h3 class="mb-2">Grooming</h3>
-        <p class="muted mb-3" style="font-size:.92rem">Grooming sehat & anti-jamur dengan pemeriksaan kesehatan awal serta vaksinasi.</p>
-        <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon">🏨</div>
-        <h3 class="mb-2">Pet Hotel</h3>
-        <p class="muted mb-3" style="font-size:.92rem">Penitipan hewan dengan standar kesehatan ketat: bebas kutu, bebas cacing, vaksin lengkap.</p>
-        <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
-      </div>
-      <div class="card reveal">
-        <div class="card-icon">💊</div>
-        <h3 class="mb-2">Toko & Farmasi</h3>
-        <p class="muted mb-3" style="font-size:.92rem">Makanan, obat-obatan, skincare, dan aksesoris — tersedia juga pembelian online.</p>
-        <a href="pages/toko.html" class="btn btn-outline btn-sm">Belanja →</a>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- PRODUK UNGGULAN -->
-<section class="section">
-  <div class="container">
-    <div class="sec-head reveal">
-      <span class="sec-tag">Produk Unggulan</span>
-      <h2>Paling Sering Dibeli</h2>
+  <!-- PRODUK UNGGULAN -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Produk Unggulan</span>
+        <h2>Paling Sering Dibeli</h2>
+      </div>
+      <div class="product-grid" id="featuredProducts"></div>
+      <div class="text-center" style="margin-top:2rem">
+        <a href="pages/toko.html" class="btn btn-primary">Lihat Semua Produk →</a>
+      </div>
     </div>
-    <div class="product-grid" id="featuredProducts"></div>
-    <div class="text-center" style="margin-top:2rem">
-      <a href="pages/toko.html" class="btn btn-primary">Lihat Semua Produk →</a>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- KENAPA KAMI -->
-<section class="section">
-  <div class="container">
-    <div class="sec-head reveal">
-      <span class="sec-tag">Kenapa Filosovet</span>
-      <h2>Perawatan Profesional yang Mudah Diakses</h2>
+  <!-- KENAPA KAMI -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Kenapa Filosovet</span>
+        <h2>Perawatan Profesional yang Mudah Diakses</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="card reveal text-center">
+          <div class="card-icon" style="margin:0 auto 1rem">📅</div>
+          <h3 class="mb-2">Booking Real-Time</h3>
+          <p class="muted" style="font-size:.92rem">Cek ketersediaan slot dokter, grooming, dan kandang pet hotel secara
+            online tanpa antre.</p>
+        </div>
+        <div class="card reveal text-center">
+          <div class="card-icon" style="margin:0 auto 1rem">📋</div>
+          <h3 class="mb-2">Rekam Medis Digital</h3>
+          <p class="muted" style="font-size:.92rem">Riwayat pemeriksaan, vaksin, dan booking tersimpan rapi dan dapat
+            diakses kapan pun.</p>
+        </div>
+        <div class="card reveal text-center">
+          <div class="card-icon" style="margin:0 auto 1rem">⚡</div>
+          <h3 class="mb-2">Notifikasi Otomatis</h3>
+          <p class="muted" style="font-size:.92rem">Konfirmasi booking, pengingat vaksin, dan pembaruan status layanan
+            langsung ke akun Anda.</p>
+        </div>
+      </div>
     </div>
-    <div class="grid grid-3">
-      <div class="card reveal text-center">
-        <div class="card-icon" style="margin:0 auto 1rem">📅</div>
-        <h3 class="mb-2">Booking Real-Time</h3>
-        <p class="muted" style="font-size:.92rem">Cek ketersediaan slot dokter, grooming, dan kandang pet hotel secara online tanpa antre.</p>
-      </div>
-      <div class="card reveal text-center">
-        <div class="card-icon" style="margin:0 auto 1rem">📋</div>
-        <h3 class="mb-2">Rekam Medis Digital</h3>
-        <p class="muted" style="font-size:.92rem">Riwayat pemeriksaan, vaksin, dan booking tersimpan rapi dan dapat diakses kapan pun.</p>
-      </div>
-      <div class="card reveal text-center">
-        <div class="card-icon" style="margin:0 auto 1rem">⚡</div>
-        <h3 class="mb-2">Notifikasi Otomatis</h3>
-        <p class="muted" style="font-size:.92rem">Konfirmasi booking, pengingat vaksin, dan pembaruan status layanan langsung ke akun Anda.</p>
-      </div>
-    </div>
-  </div>
-</section>
+  </section>
 
-<!-- TESTIMONI -->
-<section class="section">
-  <div class="container">
-    <div class="sec-head reveal">
-      <span class="sec-tag">Testimoni</span>
-      <h2>Apa Kata Para Pawrents</h2>
-    </div>
-    <div class="grid grid-3">
-      <div class="card reveal">
-        <div class="mb-2" style="color:var(--accent)">★★★★★</div>
-        <p class="mb-3" style="font-size:.95rem">"Booking dokter online gampang banget, slot langsung kelihatan. Kucing saya ditangani dengan sangat hati-hati."</p>
-        <strong>Rania P.</strong> <span class="muted" style="font-size:.85rem">— pemilik kucing</span>
+  <!-- TESTIMONI -->
+  <section class="section">
+    <div class="container">
+      <div class="sec-head reveal">
+        <span class="sec-tag">Testimoni</span>
+        <h2>Apa Kata Para Pawrents</h2>
       </div>
-      <div class="card reveal">
-        <div class="mb-2" style="color:var(--accent)">★★★★★</div>
-        <p class="mb-3" style="font-size:.95rem">"Anjing saya menginap 5 hari di pet hotel. Kondisi diperbarui tiap hari lewat website. Sangat tenang!"</p>
-        <strong>Dimas A.</strong> <span class="muted" style="font-size:.85rem">— pemilik anjing</span>
-      </div>
-      <div class="card reveal">
-        <div class="mb-2" style="color:var(--accent)">★★★★★</div>
-        <p class="mb-3" style="font-size:.95rem">"Belanja makanan dan obat cukup dari rumah, stok selalu lengkap dan cepat sampai."</p>
-        <strong>Sinta W.</strong> <span class="muted" style="font-size:.85rem">— pelanggan toko</span>
+      <div class="grid grid-3">
+        <div class="card reveal">
+          <div class="mb-2" style="color:var(--accent)">★★★★★</div>
+          <p class="mb-3" style="font-size:.95rem">"Booking dokter online gampang banget, slot langsung kelihatan.
+            Kucing saya ditangani dengan sangat hati-hati."</p>
+          <strong>Rania P.</strong> <span class="muted" style="font-size:.85rem">— pemilik kucing</span>
+        </div>
+        <div class="card reveal">
+          <div class="mb-2" style="color:var(--accent)">★★★★★</div>
+          <p class="mb-3" style="font-size:.95rem">"Anjing saya menginap 5 hari di pet hotel. Kondisi diperbarui tiap
+            hari lewat website. Sangat tenang!"</p>
+          <strong>Dimas A.</strong> <span class="muted" style="font-size:.85rem">— pemilik anjing</span>
+        </div>
+        <div class="card reveal">
+          <div class="mb-2" style="color:var(--accent)">★★★★★</div>
+          <p class="mb-3" style="font-size:.95rem">"Belanja makanan dan obat cukup dari rumah, stok selalu lengkap dan
+            cepat sampai."</p>
+          <strong>Sinta W.</strong> <span class="muted" style="font-size:.85rem">— pelanggan toko</span>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- CTA -->
-<section class="section">
-  <div class="container">
-    <div class="cta-banner reveal">
-      <h2 class="mb-2" style="font-size:1.7rem">Siap Memberikan yang Terbaik untuk Sahabat Anda?</h2>
-      <p class="mb-4" style="opacity:.92">Daftar sekarang dan jadwalkan kunjungan pertama Anda.</p>
-      <a href="pages/auth.html" class="btn btn-accent">Buat Akun Gratis</a>
-      &nbsp;
-      <a href="pages/booking.html" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Booking Langsung</a>
+  <!-- CTA -->
+  <section class="section">
+    <div class="container">
+      <div class="cta-banner reveal">
+        <h2 class="mb-2" style="font-size:1.7rem">Siap Memberikan yang Terbaik untuk Sahabat Anda?</h2>
+        <p class="mb-4" style="opacity:.92">Daftar sekarang dan jadwalkan kunjungan pertama Anda.</p>
+        <a href="pages/auth.html" class="btn btn-accent">Buat Akun Gratis</a>
+        &nbsp;
+        <a href="pages/booking.html" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Booking
+          Langsung</a>
+      </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+  <!-- PLACEHOLDER FOOTER -->
+  <div id="footer-placeholder"></div>
 
-<!-- SCRIPTS -->
-<script src="js/cart.js"></script>
-<script src="js/main.js"></script>
-<script src="js/dark-mode.js"></script>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    if (typeof PRODUCTS !== 'undefined') {
-      const featured = PRODUCTS.slice(0, 4);
-      const grid = document.getElementById('featuredProducts');
-      if (grid) {
-        grid.innerHTML = featured.map(p => `
+  <!-- SCRIPTS -->
+  <script src="js/cart.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/dark-mode.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      if (typeof PRODUCTS !== 'undefined') {
+        const featured = PRODUCTS.slice(0, 4);
+        const grid = document.getElementById('featuredProducts');
+        if (grid) {
+          grid.innerHTML = featured.map(p => `
           <div class="product-card">
-            <div class="product-thumb">${p.icon}</div>
+            <div class="product-thumb">
+              ${p.image ? `<img src="assets/images/${p.image}" alt="${p.name}" class="product-img">` : p.icon}
+            </div>
             <div class="product-body">
               <span class="product-cat">${p.cat}</span>
               <div class="product-name">${p.name}</div>
@@ -190,9 +216,10 @@
               <button class="btn btn-primary btn-sm" onclick="addToCart(${p.id})">+ Keranjang</button>
             </div>
           </div>`).join('');
+        }
       }
-    }
-  });
-</script>
+    });
+  </script>
 </body>
+
 </html>
