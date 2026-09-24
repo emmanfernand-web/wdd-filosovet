@@ -1,0 +1,255 @@
+/* ============================================================
+   FILOSOVET — css/index.css (Fixed Spacing & Layout Container)
+   ============================================================ */
+
+/* 1. Scroll Container & Layout Section */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.snap-container {
+  width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  scroll-snap-type: none;
+}
+
+/* Format Layout Section Utama */
+.fullscreen-section {
+  width: 100%;
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 90px 0 40px;
+  box-sizing: border-box;
+}
+
+/* Mencegah konten mepet ke pinggir layar kiri & kanan */
+.fullscreen-section .container {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-left: clamp(20px, 4vw, 64px);
+  padding-right: clamp(20px, 4vw, 64px);
+  box-sizing: border-box;
+}
+
+.fullscreen-section .my-auto {
+  margin-top: auto;
+  margin-bottom: auto;
+  width: 100%;
+}
+
+.fullscreen-section.bg-alt {
+  background-color: rgba(15, 118, 110, 0.03);
+}
+
+/* ============================================================
+   2. HERO SECTION (Glassmorphism Posisi Pas)
+   ============================================================ */
+.hero-section {
+  background-image: url('../assets/background/hero-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: #ffffff;
+  position: relative;
+}
+
+.hero-section .hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 70% 50%,
+    rgba(15, 118, 110, 0.4) 0%,
+    rgba(7, 53, 49, 0.85) 100%
+  );
+  z-index: 1;
+}
+
+.hero-section .hero-content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+}
+
+/* Grid Layout Hero: Seimbang Kiri & Kanan */
+.hero-section .hero-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.hero-section .hero-left-blank {
+  min-height: 50px;
+}
+
+/* --- KARTU GLASSMORPHISM HERO (TIDAK MEPET KANAN) --- */
+.hero-section .hero-glass-card {
+  background: rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 24px;
+  padding: 1.8rem 2rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 520px;
+  justify-self: end;
+  transition: all 0.3s ease;
+}
+
+.hero-section .hero-glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.4);
+}
+
+.hero-section .hero-tag {
+  background: rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(8px);
+  margin-bottom: 0.9rem;
+  font-size: 0.78rem !important;
+  padding: 0.3rem 0.85rem !important;
+  border-radius: 999px;
+}
+
+.hero-section .hero-title {
+  font-size: clamp(1.5rem, 2.2vw, 2rem);
+  font-weight: 800;
+  line-height: 1.25;
+  color: #ffffff;
+  margin-bottom: 0.7rem;
+  letter-spacing: -0.4px;
+}
+
+.hero-section .hero-desc {
+  font-size: 0.9rem;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 1.4rem;
+}
+
+.hero-section .hero-cta-group {
+  display: flex;
+  gap: 10px;
+  width: 100%;
+  margin-bottom: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.hero-section .btn-hero-primary {
+  flex: 1;
+  min-width: 135px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.88rem;
+}
+
+.hero-section .btn-outline-hero {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.65rem 1.2rem;
+  font-size: 0.88rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #ffffff;
+  backdrop-filter: blur(8px);
+}
+
+.hero-section .btn-outline-hero:hover {
+  background: #ffffff;
+  color: #0f766e;
+}
+
+.hero-section .hero-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  width: 100%;
+  padding-top: 1.1rem;
+  border-top: 1px dashed rgba(255, 255, 255, 0.22);
+  text-align: center;
+}
+
+.hero-section .hero-stats-grid strong {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #5eead4;
+}
+
+.hero-section .hero-stats-grid span {
+  font-size: 0.74rem;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* ============================================================
+   3. SECTION LAYANAN & KEUNGGULAN (Bikin Card Lega)
+   ============================================================ */
+.fullscreen-section .grid-4 {
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+}
+
+.fullscreen-section .grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.fullscreen-section .card {
+  padding: 1.6rem 1.4rem;
+  border-radius: 20px;
+}
+
+/* ============================================================
+   4. FOOTER SECTION & RESPONSIVE
+   ============================================================ */
+.fullscreen-section.footer-section {
+  justify-content: space-between;
+  padding-bottom: 0;
+}
+
+@media (max-width: 900px) {
+  .snap-container {
+    height: auto;
+    overflow-y: visible;
+    scroll-snap-type: none;
+  }
+  .fullscreen-section {
+    min-height: auto;
+    padding: 80px 0 40px;
+  }
+  .fullscreen-section .container {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  .hero-section .hero-inner {
+    grid-template-columns: 1fr;
+  }
+  .hero-section .hero-left-blank {
+    display: none;
+  }
+  .hero-section .hero-glass-card {
+    max-width: 100%;
+    justify-self: center;
+    padding: 1.5rem 1.2rem;
+  }
+  .fullscreen-section .grid-4,
+  .fullscreen-section .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
