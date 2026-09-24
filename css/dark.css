@@ -34,6 +34,11 @@ html.dark-mode aside.card {
   color: var(--text) !important;
 }
 
+html.dark-mode .card-img-wrap,
+html.dark-mode .product-thumb {
+  background-color: #0f172a !important;
+}
+
 /* Kontras Judul, Paragraf & Label */
 html.dark-mode h1, 
 html.dark-mode h2, 
