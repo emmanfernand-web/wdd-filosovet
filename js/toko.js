@@ -77,7 +77,7 @@ function applyFilter() {
 
   grid.innerHTML = filtered.map(p => `
     <div class="product-card">
-      <div class="product-thumb">${p.icon}</div>
+      <div class="product-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="product-img">` : p.icon}</div>
       <div class="product-body">
         <span class="product-cat">${p.cat}</span>
         <div class="product-name">${p.name}</div>

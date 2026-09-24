@@ -2,10 +2,10 @@
    FILOSOVET — cart.js (katalog produk & keranjang)
    ============================================================ */
 const PRODUCTS = [
-  { id: 1,  name: 'Dry Food Kucing Premium 1,5kg',  cat: 'makanan',  price: 185000, stock: 24, icon: '🍗', sold: 312 },
-  { id: 2,  name: 'Dry Food Anjing Adult 3kg',      cat: 'makanan',  price: 265000, stock: 18, icon: '🦴', sold: 245 },
-  { id: 3,  name: 'Wet Food Kucing Tuna 85g',       cat: 'makanan',  price: 22000,  stock: 60, icon: '🥫', sold: 580 },
-  { id: 4,  name: 'Snack Dental Stick Anjing',      cat: 'makanan',  price: 48000,  stock: 0,  icon: '🦷', sold: 150 },
+  { id: 1,  name: 'Dry Food Kucing Premium 1,5kg',  cat: 'makanan',  price: 185000, stock: 24, icon: '🍗', image: 'dry_food_cat.jpeg', sold: 312 },
+  { id: 2,  name: 'Dry Food Anjing Adult 3kg',      cat: 'makanan',  price: 265000, stock: 18, icon: '🦴', image: 'dry_food_dog.jpeg', sold: 245 },
+  { id: 3,  name: 'Wet Food Kucing Tuna 85g',       cat: 'makanan',  price: 22000,  stock: 60, icon: '🥫', image: 'wet_food_cat.jpeg', sold: 580 },
+  { id: 4,  name: 'Snack Dental Stick Anjing',      cat: 'makanan',  price: 48000,  stock: 0,  icon: '🦷', image: 'snack_dental_stick_dog.jpeg', sold: 150 },
   { id: 5,  name: 'Obat Cacing Broad Spectrum',     cat: 'obat',     price: 35000,  stock: 40, icon: '💊', sold: 410 },
   { id: 6,  name: 'Vitamin Bulu & Kulit 60ml',      cat: 'obat',     price: 78000,  stock: 12, icon: '🧪', sold: 198 },
   { id: 7,  name: 'Obat Kutu Spot-On Kucing',       cat: 'obat',     price: 95000,  stock: 5,  icon: '🩹', sold: 265 },
@@ -65,7 +65,7 @@ function initToko() {
     document.getElementById('resultInfo').textContent = `Menampilkan ${list.length} produk`;
     grid.innerHTML = list.length ? list.map(p => `
       <div class="product-card">
-        <div class="product-thumb">${p.icon}</div>
+        <div class="product-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="product-img">` : p.icon}</div>
         <div class="product-body">
           <span class="product-cat">${CAT_LABEL[p.cat]}</span>
           <div class="product-name">${p.name}</div>
@@ -110,7 +110,7 @@ function renderCartPage() {
   } else {
     wrap.innerHTML = items.map(p => `
       <div class="cart-item">
-        <div class="cart-thumb">${p.icon}</div>
+        <div class="cart-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="cart-img" style="width:100%;height:100%;object-fit:cover;border-radius:14px">` : p.icon}</div>
         <div>
           <div class="cart-name">${p.name}</div>
           <div class="cart-price">${rupiah(p.price)}</div>
