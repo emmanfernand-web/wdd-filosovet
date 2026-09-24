@@ -1,8 +1,8 @@
 /* ============================================================
-   FILOSOVET — dark-mode.js (Fixed State Synchronization)
+   FILOSOVET — dark-mode.js (State Synchronization)
    ============================================================ */
 
-// 1. Langsung terapkan tema dari localStorage saat script dimuat
+// 1. Terapkan tema awal dari localStorage
 (function applyInitialTheme() {
   const savedTheme = localStorage.getItem('fv_theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -14,15 +14,17 @@
   }
 })();
 
-// 2. Fungsi utama untuk mengelola tombol saklar
+// 2. Fungsi Utama Saklar Mode Gelap
 function initDarkModeToggle() {
-  const PATH_LIGHT_ICON = 'assets/dark_mode/light.png';
-  const PATH_DARK_ICON = 'assets/dark_mode/dark.png';
+  const isInsidePagesFolder = location.pathname.includes('/pages/');
+  const prefix = isInsidePagesFolder ? '../' : '';
+
+  const PATH_LIGHT_ICON = prefix + 'assets/dark_mode/light.png';
+  const PATH_DARK_ICON = prefix + 'assets/dark_mode/dark.png';
 
   const navActions = document.querySelector('.nav-actions');
   if (!navActions) return;
 
-  // Buat tombol jika belum ada di navbar
   let toggleBtn = document.querySelector('.theme-toggle-btn');
   if (!toggleBtn) {
     toggleBtn = document.createElement('button');
@@ -38,7 +40,6 @@ function initDarkModeToggle() {
 
   const toggleImg = toggleBtn.querySelector('img');
 
-  // Update tampilan ikon saklar
   function updateIcon() {
     const isDark = document.documentElement.classList.contains('dark-mode');
     if (toggleImg) {
@@ -47,14 +48,11 @@ function initDarkModeToggle() {
     }
   }
 
-  // Set ikon awal sesuai kondisi halaman
   updateIcon();
 
-  // Handler klik saklar
   toggleBtn.onclick = () => {
     const isDarkNow = document.documentElement.classList.contains('dark-mode');
     
-    // HANYA ubah tag <html> agar tidak pernah bentrok dengan <body>
     if (isDarkNow) {
       document.documentElement.classList.remove('dark-mode');
       localStorage.setItem('fv_theme', 'light');
@@ -63,7 +61,6 @@ function initDarkModeToggle() {
       localStorage.setItem('fv_theme', 'dark');
     }
 
-    // Efek animasi rotasi tombol
     if (toggleImg) {
       toggleImg.style.transform = 'scale(0.8) rotate(180deg)';
       setTimeout(() => {
@@ -74,6 +71,5 @@ function initDarkModeToggle() {
   };
 }
 
-// Jalankan saat DOM awal & saat header dinamis selesai di-fetch
 document.addEventListener('DOMContentLoaded', initDarkModeToggle);
 document.addEventListener('componentsLoaded', initDarkModeToggle);

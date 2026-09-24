@@ -4,37 +4,43 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Toko Produk & Farmasi | Filosovet Petshop & Klinik Hewan</title>
-  <!-- CSS Utama -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/shop.css">
-  <link rel="stylesheet" href="css/admin.css">
 
-  <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="components/header.css">
-  <link rel="stylesheet" href="components/footer.css">
-  
-  <!-- CSS Mode Malam -->
-  <link rel="stylesheet" href="css/dark.css">
+<!-- Pre-script Anti Flashing Dark Mode -->
 <script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark-mode');
-  } else {
-    document.documentElement.classList.remove('dark-mode');
   }
 </script>
+
+  <!-- CSS Utama (Gunakan ../ untuk keluar dari folder pages/) -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/shop.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <!-- CSS Komponen Terpisah -->
+  <link rel="stylesheet" href="../css/components/header.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+  
+  <!-- CSS Mode Malam -->
+  <link rel="stylesheet" href="../css/dark.css">
 </head>
 <body>
+
+<!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
+
+<!-- HERO SUB PAGE -->
 <section class="page-hero">
   <div class="container">
     <h1>Toko Produk & Farmasi</h1>
-    <div class="breadcrumb"><a href="index.html">Beranda</a> / Toko</div>
+    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Toko</div>
   </div>
 </section>
 
+<!-- KONTEN TOKO -->
 <section class="section">
   <div class="container shop-layout">
-    <!-- FILTER -->
+    <!-- FILTER (SIDEBAR KIRI) -->
     <aside class="card filter-card">
       <h3>🔍 Filter Produk</h3>
       <div class="filter-group">
@@ -55,26 +61,29 @@
         <label>Urutkan</label>
         <select id="sortSelect">
           <option value="populer">Paling populer</option>
-          <option value="murah">Harga termurah</option>
-          <option value="mahal">Harga termahal</option>
-          <option value="nama">Nama A–Z</option>
+          <option value="price-asc">Harga termurah</option>
+          <option value="price-desc">Harga termahal</option>
+          <option value="name-asc">Nama A–Z</option>
         </select>
       </div>
       <button class="btn btn-outline btn-sm btn-block" id="resetFilter">Reset Filter</button>
     </aside>
 
-    <!-- GRID PRODUK -->
+    <!-- GRID PRODUK (KANAN) -->
     <div>
       <p class="muted mb-3" id="resultInfo" style="font-size:.9rem"></p>
       <div class="product-grid" id="productGrid"></div>
     </div>
   </div>
 </section>
-<script src="js/cart.js"></script>
-<script src="js/toko.js"></script>
-<script>initToko();</script>
-<script src="js/dark-mode.js"></script>
+
+<!-- PLACEHOLDER FOOTER -->
+<div id="footer-placeholder"></div>
+
+<!-- SCRIPTS (Urutan Harus Tepat & Menggunakan ../) -->
+<script src="../js/cart.js"></script>
+<script src="../js/toko.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/dark-mode.js"></script>
 </body>
 </html>
-<div id="footer-placeholder"></div>
-<script src="js/main.js"></script>

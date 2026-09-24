@@ -1,28 +1,43 @@
 /* ============================================================
-   FILOSOVET — main.js (Fixed Component & Reveal Observer)
+   FILOSOVET — main.js (Robust Component Loader & Observer)
    ============================================================ */
 document.addEventListener('DOMContentLoaded', async () => {
-  // 1. Muat Header & Footer Dinamis
-  await loadComponent('#header-placeholder', ['components/header.html', 'header.html']);
-  await loadComponent('#footer-placeholder', ['components/footer.html', 'footer.html']);
+  // Tandai bahwa JS aktif untuk mendukung observer animasi
+  document.documentElement.classList.add('js-observer');
 
-  // 2. Inisialisasi Fitur Utama
+  const isInsidePagesFolder = location.pathname.includes('/pages/');
+  const prefix = isInsidePagesFolder ? '../' : '';
+
+  // 1. Muat Header & Footer sesuai posisi folder
+  await loadComponent('#header-placeholder', [
+    prefix + 'components/header.html',
+    'components/header.html'
+  ]);
+  await loadComponent('#footer-placeholder', [
+    prefix + 'components/footer.html',
+    'components/footer.html'
+  ]);
+
+  // 2. Inisialisasi Navigasi & Utility
+  fixNavLinks(isInsidePagesFolder);
   setActiveNavLink();
   initHeaderScroll();
   initHamburger();
   updateCartBadge();
   initFooterYear();
-  initReveal(); // Perbaikan animasi reveal
+  
+  // 3. Jalankan Observer Animasi Scroll
+  initReveal();
 
-  // 3. Trigger Dark Mode jika script terpasang
+  // 4. Trigger Dark Mode jika script terpasang
   if (typeof initDarkModeToggle === 'function') {
     initDarkModeToggle();
   }
-  
+
   document.dispatchEvent(new CustomEvent('componentsLoaded'));
 });
 
-// Fungsi pemanggil file HTML terpisah
+// Helper Loader Komponent dengan Error-Handling
 async function loadComponent(selector, filePaths) {
   const el = document.querySelector(selector);
   if (!el) return;
@@ -39,12 +54,11 @@ async function loadComponent(selector, filePaths) {
   }
 }
 
-// Inisialisasi Observer Animasi Scroll (Reveal Fix)
+// Inisialisasi Animation Observer
 function initReveal() {
   const reveals = document.querySelectorAll('.reveal');
   
   if (!('IntersectionObserver' in window)) {
-    // Fallback jika browser tidak mendukung observer
     reveals.forEach(el => el.classList.add('visible'));
     return;
   }
@@ -56,16 +70,48 @@ function initReveal() {
         observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+  }, { threshold: 0.02, rootMargin: '0px 0px 50px 0px' });
 
   reveals.forEach(el => observer.observe(el));
 }
 
-// Highlights Navigasi Aktif
+// Menyesuaikan Link Navigasi Berdasarkan Folder
+function fixNavLinks(isInsidePages) {
+  const brandLink = document.querySelector('.site-header .brand');
+  if (brandLink) {
+    brandLink.href = isInsidePages ? '../index.html' : 'index.html';
+    const logoImg = brandLink.querySelector('.logo');
+    if (logoImg) {
+      logoImg.src = isInsidePages ? '../assets/images/logo_filosovet.png' : 'assets/images/logo_filosovet.png';
+    }
+  }
+
+  document.querySelectorAll('.main-nav a').forEach(a => {
+    const page = a.getAttribute('data-page');
+    if (!page) return;
+
+    if (page === 'index.html') {
+      a.href = isInsidePages ? '../index.html' : 'index.html';
+    } else {
+      a.href = isInsidePages ? page : 'pages/' + page;
+    }
+  });
+
+  const cartLink = document.querySelector('.cart-link');
+  if (cartLink) {
+    cartLink.href = isInsidePages ? 'keranjang.html' : 'pages/keranjang.html';
+  }
+
+  const loginBtn = document.querySelector('.btn-login');
+  if (loginBtn) {
+    loginBtn.href = isInsidePages ? 'auth.html' : 'pages/auth.html';
+  }
+}
+
 function setActiveNavLink() {
   const currentPage = location.pathname.split('/').pop() || 'index.html';
   document.querySelectorAll('.main-nav a').forEach(a => {
-    const page = a.getAttribute('href') || a.getAttribute('data-page');
+    const page = a.getAttribute('data-page');
     if (page === currentPage || (currentPage === '' && page === 'index.html')) {
       a.classList.add('active');
     } else {
@@ -74,7 +120,6 @@ function setActiveNavLink() {
   });
 }
 
-// Efek Scroll Header Kapsul
 function initHeaderScroll() {
   const header = document.querySelector('.site-header');
   if (!header) return;
@@ -84,7 +129,6 @@ function initHeaderScroll() {
   });
 }
 
-// Hamburger Menu Mobile
 function initHamburger() {
   const burger = document.querySelector('.hamburger');
   const nav = document.querySelector('.main-nav');
@@ -103,7 +147,7 @@ function initFooterYear() {
   document.querySelectorAll('.js-year').forEach(el => el.textContent = new Date().getFullYear());
 }
 
-/* ---------- Helper Utilities ---------- */
+/* Helper Utilities */
 function rupiah(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
 function getCart() { try { return JSON.parse(localStorage.getItem('fv_cart')) || []; } catch { return []; } }
 function saveCart(c) { localStorage.setItem('fv_cart', JSON.stringify(c)); updateCartBadge(); }

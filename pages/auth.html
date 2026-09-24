@@ -4,33 +4,38 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Masuk / Daftar | Filosovet Petshop & Klinik Hewan</title>
-<!-- CSS Utama -->
-  <link rel="stylesheet" href="css/style.css">
-  
-  <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="components/header.css">
-  <link rel="stylesheet" href="components/footer.css">
-  
-  <!-- CSS Mode Malam -->
-  <link rel="stylesheet" href="css/dark.css">
+
+<!-- Pre-script Anti Flashing Dark Mode -->
 <script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark-mode');
-  } else {
-    document.documentElement.classList.remove('dark-mode');
   }
 </script>
+
+  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <link rel="stylesheet" href="../css/style.css">
+  
+  <!-- CSS Komponen Terpisah -->
+  <link rel="stylesheet" href="../css/components/header.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+  
+  <!-- CSS Mode Malam (Paling Bawah) -->
+  <link rel="stylesheet" href="../css/dark.css">
 </head>
 <body>
+
+<!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
 
-<section class="page-hero">
+<!-- HERO SUB PAGE -->
+<section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Akun Filosovet</h1>
-    <div class="breadcrumb"><a href="index.html">Beranda</a> / Masuk / Daftar</div>
+    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Masuk / Daftar</div>
   </div>
 </section>
 
+<!-- MAIN CONTENT FORM -->
 <section class="section">
   <div class="container" style="max-width:480px">
     <div class="card">
@@ -39,7 +44,7 @@
         <button class="tab" id="tabRegister" style="flex:1">Daftar Akun</button>
       </div>
 
-      <!-- LOGIN -->
+      <!-- FORM LOGIN -->
       <form id="formLogin">
         <div class="form-group">
           <label>Email</label>
@@ -53,7 +58,7 @@
         <p class="text-center muted" style="font-size:.85rem"><a href="#" style="color:var(--primary)">Lupa kata sandi?</a></p>
       </form>
 
-      <!-- REGISTER -->
+      <!-- FORM REGISTER -->
       <form id="formRegister" style="display:none">
         <div class="form-group">
           <label>Nama Lengkap</label>
@@ -88,19 +93,44 @@
     </p>
   </div>
 </section>
+
+<!-- PLACEHOLDER FOOTER -->
+<div id="footer-placeholder"></div>
+
+<!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
+<script src="../js/main.js"></script>
+<script src="../js/dark-mode.js"></script>
+
 <script>
+// Switcher Tab Login & Register
 const tLogin = document.getElementById('tabLogin'), tRegister = document.getElementById('tabRegister');
 const fLogin = document.getElementById('formLogin'), fRegister = document.getElementById('formRegister');
-tLogin.onclick = () => { tLogin.classList.add('active'); tRegister.classList.remove('active'); fLogin.style.display='block'; fRegister.style.display='none'; };
-tRegister.onclick = () => { tRegister.classList.add('active'); tLogin.classList.remove('active'); fRegister.style.display='block'; fLogin.style.display='none'; };
 
+tLogin.onclick = () => { 
+  tLogin.classList.add('active'); 
+  tRegister.classList.remove('active'); 
+  fLogin.style.display='block'; 
+  fRegister.style.display='none'; 
+};
+
+tRegister.onclick = () => { 
+  tRegister.classList.add('active'); 
+  tLogin.classList.remove('active'); 
+  fRegister.style.display='block'; 
+  fLogin.style.display='none'; 
+};
+
+// Handler Submit Login
 fLogin.addEventListener('submit', e => {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
   localStorage.setItem('fv_user', JSON.stringify({ name: email.split('@')[0], email }));
   toast('Berhasil masuk! Mengalihkan...');
+  // Pengalihan ke profil-pelanggan.html yang berada di folder yang sama (pages/)
   setTimeout(() => location.href = 'profil-pelanggan.html', 900);
 });
+
+// Handler Submit Register
 fRegister.addEventListener('submit', e => {
   e.preventDefault();
   const p1 = document.getElementById('regPass').value, p2 = document.getElementById('regPass2').value;
@@ -109,11 +139,9 @@ fRegister.addEventListener('submit', e => {
   const name = document.getElementById('regName').value;
   localStorage.setItem('fv_user', JSON.stringify({ name, email: document.getElementById('regEmail').value }));
   toast('Akun berhasil dibuat! Mengalihkan...');
+  // Pengalihan ke profil-pelanggan.html yang berada di folder yang sama (pages/)
   setTimeout(() => location.href = 'profil-pelanggan.html', 900);
 });
 </script>
-<script src="js/dark-mode.js"></script>
 </body>
 </html>
-<div id="footer-placeholder"></div>
-<script src="js/main.js"></script>
