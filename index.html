@@ -17,18 +17,11 @@
   <link rel="stylesheet" href="css/shop.css">
 
   <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="components/header.css">
-  <link rel="stylesheet" href="components/footer.css">
+  <link rel="stylesheet" href="css/components/header.css">
+  <link rel="stylesheet" href="css/components/footer.css">
   
   <!-- CSS Mode Malam -->
   <link rel="stylesheet" href="css/dark.css">
-  <script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark-mode');
-  } else {
-    document.documentElement.classList.remove('dark-mode');
-  }
-</script>
 </head>
 <body>
 
@@ -43,8 +36,8 @@
       <h1>Rawat Kesehatan & Kebahagiaan Sahabat Berbulu Anda</h1>
       <p class="lead">Booking dokter hewan, grooming, dan pet hotel secara online. Belanja kebutuhan hewan peliharaan dalam satu platform.</p>
       <div class="hero-cta">
-        <a href="booking.html" class="btn btn-accent">📅 Booking Layanan</a>
-        <a href="toko.html" class="btn" style="background:#fff;color:var(--primary)">🛍️ Belanja Sekarang</a>
+        <a href="pages/booking.html" class="btn btn-accent">📅 Booking Layanan</a>
+        <a href="pages/toko.html" class="btn" style="background:#fff;color:var(--primary)">🛍️ Belanja Sekarang</a>
       </div>
       <div class="hero-stats">
         <div><strong>2.500+</strong><span>Pasien Hewan</span></div>
@@ -69,25 +62,25 @@
         <div class="card-icon">🩺</div>
         <h3 class="mb-2">Klinik & Dokter Hewan</h3>
         <p class="muted mb-3" style="font-size:.92rem">Pemeriksaan, diagnosis, USG, X-Ray, lab, hingga tindakan medis ringan hingga lanjutan.</p>
-        <a href="daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+        <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
       </div>
       <div class="card reveal">
         <div class="card-icon">✂️</div>
         <h3 class="mb-2">Grooming</h3>
         <p class="muted mb-3" style="font-size:.92rem">Grooming sehat & anti-jamur dengan pemeriksaan kesehatan awal serta vaksinasi.</p>
-        <a href="daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+        <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
       </div>
       <div class="card reveal">
         <div class="card-icon">🏨</div>
         <h3 class="mb-2">Pet Hotel</h3>
         <p class="muted mb-3" style="font-size:.92rem">Penitipan hewan dengan standar kesehatan ketat: bebas kutu, bebas cacing, vaksin lengkap.</p>
-        <a href="daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
+        <a href="pages/daftar-layanan.html" class="btn btn-outline btn-sm">Detail →</a>
       </div>
       <div class="card reveal">
         <div class="card-icon">💊</div>
         <h3 class="mb-2">Toko & Farmasi</h3>
         <p class="muted mb-3" style="font-size:.92rem">Makanan, obat-obatan, skincare, dan aksesoris — tersedia juga pembelian online.</p>
-        <a href="toko.html" class="btn btn-outline btn-sm">Belanja →</a>
+        <a href="pages/toko.html" class="btn btn-outline btn-sm">Belanja →</a>
       </div>
     </div>
   </div>
@@ -102,7 +95,7 @@
     </div>
     <div class="product-grid" id="featuredProducts"></div>
     <div class="text-center" style="margin-top:2rem">
-      <a href="toko.html" class="btn btn-primary">Lihat Semua Produk →</a>
+      <a href="pages/toko.html" class="btn btn-primary">Lihat Semua Produk →</a>
     </div>
   </div>
 </section>
@@ -167,9 +160,9 @@
     <div class="cta-banner reveal">
       <h2 class="mb-2" style="font-size:1.7rem">Siap Memberikan yang Terbaik untuk Sahabat Anda?</h2>
       <p class="mb-4" style="opacity:.92">Daftar sekarang dan jadwalkan kunjungan pertama Anda.</p>
-      <a href="auth.html" class="btn btn-accent">Buat Akun Gratis</a>
+      <a href="pages/auth.html" class="btn btn-accent">Buat Akun Gratis</a>
       &nbsp;
-      <a href="booking.html" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Booking Langsung</a>
+      <a href="pages/booking.html" class="btn" style="background:rgba(255,255,255,.15);color:#fff">Booking Langsung</a>
     </div>
   </div>
 </section>

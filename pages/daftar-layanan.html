@@ -4,42 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daftar Layanan | Filosovet Petshop & Klinik Hewan</title>
-<!-- CSS Utama -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/shop.css">
-  
-  <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="components/header.css">
-  <link rel="stylesheet" href="components/footer.css">
-  
-  <!-- CSS Mode Malam -->
-  <link rel="stylesheet" href="css/dark.css">
+
+<!-- Pre-script Anti Flashing Dark Mode -->
 <script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark-mode');
-  } else {
-    document.documentElement.classList.remove('dark-mode');
   }
 </script>
+
+  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/shop.css">
+
+  <!-- CSS Komponen Terpisah -->
+  <link rel="stylesheet" href="../css/components/header.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+  
+  <!-- CSS Mode Malam (Paling Bawah) -->
+  <link rel="stylesheet" href="../css/dark.css">
 </head>
 <body>
+
+<!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
-<section class="page-hero">
+
+<!-- HERO SUB PAGE -->
+<section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Daftar Layanan Filosovet</h1>
-    <div class="breadcrumb"><a href="index.html">Beranda</a> / Layanan</div>
+    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Layanan</div>
   </div>
 </section>
 
+<!-- MAIN CONTENT -->
 <section class="section">
   <div class="container">
+    <!-- NAVIGATION TABS -->
     <div class="tabs" id="layananTabs">
       <button class="tab active" data-tab="medis">🩺 Klinik & Dokter Hewan</button>
       <button class="tab" data-tab="grooming">✂️ Grooming</button>
       <button class="tab" data-tab="hotel">🏨 Pet Hotel</button>
     </div>
 
-    <!-- MEDIS -->
+    <!-- 1. KLINIK & MEDIS -->
     <div id="tab-medis" class="tab-panel">
       <div class="card mb-4">
         <div class="grid grid-2" style="align-items:center;gap:2.5rem">
@@ -59,13 +66,13 @@
         </div>
       </div>
       <div class="grid grid-3">
-        <div class="card"><h3 class="mb-2">Konsultasi Umum</h3><p class="muted" style="font-size:.9rem">Pemeriksaan kesehatan menyeluruh dengan dokter hewan, termasuk resep obat bila diperlukan.</p><div class="product-price mt-2" style="margin-top:.8rem">Rp 150.000</div></div>
+        <div class="card"><h3 class="mb-2">Konsultasi Umum</h3><p class="muted" style="font-size:.9rem">Pemeriksaan kesehatan menyeluruh dengan dokter hewan, termasuk resep obat bila diperlukan.</p><div class="product-price" style="margin-top:.8rem">Rp 150.000</div></div>
         <div class="card"><h3 class="mb-2">Medical Check-Up</h3><p class="muted" style="font-size:.9rem">Paket pemeriksaan berkala: fisik, darah, dan profil kesehatan lengkap.</p><div class="product-price" style="margin-top:.8rem">Rp 350.000</div></div>
         <div class="card"><h3 class="mb-2">Vaksinasi</h3><p class="muted" style="font-size:.9rem">Vaksin rutin anjing & kucing dengan kartu vaksin digital.</p><div class="product-price" style="margin-top:.8rem">Rp 180.000</div></div>
       </div>
     </div>
 
-    <!-- GROOMING -->
+    <!-- 2. GROOMING -->
     <div id="tab-grooming" class="tab-panel" style="display:none">
       <div class="card mb-4">
         <div class="grid grid-2" style="align-items:center;gap:2.5rem">
@@ -90,7 +97,7 @@
       </div>
     </div>
 
-    <!-- HOTEL -->
+    <!-- 3. PET HOTEL -->
     <div id="tab-hotel" class="tab-panel" style="display:none">
       <div class="card mb-4">
         <div class="grid grid-2" style="align-items:center;gap:2.5rem">
@@ -115,6 +122,7 @@
       </div>
     </div>
 
+    <!-- CTA FOOTER KONSULTASI -->
     <div class="card text-center" style="margin-top:2.5rem;background:linear-gradient(120deg,var(--primary-light),#fff)">
       <h3 class="mb-2">Butuh konsultasi cepat?</h3>
       <p class="muted mb-3">Tim kami siap membantu Anda memilih layanan yang tepat.</p>
@@ -122,18 +130,24 @@
     </div>
   </div>
 </section>
+
+<!-- PLACEHOLDER FOOTER -->
+<div id="footer-placeholder"></div>
+
+<!-- SCRIPTS (Urutan Panggilan Presisi & Menggunakan ../) -->
+<script src="../js/main.js"></script>
+<script src="../js/dark-mode.js"></script>
+
 <script>
-document.querySelectorAll('#layananTabs .tab').forEach(t => {
-  t.addEventListener('click', () => {
-    document.querySelectorAll('#layananTabs .tab').forEach(x => x.classList.remove('active'));
-    t.classList.add('active');
-    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-    document.getElementById('tab-' + t.dataset.tab).style.display = 'block';
+  // Handlers Perpindahan Tab Layanan
+  document.querySelectorAll('#layananTabs .tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('#layananTabs .tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+      document.getElementById('tab-' + t.dataset.tab).style.display = 'block';
+    });
   });
-});
 </script>
-<script src="js/dark-mode.js"></script>
 </body>
 </html>
-<div id="footer-placeholder"></div>
-<script src="js/main.js"></script>

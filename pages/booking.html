@@ -7,36 +7,36 @@
 
 <!-- Pre-script Anti Flashing Dark Mode -->
 <script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark-mode');
-  } else {
-    document.documentElement.classList.remove('dark-mode');
   }
 </script>
-<!-- CSS Utama -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/shop.css">
-  
+
+  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/shop.css">
+
   <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="components/header.css">
-  <link rel="stylesheet" href="components/footer.css">
+  <link rel="stylesheet" href="../css/components/header.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
   
-  <!-- CSS Mode Malam -->
-  <link rel="stylesheet" href="css/dark.css">
+  <!-- CSS Mode Malam (Paling Bawah) -->
+  <link rel="stylesheet" href="../css/dark.css">
 </head>
 <body>
 
 <!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
 
-<!-- HERO SUB PAGE (Padding Atas 150px Agar Tidak Tertutup Navbar) -->
-<section class="page-hero" style="padding-top: 150px;">
+<!-- HERO SUB PAGE -->
+<section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Booking Layanan</h1>
-    <div class="breadcrumb"><a href="index.html">Beranda</a> / Booking</div>
+    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Booking</div>
   </div>
 </section>
 
+<!-- MAIN CONTENT -->
 <section class="section">
   <div class="container">
     <!-- 1. PILIH LAYANAN -->
@@ -133,9 +133,9 @@
 <!-- PLACEHOLDER FOOTER -->
 <div id="footer-placeholder"></div>
 
-<!-- SCRIPTS -->
-<script src="js/booking.js"></script>
-<script src="js/main.js"></script>
-<script src="js/dark-mode.js"></script>
+<!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
+<script src="../js/booking.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/dark-mode.js"></script>
 </body>
 </html>

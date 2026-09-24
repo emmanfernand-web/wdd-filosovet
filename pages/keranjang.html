@@ -4,41 +4,49 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Keranjang & Checkout | Filosovet Petshop & Klinik Hewan</title>
-  <!-- CSS Utama -->
-  <link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/shop.css">
-  <link rel="stylesheet" href="css/admin.css">
 
-  <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="components/header.css">
-  <link rel="stylesheet" href="components/footer.css">
-  
-  <!-- CSS Mode Malam -->
-  <link rel="stylesheet" href="css/dark.css">
-  <script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!localStorage.getItem('fv_theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+<!-- Pre-script Anti Flashing Dark Mode -->
+<script>
+  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark-mode');
-  } else {
-    document.documentElement.classList.remove('dark-mode');
   }
 </script>
+
+  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="stylesheet" href="../css/shop.css">
+  <link rel="stylesheet" href="../css/admin.css">
+
+  <!-- CSS Komponen Terpisah -->
+  <link rel="stylesheet" href="../css/components/header.css">
+  <link rel="stylesheet" href="../css/components/footer.css">
+  
+  <!-- CSS Mode Malam (Paling Bawah) -->
+  <link rel="stylesheet" href="../css/dark.css">
 </head>
 <body>
+
+<!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
-<section class="page-hero">
+
+<!-- HERO SUB PAGE -->
+<section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Keranjang & Checkout</h1>
-    <div class="breadcrumb"><a href="index.html">Beranda</a> / Keranjang</div>
+    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Keranjang</div>
   </div>
 </section>
 
+<!-- MAIN CONTENT -->
 <section class="section">
   <div class="container cart-layout">
+    <!-- ITEM KERANJANG (KIRI) -->
     <div class="card">
       <h3 class="mb-3">🛒 Item Keranjang</h3>
       <div id="cartItems"></div>
     </div>
 
+    <!-- RINGKASAN BELANJA (KANAN) -->
     <div class="card summary-card">
       <h3 class="mb-3">💳 Ringkasan Belanja</h3>
       <div class="promo-row">
@@ -57,8 +65,10 @@
       <div class="form-group">
         <label>Metode Pembayaran</label>
         <select id="payMethod">
-          <option>QRIS</option><option>Transfer Bank (BCA)</option>
-          <option>Transfer Bank (Mandiri)</option><option>Kartu Debit/Kredit</option>
+          <option>QRIS</option>
+          <option>Transfer Bank (BCA)</option>
+          <option>Transfer Bank (Mandiri)</option>
+          <option>Kartu Debit/Kredit</option>
           <option>COD (bayar di toko)</option>
         </select>
       </div>
@@ -68,8 +78,8 @@
   </div>
 </section>
 
-<!-- MODAL NOTA -->
-<div id="notaModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.55);z-index:200;place-items:center">
+<!-- MODAL NOTA DIGITIAL -->
+<div id="notaModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:2000;place-items:center;backdrop-filter:blur(4px);">
   <div class="card" style="max-width:430px;width:92%">
     <div class="text-center mb-3">
       <div style="font-size:3rem">🧾</div>
@@ -83,10 +93,22 @@
     <button class="btn btn-primary btn-block" onclick="document.getElementById('notaModal').style.display='none'" style="margin-top:1rem">Selesai</button>
   </div>
 </div>
-<script src="js/cart.js"></script>
-<script>initKeranjang();</script>
-<script src="js/dark-mode.js"></script>
+
+<!-- PLACEHOLDER FOOTER -->
+<div id="footer-placeholder"></div>
+
+<!-- SCRIPTS (Urutan Panggilan Presisi & Menggunakan ../) -->
+<script src="../js/cart.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/dark-mode.js"></script>
+
+<script>
+  // Inisialisasi Keranjang Setelah DOM Siap
+  document.addEventListener('DOMContentLoaded', () => {
+    if (typeof initKeranjang === 'function') {
+      initKeranjang();
+    }
+  });
+</script>
 </body>
 </html>
-<div id="footer-placeholder"></div>
-<script src="js/main.js"></script>
