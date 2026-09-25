@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initHamburger();
   updateCartBadge();
   initFooterYear();
-  
+
   // 3. Jalankan Observer Animasi Scroll
   initReveal();
 
@@ -50,14 +50,14 @@ async function loadComponent(selector, filePaths) {
         el.innerHTML = await res.text();
         return;
       }
-    } catch (err) {}
+    } catch (err) { }
   }
 }
 
 // Inisialisasi Animation Observer
 function initReveal() {
   const reveals = document.querySelectorAll('.reveal');
-  
+
   if (!('IntersectionObserver' in window)) {
     reveals.forEach(el => el.classList.add('visible'));
     return;

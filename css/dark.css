@@ -170,3 +170,11 @@ html.dark-mode .theme-toggle-btn {
   background: #172036 !important;
   border-color: #283553 !important;
 }
+
+/* Service Card Link di Dark Mode */
+html.dark-mode .service-card .card-link {
+  color: #2dd4bf !important;
+}
+html.dark-mode .service-card .card-link:hover {
+  color: #5eead4 !important;
+}
