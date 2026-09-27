@@ -54,14 +54,30 @@
   z-index: 2;
 }
 
+/* Logo Navbar Base & Transition */
 .site-header .brand .logo {
-  width: 38px !important;
-  height: 38px !important;
-  max-height: 38px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
-  box-shadow: 0 2px 8px rgba(15, 118, 110, 0.2);
+  height: 40px !important;
+  width: auto !important;
+  max-height: 40px !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
+  box-shadow: none !important;
   flex-shrink: 0 !important;
+  
+  /* Efek Transisi Halus */
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease !important;
+  cursor: pointer;
+}
+
+/* Efek Hover Logo (Membesar Sedikit & Sedikit Membesar/Bersinar) */
+.site-header .brand:hover .logo {
+  transform: scale(1.08) rotate(-2deg) !important;
+  filter: drop-shadow(0 4px 12px rgba(15, 118, 110, 0.35)) !important;
+}
+
+/* Efek Saat Logo Diklik (Active Click Feedback) */
+.site-header .brand:active .logo {
+  transform: scale(0.95) rotate(0deg) !important;
 }
 
 /* Nav Menu Pill (Sempurna di Tengah) */
