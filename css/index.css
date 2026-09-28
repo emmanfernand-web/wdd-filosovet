@@ -1,5 +1,5 @@
 /* ============================================================
-   FILOSOVET — css/index.css (Fixed Spacing & Layout Container)
+   FILOSOVET — css/index.css (Fixed Spacing & Interactive Cards)
    ============================================================ */
 
 /* 1. Scroll Container & Layout Section */
@@ -29,17 +29,17 @@ body {
   justify-content: center;
   align-items: center;
   position: relative;
-  padding: 90px 0 40px;
+  padding: 85px 0 35px;
   box-sizing: border-box;
 }
 
-/* Mencegah konten mepet ke pinggir layar kiri & kanan */
+/* Diperbesar agar konten kartu lebih leluasa dan tidak terlalu menumpuk di tengah */
 .fullscreen-section .container {
   width: 100%;
-  max-width: 1160px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding-left: clamp(20px, 4vw, 64px);
-  padding-right: clamp(20px, 4vw, 64px);
+  padding-left: clamp(20px, 3.5vw, 56px);
+  padding-right: clamp(20px, 3.5vw, 56px);
   box-sizing: border-box;
 }
 
@@ -54,7 +54,7 @@ body {
 }
 
 /* ============================================================
-   2. HERO SECTION (Glassmorphism Posisi Pas)
+   2. HERO SECTION
    ============================================================ */
 .hero-section {
   background-image: url('../assets/background/hero-bg.jpg');
@@ -82,7 +82,6 @@ body {
   width: 100%;
 }
 
-/* Grid Layout Hero: Seimbang Kiri & Kanan */
 .hero-section .hero-inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -94,7 +93,6 @@ body {
   min-height: 50px;
 }
 
-/* --- KARTU GLASSMORPHISM HERO (TIDAK MEPET KANAN) --- */
 .hero-section .hero-glass-card {
   background: rgba(255, 255, 255, 0.14);
   backdrop-filter: blur(20px) saturate(180%);
@@ -198,42 +196,64 @@ body {
 }
 
 /* ============================================================
-   3. SECTION LAYANAN & KEUNGGULAN (Bikin Card Lega)
+   3. SECTION LAYANAN & KEUNGGULAN (Kartu Diperbesar + Clickable)
    ============================================================ */
+
+/* Grid Layanan (4 Card) */
 .fullscreen-section .grid-4 {
+  display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+  gap: 1.4rem;
 }
 
+/* Grid Keunggulan (3 Card) */
 .fullscreen-section .grid-3 {
+  display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+  gap: 1.75rem;
 }
 
+/* Base Style untuk Semua Card Interaktif */
 .fullscreen-section .card {
-  padding: 1.4rem 1.25rem;
-  border-radius: 20px;
-}
-
-.fullscreen-section .service-card {
+  padding: 1.6rem 1.4rem;
+  border-radius: 22px;
+  text-decoration: none;
+  color: inherit;
   display: flex;
   flex-direction: column;
   height: 100%;
+  cursor: pointer;
+  box-sizing: border-box;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s ease,
+              border-color 0.35s ease;
 }
 
+/* Animation Hover untuk Seluruh Card */
+.fullscreen-section .card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 18px 36px rgba(15, 118, 110, 0.14);
+  border-color: rgba(15, 118, 110, 0.35);
+}
+
+/* --- Card Layanan Kami --- */
 .fullscreen-section .service-card .card-img-wrap {
   width: 100%;
-  height: 145px;
-  border-radius: 14px;
+  height: 180px; /* Diperbesar dari 145px */
+  border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 1.1rem;
+  margin-bottom: 1.2rem;
+  background-color: #f1f5f9;
 }
 
 .fullscreen-section .service-card .card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fullscreen-section .service-card:hover .card-img {
@@ -241,52 +261,50 @@ body {
 }
 
 .fullscreen-section .service-card h3 {
-  font-size: 1.15rem;
+  font-size: 1.25rem; /* Diperbesar dari 1.15rem */
   font-weight: 700;
-  margin-bottom: 0.45rem;
+  margin-bottom: 0.5rem;
+  color: var(--text, #0f172a);
 }
 
 .fullscreen-section .service-card p.muted {
-  font-size: 0.86rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
+  font-size: 0.9rem; /* Diperbesar dari 0.86rem */
+  line-height: 1.55;
+  margin-bottom: 1.2rem;
+  color: var(--muted, #64748b);
 }
 
 .fullscreen-section .service-card .card-link {
   margin-top: auto;
   font-weight: 700;
-  color: var(--primary);
-  font-size: 0.88rem;
+  color: var(--primary, #0f766e);
+  font-size: 0.92rem;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  transition: var(--transition);
+  gap: 6px;
+  transition: transform 0.3s ease, color 0.3s ease;
 }
 
-.fullscreen-section .service-card .card-link:hover {
-  transform: translateX(4px);
-  color: var(--primary-dark);
+.fullscreen-section .service-card:hover .card-link {
+  transform: translateX(6px);
+  color: var(--primary-dark, #0b5a54);
 }
 
-#why-us .card {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
+/* --- Card Keunggulan --- */
 #why-us .card .card-img-wrap {
   width: 100%;
-  height: 180px;
-  border-radius: 14px;
+  height: 215px; /* Diperbesar dari 180px */
+  border-radius: 16px;
   overflow: hidden;
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.3rem;
+  background-color: #f1f5f9;
 }
 
 #why-us .card .card-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 #why-us .card:hover .card-img {
@@ -294,14 +312,16 @@ body {
 }
 
 #why-us .card h3 {
-  font-size: 1.2rem;
+  font-size: 1.3rem; /* Diperbesar dari 1.2rem */
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
+  color: var(--text, #0f172a);
 }
 
 #why-us .card p.muted {
-  font-size: 0.9rem;
-  line-height: 1.55;
+  font-size: 0.94rem; /* Diperbesar dari 0.9rem */
+  line-height: 1.6;
+  color: var(--muted, #64748b);
 }
 
 /* ============================================================

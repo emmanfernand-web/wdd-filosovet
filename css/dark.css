@@ -34,6 +34,13 @@ html.dark-mode aside.card {
   color: var(--text) !important;
 }
 
+/* PERBAIKAN: Menimpa Kartu / Div yang Menggunakan Gradient Inline (#fff) */
+html.dark-mode .card[style*="linear-gradient"],
+html.dark-mode div[style*="linear-gradient"] {
+  background: linear-gradient(135deg, rgba(15, 118, 110, 0.35), var(--surface)) !important;
+  border-color: var(--border) !important;
+}
+
 html.dark-mode .card-img-wrap,
 html.dark-mode .product-thumb {
   background-color: #0f172a !important;
@@ -66,7 +73,7 @@ html.dark-mode .breadcrumb a {
   color: #94a3b8 !important;
 }
 
-/* Input, Form, Select & Dropdown Options (Fix Text Unreadable) */
+/* Input, Form, Select & Dropdown Options */
 html.dark-mode input,
 html.dark-mode select,
 html.dark-mode textarea {
