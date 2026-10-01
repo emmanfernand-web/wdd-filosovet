@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../config/session.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -26,14 +27,14 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER NAVBAR -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero">
   <div class="container">
     <h1>Toko Produk & Farmasi</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Toko</div>
+    <div class="breadcrumb"><a href="../index.php">Beranda</a> / Toko</div>
   </div>
 </section>
 
@@ -77,8 +78,8 @@
   </div>
 </section>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER -->
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <!-- SCRIPTS (Urutan Harus Tepat & Menggunakan ../) -->
 <script src="../js/cart.js"></script>

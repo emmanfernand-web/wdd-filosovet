@@ -1,3 +1,6 @@
+<?php
+require_once __DIR__ . '/../config/session.php';
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -29,7 +32,7 @@
 <div class="admin-layout">
   <!-- SIDEBAR (MENU UTAMA ADMIN) -->
   <aside class="admin-sidebar">
-    <a href="../index.html" class="brand">
+    <a href="../index.php" class="brand">
       <img src="../assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo"> Filosovet
     </a>
     <nav class="admin-menu">

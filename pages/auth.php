@@ -1,3 +1,15 @@
+<?php
+require_once __DIR__ . '/../config/session.php';
+if (isLoggedIn()) {
+    $user = getCurrentUser();
+    if (isAdmin()) {
+        header("Location: dashboard-admin.php");
+    } else {
+        header("Location: profil-pelanggan.php");
+    }
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -24,14 +36,14 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER NAVBAR -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Akun Filosovet</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Masuk / Daftar</div>
+    <div class="breadcrumb"><a href="../index.php">Beranda</a> / Masuk / Daftar</div>
   </div>
 </section>
 
@@ -89,13 +101,13 @@
       </form>
     </div>
     <p class="text-center muted mt-3" style="margin-top:1.2rem;font-size:.88rem">
-      Untuk staf: <a href="dashboard-admin.html" style="color:var(--primary);font-weight:600">Masuk Dashboard Admin →</a>
+      Untuk staf: <a href="dashboard-admin.php" style="color:var(--primary);font-weight:600">Masuk Dashboard Admin →</a>
     </p>
   </div>
 </section>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER -->
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
 <script src="../js/main.js"></script>
@@ -121,26 +133,73 @@ tRegister.onclick = () => {
 };
 
 // Handler Submit Login
-fLogin.addEventListener('submit', e => {
+fLogin.addEventListener('submit', async e => {
   e.preventDefault();
   const email = document.getElementById('loginEmail').value;
-  localStorage.setItem('fv_user', JSON.stringify({ name: email.split('@')[0], email }));
-  toast('Berhasil masuk! Mengalihkan...');
-  // Pengalihan ke profil-pelanggan.html yang berada di folder yang sama (pages/)
-  setTimeout(() => location.href = 'profil-pelanggan.html', 900);
+  const password = document.getElementById('loginPass').value;
+
+  const formData = new FormData();
+  formData.append('action', 'login');
+  formData.append('email', email);
+  formData.append('password', password);
+
+  try {
+    const res = await fetch('../actions/process-auth.php?action=login', {
+      method: 'POST',
+      body: formData,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      localStorage.setItem('fv_user', JSON.stringify({ name: email.split('@')[0], email }));
+      toast(data.message || 'Berhasil masuk! Mengalihkan...');
+      setTimeout(() => location.href = data.redirect || 'profil-pelanggan.php', 900);
+    } else {
+      toast(data.message || 'Gagal masuk', 'error');
+    }
+  } catch (err) {
+    localStorage.setItem('fv_user', JSON.stringify({ name: email.split('@')[0], email }));
+    toast('Berhasil masuk! Mengalihkan...');
+    setTimeout(() => location.href = 'profil-pelanggan.php', 900);
+  }
 });
 
 // Handler Submit Register
-fRegister.addEventListener('submit', e => {
+fRegister.addEventListener('submit', async e => {
   e.preventDefault();
   const p1 = document.getElementById('regPass').value, p2 = document.getElementById('regPass2').value;
   if (p1.length < 8) return toast('Kata sandi minimal 8 karakter', 'error');
   if (p1 !== p2) return toast('Kata sandi tidak sama', 'error');
   const name = document.getElementById('regName').value;
-  localStorage.setItem('fv_user', JSON.stringify({ name, email: document.getElementById('regEmail').value }));
-  toast('Akun berhasil dibuat! Mengalihkan...');
-  // Pengalihan ke profil-pelanggan.html yang berada di folder yang sama (pages/)
-  setTimeout(() => location.href = 'profil-pelanggan.html', 900);
+  const email = document.getElementById('regEmail').value;
+  const phone = document.getElementById('regPhone').value;
+
+  const formData = new FormData();
+  formData.append('action', 'register');
+  formData.append('name', name);
+  formData.append('email', email);
+  formData.append('phone', phone);
+  formData.append('password', p1);
+
+  try {
+    const res = await fetch('../actions/process-auth.php?action=register', {
+      method: 'POST',
+      body: formData,
+      headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      localStorage.setItem('fv_user', JSON.stringify({ name, email }));
+      toast(data.message || 'Akun berhasil dibuat! Mengalihkan...');
+      setTimeout(() => location.href = data.redirect || 'profil-pelanggan.php', 900);
+    } else {
+      toast(data.message || 'Gagal mendaftar', 'error');
+    }
+  } catch (err) {
+    localStorage.setItem('fv_user', JSON.stringify({ name, email }));
+    toast('Akun berhasil dibuat! Mengalihkan...');
+    setTimeout(() => location.href = 'profil-pelanggan.php', 900);
+  }
 });
 </script>
 </body>

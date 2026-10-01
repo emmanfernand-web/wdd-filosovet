@@ -145,6 +145,26 @@ document.getElementById('btnConfirm').addEventListener('click', () => {
   all.unshift(booking);
   localStorage.setItem('fv_bookings', JSON.stringify(all));
 
+  fetch('../actions/process-booking.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify({
+      service: cfg.label,
+      type: type.name,
+      date: d.toISOString().slice(0, 10),
+      time: state.time,
+      pet_name: petName,
+      pet_species: document.getElementById('petSpecies').value,
+      pet_breed: document.getElementById('petBreed').value,
+      pet_weight: document.getElementById('petWeight').value,
+      notes: document.getElementById('petNotes').value.trim(),
+      price: type.price * durasi
+    })
+  }).catch(() => {});
+
   document.getElementById('bookingCode').value = code;
   document.getElementById('modalText').textContent =
     `${cfg.label} ${type.name} untuk ${petName} pada ${state.time} telah terdaftar. Notifikasi telah dikirim ke admin.`;

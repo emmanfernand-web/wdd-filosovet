@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../config/session.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,14 +26,14 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER NAVBAR -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Daftar Layanan Filosovet</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Layanan</div>
+    <div class="breadcrumb"><a href="../index.php">Beranda</a> / Layanan</div>
   </div>
 </section>
 
@@ -60,7 +61,7 @@
               <li>✅ Tindakan medis ringan hingga lanjutan</li>
               <li>✅ Surat rujukan digital bila diperlukan</li>
             </ul>
-            <a href="booking.html?layanan=konsultasi" class="btn btn-primary">📅 Booking Konsultasi</a>
+            <a href="booking.php?layanan=konsultasi" class="btn btn-primary">📅 Booking Konsultasi</a>
           </div>
           <div class="service-banner-img">
             <img src="../assets/images/clinic.jpeg" alt="Klinik & Dokter Hewan">
@@ -87,7 +88,7 @@
               <li>✅ Grooming jamur dengan shampoo terapeutik</li>
               <li>✅ Dapat digabung dengan vaksinasi</li>
             </ul>
-            <a href="booking.html?layanan=grooming" class="btn btn-primary">📅 Booking Grooming</a>
+            <a href="booking.php?layanan=grooming" class="btn btn-primary">📅 Booking Grooming</a>
           </div>
           <div class="service-banner-img">
             <img src="../assets/images/grooming.jpeg" alt="Grooming Sehat & Anti-Jamur">
@@ -114,7 +115,7 @@
               <li>✅ Jadwal makan dan aktivitas teratur</li>
               <li>✅ Sistem waiting list saat kandang penuh</li>
             </ul>
-            <a href="booking.html?layanan=hotel" class="btn btn-primary">📅 Ajukan Penitipan</a>
+            <a href="booking.php?layanan=hotel" class="btn btn-primary">📅 Ajukan Penitipan</a>
           </div>
           <div class="service-banner-img">
             <img src="../assets/images/pet_hotel.jpeg" alt="Pet Hotel">
@@ -132,13 +133,13 @@
     <div class="card text-center" style="margin-top:2.5rem;background:linear-gradient(120deg,var(--primary-light),#fff)">
       <h3 class="mb-2">Butuh konsultasi cepat?</h3>
       <p class="muted mb-3">Tim kami siap membantu Anda memilih layanan yang tepat.</p>
-      <a href="auth.html" class="btn btn-primary btn-sm">Hubungi Kami</a>
+      <a href="auth.php" class="btn btn-primary btn-sm">Hubungi Kami</a>
     </div>
   </div>
 </section>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER -->
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <!-- SCRIPTS (Urutan Panggilan Presisi & Menggunakan ../) -->
 <script src="../js/main.js"></script>

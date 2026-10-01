@@ -1,8 +1,11 @@
 <?php
+require_once __DIR__ . '/../config/session.php';
+
 $scriptName = str_replace('\\', '/', $_SERVER['SCRIPT_NAME'] ?? '');
 $isInsidePages = (strpos($scriptName, '/pages/') !== false);
 $baseUrl = $isInsidePages ? '../' : '';
 $currentPage = basename($scriptName);
+$currentUser = getCurrentUser();
 ?>
 <header class="site-header">
   <div class="container nav-wrap">
@@ -20,9 +23,17 @@ $currentPage = basename($scriptName);
 
     <div class="nav-actions">
       <a href="<?= $isInsidePages ? 'keranjang.php' : 'pages/keranjang.php' ?>" class="cart-link" title="Keranjang">🛒<span class="cart-count" style="display:none">0</span></a>
-      <a href="<?= $isInsidePages ? 'auth.php' : 'pages/auth.php' ?>" class="btn-login">Masuk</a>
+      <?php if ($currentUser): ?>
+        <?php if (($currentUser['role'] ?? '') === 'admin'): ?>
+          <a href="<?= $isInsidePages ? 'dashboard-admin.php' : 'pages/dashboard-admin.php' ?>" class="btn-login" style="background:var(--secondary);color:#fff">Admin</a>
+        <?php else: ?>
+          <a href="<?= $isInsidePages ? 'profil-pelanggan.php' : 'pages/profil-pelanggan.php' ?>" class="btn-login"><?= htmlspecialchars($currentUser['name'] ?? 'Profil') ?></a>
+        <?php endif; ?>
+        <a href="<?= $baseUrl ?>actions/process-auth.php?action=logout" class="btn-login" style="background:transparent;border:1px solid var(--border);color:var(--text);margin-left:0.4rem" title="Keluar">Keluar</a>
+      <?php else: ?>
+        <a href="<?= $isInsidePages ? 'auth.php' : 'pages/auth.php' ?>" class="btn-login">Masuk</a>
+      <?php endif; ?>
       <button class="hamburger" aria-label="Menu">☰</button>
     </div>
   </div>
-</header>
 </header>

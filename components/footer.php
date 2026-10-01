@@ -35,4 +35,3 @@ $baseUrl = $isInsidePages ? '../' : '';
   </div>
   <div class="footer-bottom">© <span class="js-year"><?= date('Y') ?></span> Filosovet Petshop & Klinik Hewan. Seluruh hak cipta dilindungi.</div>
 </footer>
-</footer>

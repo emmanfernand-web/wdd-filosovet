@@ -73,7 +73,7 @@ function fixNavLinks(isInsidePages) {
   }
 
   const loginBtn = document.querySelector('.btn-login');
-  if (loginBtn) {
+  if (loginBtn && loginBtn.getAttribute('href') && (loginBtn.getAttribute('href').includes('auth.php') || loginBtn.getAttribute('href').includes('auth.html'))) {
     loginBtn.href = isInsidePages ? 'auth.php' : 'pages/auth.php';
   }
 }

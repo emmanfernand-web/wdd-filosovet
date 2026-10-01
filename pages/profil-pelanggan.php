@@ -1,3 +1,9 @@
+<?php
+require_once __DIR__ . '/../config/session.php';
+$currentUser = getCurrentUser();
+$sessionBookings = $_SESSION['bookings'] ?? [];
+$sessionOrders = $_SESSION['orders'] ?? [];
+?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -26,14 +32,14 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER NAVBAR -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Profil & Riwayat Pelanggan</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Profil</div>
+    <div class="breadcrumb"><a href="../index.php">Beranda</a> / Profil</div>
   </div>
 </section>
 
@@ -134,8 +140,8 @@
   </div>
 </section>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER -->
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <!-- SCRIPTS (Urutan Panggilan Sesuai Struktur Folder Baru) -->
 <script src="../js/cart.js"></script>
@@ -144,7 +150,9 @@
 
 <script>
 // Load Data User
-const user = JSON.parse(localStorage.getItem('fv_user') || 'null');
+const phpUser = <?= json_encode($currentUser) ?>;
+const user = phpUser || JSON.parse(localStorage.getItem('fv_user') || 'null');
+
 if (user) {
   document.getElementById('profilName').textContent = user.name;
   document.getElementById('profilEmail').textContent = user.email || '';
@@ -156,7 +164,7 @@ if (user) {
 function logout() { 
   localStorage.removeItem('fv_user'); 
   toast('Anda telah keluar'); 
-  setTimeout(() => location.href = 'auth.html', 800); 
+  setTimeout(() => location.href = '../actions/process-auth.php?action=logout', 800); 
 }
 
 // Navigasi Menu Samping Panel
@@ -169,11 +177,12 @@ document.querySelectorAll('.side-link').forEach(a => a.onclick = e => {
 });
 
 // Render Riwayat Booking
+const phpBookings = <?= json_encode($sessionBookings) ?>;
 const sampleBookings = [
   { code: 'FV-8K2M1P', layanan: 'Grooming', icon: '✂️', tipe: 'Grooming Kucing', tanggal: '2026-08-28', waktu: '10:30', hewan: 'Momo', biaya: 120000, status: 'Selesai', catatan: '' },
   { code: 'FV-7J4N2Q', layanan: 'Konsultasi Dokter Hewan', icon: '🩺', tipe: 'Vaksinasi', tanggal: '2026-08-15', waktu: '09:30', hewan: 'Bubu', biaya: 180000, status: 'Selesai', catatan: '' },
 ];
-const myBookings = [...(JSON.parse(localStorage.getItem('fv_bookings') || '[]')), ...sampleBookings];
+const myBookings = [...phpBookings, ...(JSON.parse(localStorage.getItem('fv_bookings') || '[]')), ...sampleBookings];
 const statusClass = s => s === 'Selesai' ? 'status-selesai' : s.includes('Menunggu') ? 'status-menunggu' : 'status-proses';
 
 document.getElementById('bookingHistoryBody').innerHTML = myBookings.length ? myBookings.map(b => `
@@ -203,13 +212,14 @@ document.getElementById('medisList').innerHTML = [
   </div>`).join('');
 
 // Render Riwayat Transaksi
-const myOrders = JSON.parse(localStorage.getItem('fv_orders') || '[]');
+const phpOrders = <?= json_encode($sessionOrders) ?>;
+const myOrders = [...phpOrders, ...(JSON.parse(localStorage.getItem('fv_orders') || '[]'))];
 document.getElementById('orderHistoryBody').innerHTML = myOrders.length ? myOrders.map(o => `
   <tr>
-    <td><strong>${o.no}</strong></td>
-    <td>${o.tanggal.slice(0, 10)}</td>
-    <td>${o.item}</td>
-    <td>${o.metode}</td>
+    <td><strong>${o.invoice_no || o.no}</strong></td>
+    <td>${(o.created_at || o.tanggal || '').slice(0, 10)}</td>
+    <td>${Array.isArray(o.items) ? o.items.length + ' produk' : (o.item || 1)}</td>
+    <td>${o.payment_method || o.metode || 'QRIS'}</td>
     <td><strong>${rupiah(o.total)}</strong></td>
   </tr>`).join('')
   : '<tr><td colspan="5" class="text-center muted">Belum ada transaksi.</td></tr>';

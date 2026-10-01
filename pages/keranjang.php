@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../config/session.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -26,14 +27,14 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER NAVBAR -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Keranjang & Checkout</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Keranjang</div>
+    <div class="breadcrumb"><a href="../index.php">Beranda</a> / Keranjang</div>
   </div>
 </section>
 
@@ -73,7 +74,7 @@
         </select>
       </div>
       <button class="btn btn-primary btn-block" id="btnCheckout">Bayar Sekarang</button>
-      <a href="toko.html" class="btn btn-outline btn-block" style="margin-top:.6rem">← Lanjut Belanja</a>
+      <a href="toko.php" class="btn btn-outline btn-block" style="margin-top:.6rem">← Lanjut Belanja</a>
     </div>
   </div>
 </section>
@@ -94,8 +95,8 @@
   </div>
 </div>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER -->
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <!-- SCRIPTS (Urutan Panggilan Presisi & Menggunakan ../) -->
 <script src="../js/cart.js"></script>

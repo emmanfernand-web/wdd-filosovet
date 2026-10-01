@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/../config/session.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,14 +26,14 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER NAVBAR -->
+<?php include __DIR__ . '/../components/header.php'; ?>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
   <div class="container">
     <h1>Booking Layanan</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Booking</div>
+    <div class="breadcrumb"><a href="../index.php">Beranda</a> / Booking</div>
   </div>
 </section>
 
@@ -125,13 +126,13 @@
     <h3 class="mb-2">Booking Berhasil!</h3>
     <p class="muted mb-3" id="modalText">Detail booking telah dikirim dan dapat dilihat di halaman Profil.</p>
     <div class="form-group text-left"><label>Kode Booking</label><input type="text" id="bookingCode" readonly style="font-weight:800;color:var(--primary)"></div>
-    <a href="profil-pelanggan.html" class="btn btn-primary btn-block" style="width: 100%;">Lihat Riwayat Saya</a>
+    <a href="profil-pelanggan.php" class="btn btn-primary btn-block" style="width: 100%;">Lihat Riwayat Saya</a>
     <button class="btn btn-outline btn-block mt-2" onclick="document.getElementById('bookingModal').style.display='none'" style="margin-top:.6rem; width: 100%;">Tutup</button>
   </div>
 </div>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER -->
+<?php include __DIR__ . '/../components/footer.php'; ?>
 
 <!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
 <script src="../js/booking.js"></script>

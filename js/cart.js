@@ -106,7 +106,7 @@ function renderCartPage() {
   const wrap = document.getElementById('cartItems');
   const items = getCartDetailed();
   if (!items.length) {
-    wrap.innerHTML = `<div class="empty"><div class="big">🛒</div><h3>Keranjang kosong</h3><p>Belum ada produk yang dipilih.</p><a href="toko.html" class="btn btn-primary btn-sm" style="margin-top:1rem">Mulai Belanja</a></div>`;
+    wrap.innerHTML = `<div class="empty"><div class="big">🛒</div><h3>Keranjang kosong</h3><p>Belum ada produk yang dipilih.</p><a href="toko.php" class="btn btn-primary btn-sm" style="margin-top:1rem">Mulai Belanja</a></div>`;
   } else {
     wrap.innerHTML = items.map(p => `
       <div class="cart-item">
@@ -151,16 +151,32 @@ function checkout() {
   // Simulasi pembayaran
   if (Math.random() < 0.05) { toast('Pembayaran gagal, silakan coba lagi', 'error'); return; }
 
+  const payMethod = document.getElementById('payMethod').value;
   const nota = {
     no: 'INV-' + Date.now().toString(36).toUpperCase(),
     tanggal: new Date().toISOString(),
     item: items.reduce((s, p) => s + p.qty, 0),
-    total, metode: document.getElementById('payMethod').value,
+    total, metode: payMethod,
     produk: items.map(p => `${p.name} x${p.qty}`)
   };
   const hist = JSON.parse(localStorage.getItem('fv_orders') || '[]');
   hist.unshift(nota);
   localStorage.setItem('fv_orders', JSON.stringify(hist));
+
+  fetch('../actions/process-cart.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest'
+    },
+    body: JSON.stringify({
+      action: 'checkout',
+      items: items,
+      total: total,
+      payment_method: payMethod,
+      shipping: ambil ? 'ambil' : 'kirim'
+    })
+  }).catch(() => {});
 
   // Kurangi stok (simulasi) & kosongkan keranjang
   saveCart([]);

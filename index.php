@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/config/session.php'; ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,8 +26,8 @@
 </head>
 <body>
 
-  <!-- PLACEHOLDER NAVBAR -->
-  <div id="header-placeholder"></div>
+  <!-- HEADER NAVBAR -->
+  <?php include __DIR__ . '/components/header.php'; ?>
 
   <!-- CONTAINER SCROLL SNAP UTAMA -->
   <main class="snap-container">
@@ -50,8 +51,8 @@
             
             <!-- Tombol CTA Inside Glass Card -->
             <div class="hero-cta-group">
-              <a href="pages/booking.html" class="btn btn-accent btn-hero-primary">Booking Perawatan</a>
-              <a href="pages/daftar-layanan.html" class="btn btn-outline-hero">Lihat Layanan</a>
+              <a href="pages/booking.php" class="btn btn-accent btn-hero-primary">Booking Perawatan</a>
+              <a href="pages/daftar-layanan.php" class="btn btn-outline-hero">Lihat Layanan</a>
             </div>
 
             <!-- Stats Ringkas Inside Glass Card -->
@@ -84,7 +85,7 @@
           <p class="muted">Pilih layanan medis dan perawatan terbaik yang dirancang khusus oleh dokter hewan berpengalaman.</p>
         </div>
         <div class="grid grid-4">
-          <a href="pages/daftar-layanan.html" class="card service-card">
+          <a href="pages/daftar-layanan.php" class="card service-card">
             <div class="card-img-wrap">
               <img src="assets/images/clinic.jpeg" alt="Klinik & Medis" class="card-img">
             </div>
@@ -93,7 +94,7 @@
             <span class="card-link">Selengkapnya →</span>
           </a>
 
-          <a href="pages/daftar-layanan.html" class="card service-card">
+          <a href="pages/daftar-layanan.php" class="card service-card">
             <div class="card-img-wrap">
               <img src="assets/images/grooming.jpeg" alt="Grooming Spa" class="card-img">
             </div>
@@ -102,7 +103,7 @@
             <span class="card-link">Selengkapnya →</span>
           </a>
 
-          <a href="pages/daftar-layanan.html" class="card service-card">
+          <a href="pages/daftar-layanan.php" class="card service-card">
             <div class="card-img-wrap">
               <img src="assets/images/pet_hotel.jpeg" alt="Pet Hotel" class="card-img">
             </div>
@@ -111,7 +112,7 @@
             <span class="card-link">Selengkapnya →</span>
           </a>
 
-          <a href="pages/toko.html" class="card service-card">
+          <a href="pages/toko.php" class="card service-card">
             <div class="card-img-wrap">
               <img src="assets/images/pet_store.jpeg" alt="Farmasi & Toko" class="card-img">
             </div>
@@ -131,7 +132,7 @@
           <h2>Mengapa Mempercayakan Anabul ke Filosovet?</h2>
         </div>
         <div class="grid grid-3">
-          <a href="pages/daftar-layanan.html" class="card feature-card">
+          <a href="pages/daftar-layanan.php" class="card feature-card">
             <div class="card-img-wrap">
               <img src="assets/images/great_doctor.jpeg" alt="Dokter Berpengalaman" class="card-img">
             </div>
@@ -139,7 +140,7 @@
             <p class="muted">Tim dokter hewan bersertifikasi yang menangani setiap pasien dengan standar medis tinggi.</p>
           </a>
 
-          <a href="pages/daftar-layanan.html" class="card feature-card">
+          <a href="pages/daftar-layanan.php" class="card feature-card">
             <div class="card-img-wrap">
               <img src="assets/images/modern_facility.jpeg" alt="Fasilitas Modern" class="card-img">
             </div>
@@ -147,7 +148,7 @@
             <p class="muted">Peralatan medis canggih untuk diagnosis akurat serta ruang perawatan yang higienis dan nyaman.</p>
           </a>
 
-          <a href="pages/daftar-layanan.html" class="card feature-card">
+          <a href="pages/daftar-layanan.php" class="card feature-card">
             <div class="card-img-wrap">
               <img src="assets/images/pet_handling.jpeg" alt="Pendekatan Bebas Stres" class="card-img">
             </div>
@@ -164,12 +165,16 @@
         <div class="cta-banner">
           <h2>Siap Memberikan yang Terbaik untuk Anabul?</h2>
           <p style="margin-bottom: 2rem; opacity: 0.9;">Jadwalkan kunjungan klinik atau booking grooming dalam hitungan detik.</p>
-          <a href="pages/booking.html" class="btn btn-accent btn-lg">Booking Konsultasi Sekarang</a>
+          <a href="pages/booking.php" class="btn btn-accent btn-lg">Booking Konsultasi Sekarang</a>
         </div>
       </div>
-      <!-- PLACEHOLDER FOOTER -->
-      <div id="footer-placeholder" style="width: 100%;"></div>
+      <!-- FOOTER -->
+      <div style="width: 100%;">
+        <?php include __DIR__ . '/components/footer.php'; ?>
+      </div>
     </section>
+
+  </main>
 
   </main>
 
