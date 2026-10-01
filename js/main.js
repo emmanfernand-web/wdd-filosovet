@@ -136,4 +136,3 @@ function toast(msg, type = 'success') {
   clearTimeout(t._to);
   t._to = setTimeout(() => t.classList.remove('show'), 2800);
 }
-}
