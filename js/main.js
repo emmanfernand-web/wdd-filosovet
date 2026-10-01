@@ -1,24 +1,13 @@
 /* ============================================================
-   FILOSOVET — main.js (Robust Component Loader & Observer)
+   FILOSOVET — main.js (Server-Side Component Integration & Global Utilities)
    ============================================================ */
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
   // Tandai bahwa JS aktif untuk mendukung observer animasi
   document.documentElement.classList.add('js-observer');
 
   const isInsidePagesFolder = location.pathname.includes('/pages/');
-  const prefix = isInsidePagesFolder ? '../' : '';
 
-  // 1. Muat Header & Footer sesuai posisi folder
-  await loadComponent('#header-placeholder', [
-    prefix + 'components/header.html',
-    'components/header.html'
-  ]);
-  await loadComponent('#footer-placeholder', [
-    prefix + 'components/footer.html',
-    'components/footer.html'
-  ]);
-
-  // 2. Inisialisasi Navigasi & Utility
+  // 1. Inisialisasi Navigasi & Utility (Komponen sudah di-render server-side oleh PHP)
   fixNavLinks(isInsidePagesFolder);
   setActiveNavLink();
   initHeaderScroll();
@@ -26,33 +15,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateCartBadge();
   initFooterYear();
 
-  // 3. Jalankan Observer Animasi Scroll
+  // 2. Jalankan Observer Animasi Scroll
   initReveal();
 
-  // 4. Trigger Dark Mode jika script terpasang
+  // 3. Trigger Dark Mode jika fungsi tersedia
   if (typeof initDarkModeToggle === 'function') {
     initDarkModeToggle();
   }
-
-  document.dispatchEvent(new CustomEvent('componentsLoaded'));
 });
-
-// Helper Loader Komponent dengan Error-Handling
-async function loadComponent(selector, filePaths) {
-  const el = document.querySelector(selector);
-  if (!el) return;
-
-  const paths = Array.isArray(filePaths) ? filePaths : [filePaths];
-  for (const path of paths) {
-    try {
-      const res = await fetch(path);
-      if (res.ok) {
-        el.innerHTML = await res.text();
-        return;
-      }
-    } catch (err) { }
-  }
-}
 
 // Inisialisasi Animation Observer
 function initReveal() {
@@ -75,11 +45,11 @@ function initReveal() {
   reveals.forEach(el => observer.observe(el));
 }
 
-// Menyesuaikan Link Navigasi Berdasarkan Folder
+// Menyelaraskan Link Navigasi Berdasarkan Posisi Halaman (Root vs Pages)
 function fixNavLinks(isInsidePages) {
   const brandLink = document.querySelector('.site-header .brand');
   if (brandLink) {
-    brandLink.href = isInsidePages ? '../index.html' : 'index.html';
+    brandLink.href = isInsidePages ? '../index.php' : 'index.php';
     const logoImg = brandLink.querySelector('.logo');
     if (logoImg) {
       logoImg.src = isInsidePages ? '../assets/images/logo_filosovet.png' : 'assets/images/logo_filosovet.png';
@@ -90,8 +60,8 @@ function fixNavLinks(isInsidePages) {
     const page = a.getAttribute('data-page');
     if (!page) return;
 
-    if (page === 'index.html') {
-      a.href = isInsidePages ? '../index.html' : 'index.html';
+    if (page === 'index.php') {
+      a.href = isInsidePages ? '../index.php' : 'index.php';
     } else {
       a.href = isInsidePages ? page : 'pages/' + page;
     }
@@ -99,20 +69,20 @@ function fixNavLinks(isInsidePages) {
 
   const cartLink = document.querySelector('.cart-link');
   if (cartLink) {
-    cartLink.href = isInsidePages ? 'keranjang.html' : 'pages/keranjang.html';
+    cartLink.href = isInsidePages ? 'keranjang.php' : 'pages/keranjang.php';
   }
 
   const loginBtn = document.querySelector('.btn-login');
   if (loginBtn) {
-    loginBtn.href = isInsidePages ? 'auth.html' : 'pages/auth.html';
+    loginBtn.href = isInsidePages ? 'auth.php' : 'pages/auth.php';
   }
 }
 
 function setActiveNavLink() {
-  const currentPage = location.pathname.split('/').pop() || 'index.html';
+  const currentPage = location.pathname.split('/').pop() || 'index.php';
   document.querySelectorAll('.main-nav a').forEach(a => {
     const page = a.getAttribute('data-page');
-    if (page === currentPage || (currentPage === '' && page === 'index.html')) {
+    if (page === currentPage || (currentPage === '' && page === 'index.php')) {
       a.classList.add('active');
     } else {
       a.classList.remove('active');
@@ -165,4 +135,5 @@ function toast(msg, type = 'success') {
   t.className = 'toast show ' + type;
   clearTimeout(t._to);
   t._to = setTimeout(() => t.classList.remove('show'), 2800);
+}
 }
