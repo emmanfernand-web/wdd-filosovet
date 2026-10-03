@@ -241,13 +241,13 @@ body {
   margin-bottom: 1.8rem;
 }
 
-.live-pulse {
-  width: 10px;
-  height: 10px;
+/* .live-pulse {
+  width: 00px;
+  height: 0px;
   border-radius: 50%;
   background: #2dd4bf;
   box-shadow: 0 0 12px #2dd4bf;
-}
+} */
 
 /* Stats Pill Cards (Light Mode) */
 .stats-pills-grid {
