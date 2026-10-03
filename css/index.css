@@ -49,8 +49,34 @@ body {
   width: 100%;
 }
 
-.fullscreen-section.bg-alt {
-  background-color: rgba(15, 118, 110, 0.03);
+/* ============================================================
+   Light Mode — Section "Layanan Kami" subtle warm background
+   ============================================================ */
+.fullscreen-section:not(.hero-section):not(.bg-alt):not(.footer-section) {
+  background-color: #fdfcfb;
+}
+
+/* ============================================================
+   Light Mode — Section "Keunggulan" (bg-alt) with texture
+   ============================================================ */
+.fullscreen-section.bg-alt,
+.keunggulan-section {
+  /* Warm paw-print dot-grid texture via SVG data URI */
+  background-color: #f0faf8;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(15, 118, 110, 0.07) 1px, transparent 0);
+  background-size: 28px 28px;
+  position: relative;
+}
+
+/* Subtle teal top border for visual separation */
+.keunggulan-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--primary-light), var(--primary), transparent);
+  opacity: 0.4;
 }
 
 /* ============================================================
@@ -196,6 +222,59 @@ body {
 }
 
 /* ============================================================
+   Scroll Hint Arrow
+   ============================================================ */
+.scroll-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  color: rgba(255, 255, 255, 0.75);
+  animation: scrollHintPulse 2.2s ease-in-out infinite;
+  cursor: default;
+  user-select: none;
+}
+
+.scroll-hint-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+.scroll-hint-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(6px);
+}
+
+.scroll-hint-arrow svg {
+  animation: scrollArrowBounce 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollArrowBounce {
+  0%, 100% { transform: translateY(0); opacity: 0.7; }
+  50% { transform: translateY(4px); opacity: 1; }
+}
+
+@keyframes scrollHintPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ============================================================
    3. SECTION LAYANAN & KEUNGGULAN (Kartu Diperbesar + Clickable)
    ============================================================ */
 
@@ -213,7 +292,7 @@ body {
   gap: 1.75rem;
 }
 
-/* Base Style untuk Semua Card Interaktif */
+/* Base Style untuk Semua Card Interaktif di Beranda */
 .fullscreen-section .card {
   padding: 1.6rem 1.4rem;
   border-radius: 22px;
@@ -226,13 +305,13 @@ body {
   box-sizing: border-box;
   background: var(--surface, #ffffff);
   border: 1px solid var(--border, #e2e8f0);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.35s ease,
               border-color 0.35s ease;
 }
 
-/* Animation Hover untuk Seluruh Card */
+/* Animation Hover untuk Card di Beranda (Service & Feature Cards) */
 .fullscreen-section .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 18px 36px rgba(15, 118, 110, 0.14);
@@ -242,7 +321,7 @@ body {
 /* --- Card Layanan Kami --- */
 .fullscreen-section .service-card .card-img-wrap {
   width: 100%;
-  height: 180px; /* Diperbesar dari 145px */
+  height: 180px;
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 1.2rem;
@@ -261,14 +340,14 @@ body {
 }
 
 .fullscreen-section .service-card h3 {
-  font-size: 1.25rem; /* Diperbesar dari 1.15rem */
+  font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: var(--text, #0f172a);
 }
 
 .fullscreen-section .service-card p.muted {
-  font-size: 0.9rem; /* Diperbesar dari 0.86rem */
+  font-size: 0.9rem;
   line-height: 1.55;
   margin-bottom: 1.2rem;
   color: var(--muted, #64748b);
@@ -290,10 +369,20 @@ body {
   color: var(--primary-dark, #0b5a54);
 }
 
-/* --- Card Keunggulan --- */
+/* --- Card Keunggulan (feature-card) — NO hover lift, only image zoom --- */
+.fullscreen-section .feature-card {
+  cursor: default;
+}
+
+.fullscreen-section .feature-card:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-color: var(--border, #e2e8f0);
+}
+
 #why-us .card .card-img-wrap {
   width: 100%;
-  height: 215px; /* Diperbesar dari 180px */
+  height: 215px;
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 1.3rem;
@@ -308,18 +397,18 @@ body {
 }
 
 #why-us .card:hover .card-img {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
 #why-us .card h3 {
-  font-size: 1.3rem; /* Diperbesar dari 1.2rem */
+  font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 0.6rem;
   color: var(--text, #0f172a);
 }
 
 #why-us .card p.muted {
-  font-size: 0.94rem; /* Diperbesar dari 0.9rem */
+  font-size: 0.94rem;
   line-height: 1.6;
   color: var(--muted, #64748b);
 }
@@ -360,5 +449,8 @@ body {
   .fullscreen-section .grid-4,
   .fullscreen-section .grid-3 {
     grid-template-columns: 1fr;
+  }
+  .scroll-hint {
+    display: none;
   }
 }

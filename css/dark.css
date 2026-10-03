@@ -19,7 +19,8 @@ html.dark-mode body {
   color: var(--text) !important;
 }
 
-html.dark-mode .section {
+html.dark-mode .section,
+html.dark-mode .fullscreen-section:not(.hero-section):not(.bg-alt):not(.footer-section) {
   background-color: var(--bg) !important;
 }
 
@@ -69,8 +70,15 @@ html.dark-mode .muted,
 html.dark-mode p.muted,
 html.dark-mode span.muted,
 html.dark-mode .breadcrumb,
-html.dark-mode .breadcrumb a {
+html.dark-mode .breadcrumb a,
+html.dark-mode .sec-head p.muted {
   color: #94a3b8 !important;
+}
+
+/* Tag Badge Section (Layanan Kami) */
+html.dark-mode .sec-tag {
+  background-color: rgba(20, 184, 166, 0.2) !important;
+  color: #5eead4 !important;
 }
 
 /* Input, Form, Select & Dropdown Options */
@@ -135,6 +143,26 @@ html.dark-mode .main-nav a:hover {
   color: #ffffff !important;
 }
 
+/* FIX: Ikon & Tombol Keranjang Belanja di Dark Mode */
+html.dark-mode .cart-link {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode .cart-link svg {
+  stroke: #f8fafc !important;
+}
+
+html.dark-mode .cart-link:hover {
+  border-color: #2dd4bf !important;
+  background-color: rgba(20, 184, 166, 0.15) !important;
+}
+
+html.dark-mode .cart-link:hover svg {
+  stroke: #2dd4bf !important;
+}
+
 /* Hero Section Kontras */
 html.dark-mode .hero,
 html.dark-mode .page-hero {
@@ -149,6 +177,17 @@ html.dark-mode .hero-stats span,
 html.dark-mode .page-hero h1,
 html.dark-mode .page-hero .breadcrumb {
   color: #ffffff !important;
+}
+
+/* Keunggulan Section (bg-alt) in Dark Mode */
+html.dark-mode .fullscreen-section.bg-alt,
+html.dark-mode .keunggulan-section {
+  background-color: #0d1a30 !important;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(94, 234, 212, 0.06) 1px, transparent 0) !important;
+}
+html.dark-mode .keunggulan-section::before {
+  opacity: 0.25 !important;
 }
 
 /* Tabel & Record Medis */
@@ -184,4 +223,45 @@ html.dark-mode .service-card .card-link {
 }
 html.dark-mode .service-card .card-link:hover {
   color: #5eead4 !important;
+}
+
+/* Profile Sidebar in Dark Mode */
+html.dark-mode .profile-sidebar {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .side-link {
+  color: #e2e8f0 !important;
+}
+
+html.dark-mode .side-link-icon {
+  background: rgba(20, 184, 166, 0.2) !important;
+  color: #2dd4bf !important;
+}
+
+html.dark-mode .side-link:hover {
+  background: rgba(20, 184, 166, 0.15) !important;
+  border-color: rgba(20, 184, 166, 0.3) !important;
+  color: #5eead4 !important;
+}
+
+html.dark-mode .side-link:hover .side-link-icon {
+  background: rgba(15, 118, 110, 0.6) !important;
+  color: #fff !important;
+}
+
+html.dark-mode .side-link.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #fff !important;
+}
+
+html.dark-mode .side-link.active .side-link-icon {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+}
+
+/* Scroll hint on hero */
+html.dark-mode .scroll-hint {
+  color: rgba(255, 255, 255, 0.75);
 }
