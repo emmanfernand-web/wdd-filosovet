@@ -1,20 +1,304 @@
 /* ============================================================
-   FILOSOVET — admin.css (Dashboard Admin)
+   FILOSOVET — css/admin.css (Cleaned & Fixed Logo)
    ============================================================ */
-.admin-layout{display:grid;grid-template-columns:230px 1fr;min-height:100vh}
-.admin-sidebar{background:#0f172a;color:#cbd5e1;padding:1.5rem 1rem;position:sticky;top:0;height:100vh;overflow-y:auto}
-.admin-sidebar .brand{color:#fff;margin-bottom:1.8rem;font-size:1.1rem}
-.admin-sidebar .brand .logo{width:34px;height:34px;font-size:1.1rem}
-.admin-menu a{display:flex;gap:.7rem;align-items:center;padding:.65rem .9rem;border-radius:10px;
-  color:#cbd5e1;font-size:.92rem;font-weight:500;margin-bottom:.25rem}
-.admin-menu a:hover{background:#1e293b;color:#fff}
-.admin-menu a.active{background:var(--primary);color:#fff}
 
-/* ---- Profile Sidebar Navigation ---- */
-.profile-sidebar {
-  background: #fff;
+/* ---------- 1. Admin Layout & Structure ---------- */
+.admin-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.admin-sidebar {
+  background: #0f172a;
+  color: #cbd5e1;
+  padding: 1.6rem 1.1rem;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+/* Brand Logo Sidebar (Gaya Tampil Asli Tanpa Potongan Lingkaran) */
+.admin-sidebar .brand {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  margin-bottom: 2rem !important;
+  text-decoration: none !important;
+  gap: 0 !important;
+}
+
+/* LOGO FIX: Menghilangkan potongan lingkaran & menjaga rasio gambar asli */
+.admin-sidebar .brand .logo {
+  height: 42px !important;
+  width: auto !important;
+  max-height: 42px !important;
+  max-width: 100% !important;
+  border-radius: 0 !important; /* Hilangkan bentuk bulat */
+  object-fit: contain !important; /* Jaga proporsi gambar tanpa terpotong */
+  box-shadow: none !important;
+  flex-shrink: 0 !important;
+  display: block !important;
+}
+
+.admin-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.admin-menu a {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-size: 0.92rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.admin-menu a:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
+  transform: translateX(3px);
+}
+
+.admin-menu a.active {
+  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
+  color: #ffffff;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+}
+
+/* ---------- 2. Main Content & Topbar ---------- */
+.admin-main {
+  padding: 1.8rem 2.2rem;
+  background: var(--bg, #f8fafc);
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.admin-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  width: 100%;
+  padding-right: 0.5rem; /* Jarak aman tepi kanan */
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  background: transparent !important;
+}
+
+.topbar-title {
+  min-width: 200px;
+}
+
+.admin-topbar h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--text, #0f172a);
+  margin-bottom: 0.2rem;
+}
+
+/* Admin User Area */
+.admin-user {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  padding: 0.2rem 0.5rem;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.admin-user .user-name {
+  color: var(--text, #0f172a);
+}
+
+.avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--primary, #0f766e);
+  color: #ffffff;
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+/* Saklar Toggle Mode Malam */
+.admin-user .theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: none !important;
+}
+
+/* ---------- 3. Alert Banner & Stat Grid ---------- */
+.alert-banner {
+  background: var(--danger-bg, #fee2e2);
+  border: 1px solid #fecaca;
+  color: #991b1b;
+  border-radius: var(--radius, 16px);
+  padding: 1rem 1.3rem;
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+  margin-bottom: 1.6rem;
+  font-weight: 600;
+  font-size: 0.92rem;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.2rem;
+  margin-bottom: 1.8rem;
+  width: 100%;
+}
+
+.stat-card {
+  background: #ffffff;
   border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 16px);
+  padding: 1.3rem 1.4rem;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow, 0 12px 30px -6px rgba(15, 23, 42, 0.08));
+}
+
+.stat-card .stat-label {
+  font-size: 0.82rem;
+  color: var(--muted, #64748b);
+  font-weight: 600;
+}
+
+.stat-card .stat-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  margin: 0.2rem 0;
+  color: var(--text, #0f172a);
+}
+
+.stat-card .stat-delta {
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.stat-delta.up { color: #15803d; }
+.stat-delta.down { color: var(--danger, #dc2626); }
+
+/* ---------- 4. Panels & Bar Chart ---------- */
+.panel-grid {
+  display: grid;
+  grid-template-columns: 1.55fr 1fr;
+  gap: 1.5rem;
+}
+
+.panel {
+  background: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 16px);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+}
+
+.panel-head h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text, #0f172a);
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  height: 180px;
+  padding-top: 0.5rem;
+}
+
+.bar {
+  flex: 1;
+  background: linear-gradient(180deg, #14b8a6, var(--primary, #0f766e));
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  min-height: 6px;
+  transition: opacity 0.2s ease;
+}
+
+.bar span {
+  position: absolute;
+  bottom: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.72rem;
+  color: var(--muted, #64748b);
+  font-weight: 600;
+}
+
+.bar:hover {
+  opacity: 0.85;
+}
+
+.chart-wrap {
+  padding-bottom: 2rem;
+}
+
+/* Status Chips */
+.status-chip {
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-block;
+}
+
+.status-selesai { background: #dcfce7; color: #166534; }
+.status-proses { background: #fef3c7; color: #92400e; }
+.status-menunggu { background: #dbeafe; color: #1d4ed8; }
+.status-batal { background: var(--danger-bg, #fee2e2); color: var(--danger, #dc2626); }
+
+/* ---------- 5. Profile Sidebar Navigation ---------- */
+.profile-sidebar {
+  background: #ffffff;
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 16px);
   box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+  padding: 1.5rem;
 }
 
 .profile-nav {
@@ -59,65 +343,72 @@
 
 .side-link:hover .side-link-icon {
   background: var(--primary, #0f766e);
-  color: #fff;
+  color: #ffffff;
 }
 
 .side-link.active {
   background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
   border-color: transparent;
-  color: #fff;
+  color: #ffffff;
   box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
 }
 
 .side-link.active .side-link-icon {
   background: rgba(255, 255, 255, 0.2);
-  color: #fff;
+  color: #ffffff;
 }
 
 .side-link.active:hover {
   transform: translateX(0);
 }
-.admin-main{padding:1.8rem 2.2rem;background:var(--bg)}
-.admin-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.6rem}
-.admin-topbar h1{font-size:1.4rem}
-.admin-user{display:flex;align-items:center;gap:.6rem;font-weight:600;font-size:.9rem}
-.avatar{width:38px;height:38px;border-radius:50%;background:var(--primary);color:#fff;
-  display:grid;place-items:center;font-weight:800}
 
-.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.1rem;margin-bottom:1.6rem}
-.stat-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.2rem 1.3rem}
-.stat-card .stat-label{font-size:.82rem;color:var(--muted);font-weight:600}
-.stat-card .stat-value{font-size:1.7rem;font-weight:800;margin:.15rem 0}
-.stat-card .stat-delta{font-size:.8rem;font-weight:700}
-.stat-delta.up{color:#15803d}.stat-delta.down{color:var(--danger)}
-
-.alert-banner{background:var(--danger-bg);border:1px solid #fecaca;color:#991b1b;border-radius:var(--radius);
-  padding:1rem 1.3rem;display:flex;gap:.9rem;align-items:center;margin-bottom:1.4rem;font-weight:600;font-size:.92rem}
-.alert-banner .bell{font-size:1.3rem}
-
-.panel{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;margin-bottom:1.4rem}
-.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
-.panel-head h3{font-size:1.05rem}
-.panel-grid{display:grid;grid-template-columns:1.5fr 1fr;gap:1.4rem}
-
-.bar-chart{display:flex;align-items:flex-end;gap:10px;height:180px;padding-top:.5rem}
-.bar{flex:1;background:linear-gradient(180deg,#14b8a6,var(--primary));border-radius:6px 6px 0 0;
-  position:relative;min-height:6px}
-.bar span{position:absolute;bottom:-24px;left:50%;transform:translateX(-50%);font-size:.72rem;color:var(--muted)}
-.bar:hover{opacity:.85}
-.chart-wrap{padding-bottom:1.8rem}
-
-.status-chip{padding:.2rem .65rem;border-radius:999px;font-size:.74rem;font-weight:700}
-.status-selesai{background:#dcfce7;color:#166534}
-.status-proses{background:#fef3c7;color:#92400e}
-.status-menunggu{background:#dbeafe;color:#1d4ed8}
-.status-batal{background:var(--danger-bg);color:var(--danger)}
-
-@media (max-width:900px){
-  .admin-layout{grid-template-columns:1fr}
-  .admin-sidebar{position:static;height:auto;display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
-  .admin-menu{display:flex;flex-wrap:wrap;gap:.3rem}
-  .stat-grid{grid-template-columns:repeat(2,1fr)}
-  .panel-grid{grid-template-columns:1fr}
+/* ---------- 6. Responsive Breakpoints ---------- */
+@media (max-width: 1024px) {
+  .stat-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
-@media (max-width:560px){.stat-grid{grid-template-columns:1fr}}
+
+@media (max-width: 900px) {
+  .admin-layout {
+    grid-template-columns: 1fr;
+  }
+  .admin-sidebar {
+    position: static;
+    height: auto;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .admin-sidebar .brand {
+    margin-bottom: 0 !important;
+  }
+  .admin-menu {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+  .panel-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 560px) {
+  .admin-main {
+    padding: 1.2rem 1rem;
+  }
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+  .admin-topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.8rem;
+  }
+  .admin-user {
+    width: 100%;
+    justify-content: space-between;
+  }
+}

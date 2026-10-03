@@ -1,8 +1,8 @@
 /* ============================================================
-   FILOSOVET — dark-mode.js (State Synchronization)
+   FILOSOVET — dark-mode.js (Clean Floating Switcher)
    ============================================================ */
 
-// 1. Terapkan tema awal dari localStorage
+// 1. Terapkan tema awal langsung dari localStorage
 (function applyInitialTheme() {
   const savedTheme = localStorage.getItem('fv_theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -14,7 +14,7 @@
   }
 })();
 
-// 2. Fungsi Utama Saklar Mode Gelap
+// 2. Inisialisasi Saklar Mode Terang / Gelap
 function initDarkModeToggle() {
   const isInsidePagesFolder = location.pathname.includes('/pages/');
   const prefix = isInsidePagesFolder ? '../' : '';
@@ -22,9 +22,11 @@ function initDarkModeToggle() {
   const PATH_LIGHT_ICON = prefix + 'assets/dark_mode/light.png';
   const PATH_DARK_ICON = prefix + 'assets/dark_mode/dark.png';
 
-  const navActions = document.querySelector('.nav-actions');
-  if (!navActions) return;
+  // Cari wadah navigasi publik (.nav-actions) atau topbar admin (.admin-user)
+  const targetContainer = document.querySelector('.nav-actions') || document.querySelector('.admin-user');
+  if (!targetContainer) return;
 
+  // Cegah duplikasi tombol
   let toggleBtn = document.querySelector('.theme-toggle-btn');
   if (!toggleBtn) {
     toggleBtn = document.createElement('button');
@@ -32,10 +34,11 @@ function initDarkModeToggle() {
     toggleBtn.setAttribute('title', 'Ganti Mode Tampilan');
     
     const toggleImg = document.createElement('img');
-    toggleImg.style.cssText = 'width: 22px; height: 22px; object-fit: contain; transition: transform 0.3s ease;';
+    toggleImg.style.cssText = 'width: 24px; height: 24px; object-fit: contain; transition: transform 0.3s ease;';
     toggleBtn.appendChild(toggleImg);
     
-    navActions.insertBefore(toggleBtn, navActions.firstChild);
+    // Sisipkan sebelum elemen pertama
+    targetContainer.insertBefore(toggleBtn, targetContainer.firstChild);
   }
 
   const toggleImg = toggleBtn.querySelector('img');

@@ -56,57 +56,83 @@
   <!-- CONTAINER SCROLL SNAP UTAMA -->
   <main class="snap-container">
 
-    <!-- SECTION 1: HERO (Full Screen with Glassmorphism Card on Right) -->
-    <section class="fullscreen-section hero-section" id="hero">
-      <div class="hero-overlay"></div>
-      <div class="container hero-content">
-        <div class="hero-inner">
-          
-          <!-- SISI KIRI -->
-          <div class="hero-left-blank"></div>
+<!-- SECTION 1: HERO (Modern Split Bionic Layout) -->
+<section class="fullscreen-section hero-section" id="hero">
+  <div class="hero-overlay"></div>
+  
+  <div class="container hero-content">
+    <div class="hero-inner-modern">
+      
+      <!-- SISI KIRI: Headline Utama & CTAs -->
+      <div class="hero-left-content">
+        <div class="status-badge-glow mb-3">
+          <span class="badge-dot"></span>
+          <span>Layanan Darurat &amp; Klinik Buka 24 Jam</span>
+        </div>
 
-          <!-- SISI KANAN (Glassmorphism Card) -->
-          <div class="hero-glass-card">
-            <span class="sec-tag hero-tag">Klinik &amp; Petshop Terpercaya</span>
-            <h1 class="hero-title">Merawat Kesehatan &amp; Kebahagiaan Anabul Anda</h1>
-            <p class="hero-desc">
-              Layanan medis profesional, perawatan grooming terpadu, dan kebutuhan hewan peliharaan terlengkap dengan kasih sayang penuh.
-            </p>
-            
-            <!-- Tombol CTA Inside Glass Card -->
-            <div class="hero-cta-group">
-              <a href="pages/booking.html" class="btn btn-accent btn-hero-primary">Booking Perawatan</a>
-              <a href="pages/daftar-layanan.html" class="btn btn-outline-hero">Lihat Layanan</a>
-            </div>
+        <h1 class="hero-title-modern">
+          Perawatan Medis <br>
+          <span class="gradient-text">&amp; Spa Terbaik</span> <br>
+          Untuk Anabul Anda
+        </h1>
 
-            <!-- Stats Ringkas Inside Glass Card -->
-            <div class="hero-stats-grid">
-              <div>
-                <strong>1,500+</strong>
-                <span>Anabul Ditolong</span>
-              </div>
-              <div>
-                <strong>4.9/5</strong>
-                <span>Rating Pelanggan</span>
-              </div>
-              <div>
-                <strong>24/7</strong>
-                <span>Layanan Darurat</span>
-              </div>
-            </div>
+        <p class="hero-desc-modern">
+          Klinik hewan terpadu dengan standar medis modern, dokter hewan berpengalaman, dan fasilitas grooming spa bebas stres.
+        </p>
+
+        <!-- CTAs -->
+        <div class="hero-actions-modern">
+          <a href="pages/booking.html" class="btn btn-accent btn-glow">
+            <span>Booking Konsultasi</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+          <a href="pages/daftar-layanan.html" class="btn btn-glass">
+            Eksplorasi Layanan
+          </a>
+        </div>
+      </div>
+
+      <!-- SISI KANAN: Modern Glass Console & Quick Stats -->
+      <div class="hero-right-console">
+        <div class="hero-glass-card-modern">
+          <div class="console-header">
+            <span class="sec-tag hero-tag">Klinik &amp; Petshop Filosovet</span>
+            <div class="live-pulse" title="Sistem Aktif"></div>
           </div>
 
+          <p class="console-text">
+            Solusi kesehatan &amp; kenyamanan hewan kesayangan Anda kini lebih cepat &amp; praktis dengan booking otomatis.
+          </p>
+
+          <!-- Floating Stats Grid -->
+          <div class="stats-pills-grid">
+            <div class="stat-pill-item">
+              <strong>1.500+</strong>
+              <span>Anabul Ditolong</span>
+            </div>
+            <div class="stat-pill-item">
+              <strong>4.9 ★</strong>
+              <span>Rating Klien</span>
+            </div>
+            <div class="stat-pill-item">
+              <strong>24/7</strong>
+              <span>Layanan Darurat</span>
+            </div>
+          </div>
         </div>
       </div>
 
-      <!-- Scroll Down Arrow -->
-      <div class="scroll-hint" aria-label="Scroll ke bawah">
-        <span class="scroll-hint-label">Scroll</span>
-        <div class="scroll-hint-arrow">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-        </div>
-      </div>
-    </section>
+    </div>
+  </div>
+
+  <!-- Scroll Down Indicator -->
+  <div class="scroll-hint" aria-label="Scroll ke bawah">
+    <span class="scroll-hint-label">SCROLL</span>
+    <div class="scroll-hint-arrow">
+      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </div>
+  </div>
+</section>
 
     <!-- SECTION 2: LAYANAN UNGGULAN (100vh) -->
     <section class="fullscreen-section" id="services">
