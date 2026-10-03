@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Layanan | Filosovet Petshop & Klinik Hewan</title>
+<title>Booking Layanan | Filosovet Petshop &amp; Klinik Hewan</title>
 
 <!-- Pre-script Anti Flashing Dark Mode -->
 <script>
@@ -25,8 +25,33 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER (INLINE) -->
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="../index.html" class="brand" title="Kembali ke Beranda">
+      <img src="../assets/images/logo_filosovet.png" alt="Filosovet" class="logo">
+    </a>
+
+    <nav class="main-nav">
+      <a href="../index.html" data-page="index.html">Beranda</a>
+      <a href="daftar-layanan.html" data-page="daftar-layanan.html">Layanan</a>
+      <a href="booking.html" data-page="booking.html">Booking</a>
+      <a href="toko.html" data-page="toko.html">Toko</a>
+      <a href="profil-pelanggan.html" data-page="profil-pelanggan.html">Profil</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="keranjang.html" class="cart-link" title="Keranjang">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count" style="display:none">0</span>
+      </a>
+      <a href="auth.html" class="btn-login">Masuk</a>
+      <button class="hamburger" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
@@ -40,12 +65,12 @@
 <section class="section">
   <div class="container">
     <!-- 1. PILIH LAYANAN -->
-    <div class="card mb-4">
-      <h3 class="mb-3">1️⃣ Pilih Layanan</h3>
+    <div class="card mb-4 no-hover">
+      <h3 class="mb-3">1. Pilih Layanan</h3>
       <div class="tabs" id="serviceTabs">
-        <button class="tab active" data-svc="grooming">✂️ Grooming</button>
-        <button class="tab" data-svc="konsultasi">🩺 Konsultasi Dokter</button>
-        <button class="tab" data-svc="hotel">🏨 Pet Hotel</button>
+        <button class="tab active" data-svc="grooming">Grooming</button>
+        <button class="tab" data-svc="konsultasi">Konsultasi Dokter</button>
+        <button class="tab" data-svc="hotel">Pet Hotel</button>
       </div>
       <div class="grid grid-3" id="serviceDetail">
         <div class="form-group"><label>Tipe Layanan</label><select id="svcType"></select></div>
@@ -58,21 +83,21 @@
     <div class="cart-layout" style="display: grid; grid-template-columns: 1.8fr 1fr; gap: 1.8rem; align-items: start;">
       <div>
         <!-- 2. TANGGAL -->
-        <div class="card mb-4">
-          <h3 class="mb-3">2️⃣ Pilih Tanggal <span class="badge badge-teal" id="selectedDateLabel"></span></h3>
+        <div class="card mb-4 no-hover">
+          <h3 class="mb-3">2. Pilih Tanggal <span class="badge badge-teal" id="selectedDateLabel"></span></h3>
           <div class="tabs" id="dateTabs"></div>
         </div>
 
         <!-- 3. SLOT -->
-        <div class="card mb-4">
-          <h3 class="mb-3">3️⃣ Pilih Slot Waktu <span class="muted" style="font-size:.85rem;font-weight:400">(abu-abu = penuh)</span></h3>
+        <div class="card mb-4 no-hover">
+          <h3 class="mb-3">3. Pilih Slot Waktu <span class="muted" style="font-size:.85rem;font-weight:400">(abu-abu = penuh)</span></h3>
           <div class="tabs" id="slotGrid"></div>
           <p id="slotHint" class="muted mt-2" style="margin-top:.8rem;font-size:.88rem"></p>
         </div>
 
         <!-- 4. DATA HEWAN -->
-        <div class="card">
-          <h3 class="mb-3">4️⃣ Data Hewan & Keluhan</h3>
+        <div class="card no-hover">
+          <h3 class="mb-3">4. Data Hewan &amp; Keluhan</h3>
           <div class="form-row">
             <div class="form-group"><label>Nama Hewan</label><input type="text" id="petName" placeholder="cth. Momo"></div>
             <div class="form-group">
@@ -90,8 +115,8 @@
 
       <!-- RINGKASAN STICKY (SISI KANAN) -->
       <div>
-        <div class="card summary-card" style="position: sticky; top: 100px;">
-          <h3 class="mb-3">📋 Ringkasan Booking</h3>
+        <div class="card summary-card no-hover" style="position: sticky; top: 100px;">
+          <h3 class="mb-3">Ringkasan Booking</h3>
           <div class="summary-row" style="display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px dashed var(--border);">
             <span>Layanan</span><strong id="sumService">—</strong>
           </div>
@@ -110,7 +135,7 @@
           <div class="summary-row total" style="display: flex; justify-content: space-between; padding: 1rem 0 0.5rem; font-weight: 800; font-size: 1.15rem; color: var(--primary);">
             <span>Estimasi Biaya</span><span id="sumPrice">Rp 0</span>
           </div>
-          <button class="btn btn-primary btn-block" id="btnConfirm" style="margin-top:1.2rem; width: 100%;">✅ Konfirmasi Booking</button>
+          <button class="btn btn-primary btn-block" id="btnConfirm" style="margin-top:1.2rem; width: 100%;">Konfirmasi Booking</button>
           <p class="muted text-center mt-2" style="margin-top:.8rem;font-size:.8rem">Slot akan dikunci selama 15 menit setelah konfirmasi.</p>
         </div>
       </div>
@@ -120,8 +145,8 @@
 
 <!-- MODAL SUKSES -->
 <div id="bookingModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:2000;place-items:center;backdrop-filter:blur(4px);">
-  <div class="card" style="max-width:420px;width:92%;text-align:center">
-    <div style="font-size:3.5rem;margin-bottom:.8rem">🎉</div>
+  <div class="card no-hover" style="max-width:420px;width:92%;text-align:center">
+    <div style="font-size:3.5rem;margin-bottom:.8rem">&#127881;</div>
     <h3 class="mb-2">Booking Berhasil!</h3>
     <p class="muted mb-3" id="modalText">Detail booking telah dikirim dan dapat dilihat di halaman Profil.</p>
     <div class="form-group text-left"><label>Kode Booking</label><input type="text" id="bookingCode" readonly style="font-weight:800;color:var(--primary)"></div>
@@ -130,8 +155,39 @@
   </div>
 </div>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER (INLINE) -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="brand" style="color:#fff;margin-bottom:.8rem">
+        <img src="../assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo" style="width:36px;height:36px;border-radius:50%">
+        Filosovet
+      </div>
+      <p style="font-size:.9rem;max-width:300px">Petshop &amp; Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
+    </div>
+    <div>
+      <h4>Layanan</h4>
+      <a href="daftar-layanan.html">Klinik &amp; Dokter Hewan</a>
+      <a href="daftar-layanan.html">Grooming</a>
+      <a href="daftar-layanan.html">Pet Hotel</a>
+      <a href="toko.html">Toko &amp; Farmasi</a>
+    </div>
+    <div>
+      <h4>Bantuan</h4>
+      <a href="booking.html">Cara Booking</a>
+      <a href="keranjang.html">Keranjang</a>
+      <a href="profil-pelanggan.html">Akun Saya</a>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <a href="#">Jl. Petshop Raya No. 88</a>
+      <a href="#">(021) 555-0123</a>
+      <a href="#">halo@filosovet.id</a>
+      <a href="#">Buka setiap hari 08.00–21.00</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
+</footer>
 
 <!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
 <script src="../js/booking.js"></script>

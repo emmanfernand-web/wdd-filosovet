@@ -19,7 +19,8 @@ html.dark-mode body {
   color: var(--text) !important;
 }
 
-html.dark-mode .section {
+html.dark-mode .section,
+html.dark-mode .fullscreen-section:not(.hero-section):not(.bg-alt):not(.footer-section) {
   background-color: var(--bg) !important;
 }
 
@@ -69,8 +70,15 @@ html.dark-mode .muted,
 html.dark-mode p.muted,
 html.dark-mode span.muted,
 html.dark-mode .breadcrumb,
-html.dark-mode .breadcrumb a {
+html.dark-mode .breadcrumb a,
+html.dark-mode .sec-head p.muted {
   color: #94a3b8 !important;
+}
+
+/* Tag Badge Section (Layanan Kami) */
+html.dark-mode .sec-tag {
+  background-color: rgba(20, 184, 166, 0.2) !important;
+  color: #5eead4 !important;
 }
 
 /* Input, Form, Select & Dropdown Options */
@@ -135,20 +143,86 @@ html.dark-mode .main-nav a:hover {
   color: #ffffff !important;
 }
 
-/* Hero Section Kontras */
-html.dark-mode .hero,
-html.dark-mode .page-hero {
-  background: linear-gradient(135deg, #041f1c, #0f766e 65%, #0d9488) !important;
-  color: #ffffff !important;
+/* FIX: Ikon & Tombol Keranjang Belanja di Dark Mode */
+html.dark-mode .cart-link {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+  color: #f8fafc !important;
 }
 
-html.dark-mode .hero h1,
-html.dark-mode .hero p.lead,
-html.dark-mode .hero-stats strong,
-html.dark-mode .hero-stats span,
-html.dark-mode .page-hero h1,
-html.dark-mode .page-hero .breadcrumb {
-  color: #ffffff !important;
+html.dark-mode .cart-link svg {
+  stroke: #f8fafc !important;
+}
+
+html.dark-mode .cart-link:hover {
+  border-color: #2dd4bf !important;
+  background-color: rgba(20, 184, 166, 0.15) !important;
+}
+
+html.dark-mode .cart-link:hover svg {
+  stroke: #2dd4bf !important;
+}
+
+/* ============================================================
+   HERO SECTION OVERRIDES IN DARK MODE
+   ============================================================ */
+html.dark-mode .hero-section .hero-overlay {
+  background: 
+    radial-gradient(circle at 15% 50%, rgba(11, 19, 41, 0.88) 0%, rgba(15, 118, 110, 0.45) 50%, rgba(11, 19, 41, 0.92) 100%),
+    linear-gradient(to bottom, rgba(11, 19, 41, 0.4), rgba(11, 19, 41, 0.8)) !important;
+}
+
+html.dark-mode .status-badge-glow {
+  background: rgba(20, 184, 166, 0.15) !important;
+  border-color: rgba(45, 212, 191, 0.35) !important;
+  color: #5eead4 !important;
+}
+
+html.dark-mode .hero-desc-modern {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .hero-glass-card-modern {
+  background: rgba(23, 32, 54, 0.72) !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark-mode .hero-glass-card-modern:hover {
+  border-color: rgba(45, 212, 191, 0.4) !important;
+}
+
+html.dark-mode .console-text {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .stat-pill-item {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+html.dark-mode .stat-pill-item:hover {
+  background: rgba(20, 184, 166, 0.12) !important;
+  border-color: rgba(45, 212, 191, 0.3) !important;
+}
+
+html.dark-mode .stat-pill-item strong {
+  color: #5eead4 !important;
+}
+
+html.dark-mode .stat-pill-item span {
+  color: #e2e8f0 !important;
+}
+
+/* Keunggulan Section (bg-alt) in Dark Mode */
+html.dark-mode .fullscreen-section.bg-alt,
+html.dark-mode .keunggulan-section {
+  background-color: #0d1a30 !important;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(94, 234, 212, 0.06) 1px, transparent 0) !important;
+}
+html.dark-mode .keunggulan-section::before {
+  opacity: 0.25 !important;
 }
 
 /* Tabel & Record Medis */
@@ -184,4 +258,233 @@ html.dark-mode .service-card .card-link {
 }
 html.dark-mode .service-card .card-link:hover {
   color: #5eead4 !important;
+}
+
+/* Profile Sidebar in Dark Mode */
+html.dark-mode .profile-sidebar {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .side-link {
+  color: #e2e8f0 !important;
+}
+
+html.dark-mode .side-link-icon {
+  background: rgba(20, 184, 166, 0.2) !important;
+  color: #2dd4bf !important;
+}
+
+html.dark-mode .side-link:hover {
+  background: rgba(20, 184, 166, 0.15) !important;
+  border-color: rgba(20, 184, 166, 0.3) !important;
+  color: #5eead4 !important;
+}
+
+html.dark-mode .side-link:hover .side-link-icon {
+  background: rgba(15, 118, 110, 0.6) !important;
+  color: #fff !important;
+}
+
+html.dark-mode .side-link.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #fff !important;
+}
+
+html.dark-mode .side-link.active .side-link-icon {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #fff !important;
+}
+
+/* Scroll hint on hero */
+html.dark-mode .scroll-hint {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* ============================================================
+   ADMIN DASHBOARD — DARK MODE OVERRIDES
+   ============================================================ */
+html.dark-mode .admin-layout,
+html.dark-mode .admin-main {
+  background-color: var(--bg, #0b1329) !important;
+  color: var(--text, #f8fafc) !important;
+}
+
+/* Sidebar Admin */
+html.dark-mode .admin-sidebar {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+}
+
+html.dark-mode .admin-menu a {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .admin-menu a:hover,
+html.dark-mode .admin-menu a.active {
+  background: rgba(20, 184, 166, 0.18) !important;
+  color: #2dd4bf !important;
+}
+
+/* Topbar Admin */
+html.dark-mode .admin-topbar {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+}
+
+html.dark-mode .admin-topbar h1 {
+  color: #f8fafc !important;
+}
+
+/* Kartu Statistik & Panel */
+html.dark-mode .stat-card,
+html.dark-mode .panel,
+html.dark-mode .chart-wrap {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark-mode .stat-label {
+  color: #94a3b8 !important;
+}
+
+html.dark-mode .stat-value {
+  color: #f8fafc !important;
+}
+
+/* Alert Peringatan Stok Top Banner */
+html.dark-mode .alert-banner {
+  background-color: rgba(220, 38, 38, 0.15) !important;
+  border: 1px solid rgba(220, 38, 38, 0.35) !important;
+  color: #fca5a5 !important;
+}
+
+/* Peringatan Stok Item List Card */
+html.dark-mode #lowStockList > div,
+html.dark-mode .low-stock-item {
+  background-color: rgba(239, 68, 68, 0.12) !important;
+  border-color: rgba(239, 68, 68, 0.25) !important;
+  color: #f8fafc !important;
+}
+
+html.dark-mode #lowStockList span {
+  color: #f8fafc !important;
+}
+
+/* Grafik Batang (Bar Chart) */
+html.dark-mode .bar-chart .bar {
+  background: linear-gradient(180deg, #2dd4bf 0%, #0f766e 100%) !important;
+}
+
+html.dark-mode .bar-chart .bar span {
+  color: #94a3b8 !important;
+}
+
+/* Tabel Admin */
+html.dark-mode .admin-main th {
+  background-color: #0b1329 !important;
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .admin-main td {
+  color: #e2e8f0 !important;
+  border-color: var(--border, #283553) !important;
+}
+
+/* Saklar Tombol Mode Gelap di Topbar Admin */
+html.dark-mode .admin-user .theme-toggle-btn {
+  background-color: #0b1329 !important;
+  border-color: #283553 !important;
+}
+
+html.dark-mode .admin-user .user-name {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .admin-user {
+  background: rgba(255, 255, 255, 0.06) !important;
+  border: 1px solid var(--border, #283553) !important;
+}
+
+html.dark-mode .admin-user .theme-toggle-btn {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+}
+
+/* ============================================================
+   FIX: SAKLAR THEME TOGGLE MURNI TRANS PARAN (GLOBAL & ADMIN)
+   ============================================================ */
+
+/* Hilangkan Latar Belakang & Border Kotak Pembungkus Admin User */
+.admin-user {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+}
+
+/* Saklar Toggle Mode Terang/Gelap di Seluruh Website */
+.theme-toggle-btn,
+html.dark-mode .theme-toggle-btn,
+.admin-user .theme-toggle-btn,
+html.dark-mode .admin-user .theme-toggle-btn {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  border-radius: 50% !important;
+  width: 38px !important;
+  height: 38px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  transition: transform 0.25s ease, opacity 0.25s ease !important;
+}
+
+.theme-toggle-btn:hover {
+  transform: scale(1.12) !important;
+  opacity: 0.85 !important;
+  background: transparent !important;
+}
+
+.theme-toggle-btn img {
+  width: 24px !important;
+  height: 24px !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+}
+
+/* ============================================================
+   FIX DARK MODE: TOPBAR & ADMIN USER CLEAR BACKGROUND
+   ============================================================ */
+
+/* Hilangkan latar belakang gelap menyisa pada topbar & admin-user */
+html.dark-mode .admin-topbar,
+html.dark-mode .admin-user {
+  background: transparent !important;
+  background-color: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Teks Admin & Hari/Tanggal di Dark Mode */
+html.dark-mode .admin-topbar h1,
+html.dark-mode .admin-user .user-name,
+html.dark-mode .admin-user {
+  color: #f8fafc !important;
+}
+
+html.dark-mode .admin-topbar .muted {
+  color: #94a3b8 !important;
+}
+
+/* Tombol Saklar Melayang Transparan */
+html.dark-mode .admin-user .theme-toggle-btn {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }

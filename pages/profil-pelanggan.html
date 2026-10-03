@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Profil & Riwayat | Filosovet Petshop & Klinik Hewan</title>
+<title>Profil &amp; Riwayat | Filosovet Petshop &amp; Klinik Hewan</title>
 
 <!-- Pre-script Anti Flashing Dark Mode -->
 <script>
@@ -26,13 +26,38 @@
 </head>
 <body>
 
-<!-- PLACEHOLDER NAVBAR -->
-<div id="header-placeholder"></div>
+<!-- HEADER (INLINE) -->
+<header class="site-header">
+  <div class="container nav-wrap">
+    <a href="../index.html" class="brand" title="Kembali ke Beranda">
+      <img src="../assets/images/logo_filosovet.png" alt="Filosovet" class="logo">
+    </a>
+
+    <nav class="main-nav">
+      <a href="../index.html" data-page="index.html">Beranda</a>
+      <a href="daftar-layanan.html" data-page="daftar-layanan.html">Layanan</a>
+      <a href="booking.html" data-page="booking.html">Booking</a>
+      <a href="toko.html" data-page="toko.html">Toko</a>
+      <a href="profil-pelanggan.html" data-page="profil-pelanggan.html">Profil</a>
+    </nav>
+
+    <div class="nav-actions">
+      <a href="keranjang.html" class="cart-link" title="Keranjang">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        <span class="cart-count" style="display:none">0</span>
+      </a>
+      <a href="auth.html" class="btn-login">Masuk</a>
+      <button class="hamburger" aria-label="Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
 
 <!-- HERO SUB PAGE -->
 <section class="page-hero" style="padding-top: 140px;">
   <div class="container">
-    <h1>Profil & Riwayat Pelanggan</h1>
+    <h1>Profil &amp; Riwayat Pelanggan</h1>
     <div class="breadcrumb"><a href="../index.html">Beranda</a> / Profil</div>
   </div>
 </section>
@@ -41,28 +66,53 @@
 <section class="section">
   <div class="container cart-layout" style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start;">
     <!-- MENU SAMPING (STICKY SIDEBAR) -->
-    <aside class="card" style="position:sticky;top:100px;z-index:10">
+    <aside class="card profile-sidebar no-hover" style="position:sticky;top:100px;z-index:10">
       <div class="text-center mb-4">
         <div class="avatar" style="width:72px;height:72px;font-size:1.6rem;margin:0 auto .8rem" id="profilAvatar">A</div>
         <h3 id="profilName">Pengunjung</h3>
         <p class="muted" style="font-size:.85rem" id="profilEmail">—</p>
-        <span class="badge badge-teal mt-2" style="margin-top:.5rem">👑 Member Filosovet</span>
+        <span class="badge badge-teal" style="margin-top:.5rem">Member Filosovet</span>
       </div>
-      <nav class="admin-menu" style="display:grid;gap:.3rem">
-        <a href="#panelProfil" class="side-link active" data-panel="panelProfil">👤 Data Diri</a>
-        <a href="#panelHewan" class="side-link" data-panel="panelHewan">🐾 Hewan Peliharaan</a>
-        <a href="#panelBooking" class="side-link" data-panel="panelBooking">📅 Riwayat Booking</a>
-        <a href="#panelMedis" class="side-link" data-panel="panelMedis">📋 Rekam Medis</a>
-        <a href="#panelTransaksi" class="side-link" data-panel="panelTransaksi">🧾 Riwayat Transaksi</a>
+      <nav class="profile-nav" style="display:grid;gap:.4rem">
+        <a href="#panelProfil" class="side-link active" data-panel="panelProfil">
+          <span class="side-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          Data Diri
+        </a>
+        <a href="#panelHewan" class="side-link" data-panel="panelHewan">
+          <span class="side-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 5.172C10 3.782 8.423 2.679 6.5 3c-2.823.47-4.113 6.006-4 7 .08.703 1.725 1.722 3.656 1 1.261-.472 1.96-1.45 2.344-2.5"/><path d="M14.267 5.172c0-1.39 1.577-2.493 3.5-2.172 2.823.47 4.113 6.006 4 7-.08.703-1.725 1.722-3.656 1-1.261-.472-1.855-1.45-2.344-2.5"/><path d="M8 14v.5"/><path d="M16 14v.5"/><path d="M11.25 16.25h1.5L12 17l-.75-.75Z"/><path d="M4.42 11.247A13.152 13.152 0 0 0 4 14.556C4 18.728 7.582 21 12 21s8-2.272 8-6.444c0-1.061-.162-2.2-.493-3.309m-9.243-6.082A8.801 8.801 0 0 1 12 5c.78 0 1.5.108 2.161.306"/></svg>
+          </span>
+          Hewan Peliharaan
+        </a>
+        <a href="#panelBooking" class="side-link" data-panel="panelBooking">
+          <span class="side-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </span>
+          Riwayat Booking
+        </a>
+        <a href="#panelMedis" class="side-link" data-panel="panelMedis">
+          <span class="side-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </span>
+          Rekam Medis
+        </a>
+        <a href="#panelTransaksi" class="side-link" data-panel="panelTransaksi">
+          <span class="side-link-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+          </span>
+          Riwayat Transaksi
+        </a>
       </nav>
-      <button class="btn btn-danger btn-sm btn-block mt-3" style="margin-top:1rem" onclick="logout()">Keluar Akun</button>
+      <button class="btn btn-danger btn-sm btn-block" style="margin-top:1rem" onclick="logout()">Keluar Akun</button>
     </aside>
 
     <!-- PANEL KONTEN KANAN -->
     <div>
       <!-- 1. DATA DIRI -->
-      <div class="card mb-4 prof-panel" id="panelProfil">
-        <h3 class="mb-3">👤 Data Diri</h3>
+      <div class="card mb-4 prof-panel no-hover" id="panelProfil">
+        <h3 class="mb-3">Data Diri</h3>
         <div class="form-row">
           <div class="form-group"><label>Nama Lengkap</label><input type="text" id="pName" value="Ayu Lestari"></div>
           <div class="form-group"><label>Nomor HP</label><input type="tel" id="pPhone" value="0812-3456-7890"></div>
@@ -76,27 +126,27 @@
       </div>
 
       <!-- 2. HEWAN PELIHARAAN -->
-      <div class="card mb-4 prof-panel" id="panelHewan" style="display:none">
+      <div class="card mb-4 prof-panel no-hover" id="panelHewan" style="display:none">
         <div class="panel-head" style="margin-bottom:1rem; display:flex; justify-content:space-between; align-items:center">
-          <h3>🐾 Hewan Peliharaan</h3>
+          <h3>Hewan Peliharaan</h3>
           <button class="btn btn-outline btn-sm" onclick="toast('Fitur tambah hewan (demo)')">+ Tambah</button>
         </div>
         <div class="grid grid-2">
-          <div class="card" style="box-shadow:none">
+          <div class="card no-hover" style="box-shadow:none">
             <div style="display:flex;gap:1rem;align-items:center">
-              <div style="font-size:2.5rem">🐱</div>
+              <div style="font-size:2.5rem">&#128049;</div>
               <div>
                 <strong>Momo</strong> <span class="muted" style="font-size:.85rem">— Kucing Persia, 3,5 kg</span>
-                <div style="margin-top:.3rem"><span class="badge badge-green">✔ Vaksin lengkap</span> <span class="badge badge-blue">Steril</span></div>
+                <div style="margin-top:.3rem"><span class="badge badge-green">Vaksin lengkap</span> <span class="badge badge-blue">Steril</span></div>
               </div>
             </div>
           </div>
-          <div class="card" style="box-shadow:none">
+          <div class="card no-hover" style="box-shadow:none">
             <div style="display:flex;gap:1rem;align-items:center">
-              <div style="font-size:2.5rem">🐶</div>
+              <div style="font-size:2.5rem">&#128054;</div>
               <div>
                 <strong>Bubu</strong> <span class="muted" style="font-size:.85rem">— Golden Retriever, 18 kg</span>
-                <div style="margin-top:.3rem"><span class="badge badge-amber">⚠ Vaksin diperbarui 2 bln lagi</span></div>
+                <div style="margin-top:.3rem"><span class="badge badge-amber">Vaksin diperbarui 2 bln lagi</span></div>
               </div>
             </div>
           </div>
@@ -104,8 +154,8 @@
       </div>
 
       <!-- 3. RIWAYAT BOOKING -->
-      <div class="card mb-4 prof-panel" id="panelBooking" style="display:none">
-        <h3 class="mb-3">📅 Riwayat Booking</h3>
+      <div class="card mb-4 prof-panel no-hover" id="panelBooking" style="display:none">
+        <h3 class="mb-3">Riwayat Booking</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>Kode</th><th>Layanan</th><th>Tanggal</th><th>Waktu</th><th>Hewan</th><th>Biaya</th><th>Status</th></tr></thead>
@@ -115,14 +165,14 @@
       </div>
 
       <!-- 4. REKAM MEDIS -->
-      <div class="card mb-4 prof-panel" id="panelMedis" style="display:none">
-        <h3 class="mb-3">📋 Rekam Medis</h3>
+      <div class="card mb-4 prof-panel no-hover" id="panelMedis" style="display:none">
+        <h3 class="mb-3">Rekam Medis</h3>
         <div style="display:grid;gap:.9rem" id="medisList"></div>
       </div>
 
       <!-- 5. RIWAYAT TRANSAKSI -->
-      <div class="card prof-panel" id="panelTransaksi" style="display:none">
-        <h3 class="mb-3">🧾 Riwayat Transaksi</h3>
+      <div class="card prof-panel no-hover" id="panelTransaksi" style="display:none">
+        <h3 class="mb-3">Riwayat Transaksi</h3>
         <div class="table-wrap">
           <table>
             <thead><tr><th>No. Nota</th><th>Tanggal</th><th>Item</th><th>Metode</th><th>Total</th></tr></thead>
@@ -134,8 +184,39 @@
   </div>
 </section>
 
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
+<!-- FOOTER (INLINE) -->
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <div class="brand" style="color:#fff;margin-bottom:.8rem">
+        <img src="../assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo" style="width:36px;height:36px;border-radius:50%">
+        Filosovet
+      </div>
+      <p style="font-size:.9rem;max-width:300px">Petshop &amp; Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
+    </div>
+    <div>
+      <h4>Layanan</h4>
+      <a href="daftar-layanan.html">Klinik &amp; Dokter Hewan</a>
+      <a href="daftar-layanan.html">Grooming</a>
+      <a href="daftar-layanan.html">Pet Hotel</a>
+      <a href="toko.html">Toko &amp; Farmasi</a>
+    </div>
+    <div>
+      <h4>Bantuan</h4>
+      <a href="booking.html">Cara Booking</a>
+      <a href="keranjang.html">Keranjang</a>
+      <a href="profil-pelanggan.html">Akun Saya</a>
+    </div>
+    <div>
+      <h4>Kontak</h4>
+      <a href="#">Jl. Petshop Raya No. 88</a>
+      <a href="#">(021) 555-0123</a>
+      <a href="#">halo@filosovet.id</a>
+      <a href="#">Buka setiap hari 08.00–21.00</a>
+    </div>
+  </div>
+  <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
+</footer>
 
 <!-- SCRIPTS (Urutan Panggilan Sesuai Struktur Folder Baru) -->
 <script src="../js/cart.js"></script>
@@ -170,8 +251,8 @@ document.querySelectorAll('.side-link').forEach(a => a.onclick = e => {
 
 // Render Riwayat Booking
 const sampleBookings = [
-  { code: 'FV-8K2M1P', layanan: 'Grooming', icon: '✂️', tipe: 'Grooming Kucing', tanggal: '2026-08-28', waktu: '10:30', hewan: 'Momo', biaya: 120000, status: 'Selesai', catatan: '' },
-  { code: 'FV-7J4N2Q', layanan: 'Konsultasi Dokter Hewan', icon: '🩺', tipe: 'Vaksinasi', tanggal: '2026-08-15', waktu: '09:30', hewan: 'Bubu', biaya: 180000, status: 'Selesai', catatan: '' },
+  { code: 'FV-8K2M1P', layanan: 'Grooming', icon: '', tipe: 'Grooming Kucing', tanggal: '2026-08-28', waktu: '10:30', hewan: 'Momo', biaya: 120000, status: 'Selesai', catatan: '' },
+  { code: 'FV-7J4N2Q', layanan: 'Konsultasi Dokter Hewan', icon: '', tipe: 'Vaksinasi', tanggal: '2026-08-15', waktu: '09:30', hewan: 'Bubu', biaya: 180000, status: 'Selesai', catatan: '' },
 ];
 const myBookings = [...(JSON.parse(localStorage.getItem('fv_bookings') || '[]')), ...sampleBookings];
 const statusClass = s => s === 'Selesai' ? 'status-selesai' : s.includes('Menunggu') ? 'status-menunggu' : 'status-proses';
@@ -179,7 +260,7 @@ const statusClass = s => s === 'Selesai' ? 'status-selesai' : s.includes('Menung
 document.getElementById('bookingHistoryBody').innerHTML = myBookings.length ? myBookings.map(b => `
   <tr>
     <td><strong>${b.code}</strong></td>
-    <td>${b.icon || ''} ${b.tipe}</td>
+    <td>${b.tipe}</td>
     <td>${b.tanggal}</td>
     <td>${b.waktu}</td>
     <td>${b.hewan}</td>
@@ -190,12 +271,11 @@ document.getElementById('bookingHistoryBody').innerHTML = myBookings.length ? my
 
 // Render Rekam Medis
 document.getElementById('medisList').innerHTML = [
-  { icon: '🐱', pet: 'Momo', tgl: '28 Agt 2026', ket: 'Grooming sehat — kondisi kulit normal, berat stabil 3,5 kg.', oleh: 'Rani (Groomer)' },
-  { icon: '🐶', pet: 'Bubu', tgl: '15 Agt 2026', ket: 'Vaksin rabies dosis kedua. Tidak ada reaksi. Kontrol 1 tahun.', oleh: 'drh. Andini' },
-  { icon: '🐶', pet: 'Bubu', tgl: '02 Jul 2026', ket: 'Konsultasi kulit — diberikan shampoo anti-jamur, grooming jamur 2x seminggu.', oleh: 'drh. Prasetyo' },
+  { pet: 'Momo', tgl: '28 Agt 2026', ket: 'Grooming sehat — kondisi kulit normal, berat stabil 3,5 kg.', oleh: 'Rani (Groomer)' },
+  { pet: 'Bubu', tgl: '15 Agt 2026', ket: 'Vaksin rabies dosis kedua. Tidak ada reaksi. Kontrol 1 tahun.', oleh: 'drh. Andini' },
+  { pet: 'Bubu', tgl: '02 Jul 2026', ket: 'Konsultasi kulit — diberikan shampoo anti-jamur, grooming jamur 2x seminggu.', oleh: 'drh. Prasetyo' },
 ].map(m => `
   <div style="display:flex;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:12px">
-    <div style="font-size:2rem">${m.icon}</div>
     <div>
       <strong>${m.pet}</strong> <span class="muted" style="font-size:.8rem">· ${m.tgl} · oleh ${m.oleh}</span>
       <p style="font-size:.9rem;margin-top:.2rem">${m.ket}</p>

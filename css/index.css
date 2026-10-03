@@ -1,5 +1,5 @@
 /* ============================================================
-   FILOSOVET — css/index.css (Fixed Spacing & Interactive Cards)
+   FILOSOVET — css/index.css (Hero Section Adjustments for Light & Dark)
    ============================================================ */
 
 /* 1. Scroll Container & Layout Section */
@@ -18,7 +18,6 @@ body {
   scroll-snap-type: none;
 }
 
-/* Format Layout Section Utama */
 .fullscreen-section {
   width: 100%;
   min-height: 100vh;
@@ -33,7 +32,6 @@ body {
   box-sizing: border-box;
 }
 
-/* Diperbesar agar konten kartu lebih leluasa dan tidak terlalu menumpuk di tengah */
 .fullscreen-section .container {
   width: 100%;
   max-width: 1280px;
@@ -49,30 +47,47 @@ body {
   width: 100%;
 }
 
-.fullscreen-section.bg-alt {
-  background-color: rgba(15, 118, 110, 0.03);
+.fullscreen-section:not(.hero-section):not(.bg-alt):not(.footer-section) {
+  background-color: #fdfcfb;
+}
+
+.fullscreen-section.bg-alt,
+.keunggulan-section {
+  background-color: #f0faf8;
+  background-image:
+    radial-gradient(circle at 1px 1px, rgba(15, 118, 110, 0.07) 1px, transparent 0);
+  background-size: 28px 28px;
+  position: relative;
+}
+
+.keunggulan-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--primary), var(--primary-light), var(--primary), transparent);
+  opacity: 0.4;
 }
 
 /* ============================================================
-   2. HERO SECTION
+   2. HERO SECTION — LIGHT MODE ADJUSTMENTS
    ============================================================ */
 .hero-section {
   background-image: url('../assets/background/hero-bg.jpg');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  color: #ffffff;
   position: relative;
+  overflow: hidden;
 }
 
+/* Overlay Light Mode: Warm, Clean Teal Soft Vignette */
 .hero-section .hero-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at 70% 50%,
-    rgba(15, 118, 110, 0.4) 0%,
-    rgba(7, 53, 49, 0.85) 100%
-  );
+  background: 
+    radial-gradient(circle at 75% 50%, rgba(15, 118, 110, 0.25) 0%, rgba(7, 43, 40, 0.65) 100%),
+    linear-gradient(to bottom, rgba(15, 23, 42, 0.2), rgba(15, 23, 42, 0.55));
   z-index: 1;
 }
 
@@ -82,138 +97,262 @@ body {
   width: 100%;
 }
 
-.hero-section .hero-inner {
+.hero-inner-modern {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2.5rem;
+  grid-template-columns: 1.2fr 0.9fr;
+  gap: 3.5rem;
   align-items: center;
 }
 
-.hero-section .hero-left-blank {
-  min-height: 50px;
-}
-
-.hero-section .hero-glass-card {
-  background: rgba(255, 255, 255, 0.14);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.28);
-  border-radius: 24px;
-  padding: 1.8rem 2rem;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+/* Sisi Kiri */
+.hero-left-content {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  width: 100%;
-  max-width: 520px;
-  justify-self: end;
-  transition: all 0.3s ease;
 }
 
-.hero-section .hero-glass-card:hover {
-  border-color: rgba(255, 255, 255, 0.42);
-  box-shadow: 0 25px 55px rgba(0, 0, 0, 0.4);
-}
-
-.hero-section .hero-tag {
-  background: rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(8px);
-  margin-bottom: 0.9rem;
-  font-size: 0.78rem !important;
-  padding: 0.3rem 0.85rem !important;
+/* Badge Status Light Mode */
+.status-badge-glow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.4rem 1.1rem;
   border-radius: 999px;
-}
-
-.hero-section .hero-title {
-  font-size: clamp(1.5rem, 2.2vw, 2rem);
-  font-weight: 800;
-  line-height: 1.25;
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   color: #ffffff;
-  margin-bottom: 0.7rem;
-  letter-spacing: -0.4px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
-.hero-section .hero-desc {
-  font-size: 0.9rem;
-  line-height: 1.55;
-  color: rgba(255, 255, 255, 0.9);
-  margin-bottom: 1.4rem;
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #5eead4;
+  box-shadow: 0 0 10px #5eead4;
+  animation: pulseGlow 1.8s infinite;
 }
 
-.hero-section .hero-cta-group {
+@keyframes pulseGlow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.45; transform: scale(0.85); }
+}
+
+/* Hero Typography Light Mode */
+.hero-title-modern {
+  font-size: clamp(2.2rem, 3.8vw, 3.4rem);
+  font-weight: 900;
+  line-height: 1.15;
+  color: #ffffff;
+  letter-spacing: -0.8px;
+  margin-bottom: 1rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gradient-text {
+  background: linear-gradient(135deg, #5eead4 0%, #a7f3d0 50%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-desc-modern {
+  font-size: 1.02rem;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+  max-width: 540px;
+  margin-bottom: 2rem;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Buttons Light Mode */
+.hero-actions-modern {
   display: flex;
-  gap: 10px;
-  width: 100%;
-  margin-bottom: 1.4rem;
+  gap: 14px;
   flex-wrap: wrap;
 }
 
-.hero-section .btn-hero-primary {
-  flex: 1;
-  min-width: 135px;
-  padding: 0.65rem 1.2rem;
-  font-size: 0.88rem;
-}
-
-.hero-section .btn-outline-hero {
-  flex: 1;
-  min-width: 120px;
-  padding: 0.65rem 1.2rem;
-  font-size: 0.88rem;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1.5px solid rgba(255, 255, 255, 0.55);
+.btn-glow {
+  background: linear-gradient(135deg, #0d9488, #0f766e);
   color: #ffffff;
-  backdrop-filter: blur(8px);
+  box-shadow: 0 8px 24px rgba(13, 148, 136, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.hero-section .btn-outline-hero:hover {
+.btn-glow:hover {
+  box-shadow: 0 12px 30px rgba(13, 148, 136, 0.6);
+  transform: translateY(-3px);
+}
+
+.btn-glass {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  color: #ffffff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.btn-glass:hover {
   background: #ffffff;
   color: #0f766e;
+  transform: translateY(-3px);
 }
 
-.hero-section .hero-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0.8rem;
+/* Sisi Kanan: Frosted White Glass Card (Light Mode) */
+.hero-right-console {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hero-glass-card-modern {
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 28px;
+  padding: 2.2rem;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
   width: 100%;
-  padding-top: 1.1rem;
-  border-top: 1px dashed rgba(255, 255, 255, 0.22);
-  text-align: center;
+  max-width: 440px;
+  transition: transform 0.4s ease, border-color 0.4s ease, background 0.4s ease;
 }
 
-.hero-section .hero-stats-grid strong {
-  display: block;
+.hero-glass-card-modern:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.24);
+  border-color: rgba(255, 255, 255, 0.55);
+}
+
+.console-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.console-text {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.92);
+  line-height: 1.55;
+  margin-bottom: 1.8rem;
+}
+
+.live-pulse {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #2dd4bf;
+  box-shadow: 0 0 12px #2dd4bf;
+}
+
+/* Stats Pill Cards (Light Mode) */
+.stats-pills-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-pill-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1.2rem;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 16px;
+  backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.stat-pill-item:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: translateX(4px);
+}
+
+.stat-pill-item strong {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #5eead4;
+  color: #ffffff;
+  text-shadow: 0 0 10px rgba(45, 212, 191, 0.5);
 }
 
-.hero-section .hero-stats-grid span {
-  font-size: 0.74rem;
+.stat-pill-item span {
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 600;
+}
+
+/* Scroll Hint Component */
+.scroll-hint {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   color: rgba(255, 255, 255, 0.85);
+  cursor: default;
+  user-select: none;
+  animation: scrollHintPulse 2.4s ease-in-out infinite;
 }
 
-/* ============================================================
-   3. SECTION LAYANAN & KEUNGGULAN (Kartu Diperbesar + Clickable)
-   ============================================================ */
+.scroll-hint-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.9);
+}
 
-/* Grid Layanan (4 Card) */
+.scroll-hint-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all 0.3s ease;
+}
+
+.scroll-hint-arrow svg {
+  animation: scrollArrowBounce 2.2s ease-in-out infinite;
+}
+
+@keyframes scrollArrowBounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(5px); }
+}
+
+@keyframes scrollHintPulse {
+  0%, 100% { opacity: 0.95; }
+  50% { opacity: 0.55; }
+}
+
+/* Base Cards & Grid */
 .fullscreen-section .grid-4 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1.4rem;
 }
 
-/* Grid Keunggulan (3 Card) */
 .fullscreen-section .grid-3 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.75rem;
 }
 
-/* Base Style untuk Semua Card Interaktif */
 .fullscreen-section .card {
   padding: 1.6rem 1.4rem;
   border-radius: 22px;
@@ -226,23 +365,21 @@ body {
   box-sizing: border-box;
   background: var(--surface, #ffffff);
   border: 1px solid var(--border, #e2e8f0);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
               box-shadow 0.35s ease,
               border-color 0.35s ease;
 }
 
-/* Animation Hover untuk Seluruh Card */
 .fullscreen-section .card:hover {
   transform: translateY(-8px);
   box-shadow: 0 18px 36px rgba(15, 118, 110, 0.14);
   border-color: rgba(15, 118, 110, 0.35);
 }
 
-/* --- Card Layanan Kami --- */
 .fullscreen-section .service-card .card-img-wrap {
   width: 100%;
-  height: 180px; /* Diperbesar dari 145px */
+  height: 180px;
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 1.2rem;
@@ -261,14 +398,14 @@ body {
 }
 
 .fullscreen-section .service-card h3 {
-  font-size: 1.25rem; /* Diperbesar dari 1.15rem */
+  font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.5rem;
   color: var(--text, #0f172a);
 }
 
 .fullscreen-section .service-card p.muted {
-  font-size: 0.9rem; /* Diperbesar dari 0.86rem */
+  font-size: 0.9rem;
   line-height: 1.55;
   margin-bottom: 1.2rem;
   color: var(--muted, #64748b);
@@ -290,10 +427,19 @@ body {
   color: var(--primary-dark, #0b5a54);
 }
 
-/* --- Card Keunggulan --- */
+.fullscreen-section .feature-card {
+  cursor: default;
+}
+
+.fullscreen-section .feature-card:hover {
+  transform: none;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  border-color: var(--border, #e2e8f0);
+}
+
 #why-us .card .card-img-wrap {
   width: 100%;
-  height: 215px; /* Diperbesar dari 180px */
+  height: 215px;
   border-radius: 16px;
   overflow: hidden;
   margin-bottom: 1.3rem;
@@ -308,25 +454,22 @@ body {
 }
 
 #why-us .card:hover .card-img {
-  transform: scale(1.08);
+  transform: scale(1.05);
 }
 
 #why-us .card h3 {
-  font-size: 1.3rem; /* Diperbesar dari 1.2rem */
+  font-size: 1.3rem;
   font-weight: 700;
   margin-bottom: 0.6rem;
   color: var(--text, #0f172a);
 }
 
 #why-us .card p.muted {
-  font-size: 0.94rem; /* Diperbesar dari 0.9rem */
+  font-size: 0.94rem;
   line-height: 1.6;
   color: var(--muted, #64748b);
 }
 
-/* ============================================================
-   4. FOOTER SECTION & RESPONSIVE
-   ============================================================ */
 .fullscreen-section.footer-section {
   justify-content: space-between;
   padding-bottom: 0;
@@ -346,19 +489,109 @@ body {
     padding-left: 20px;
     padding-right: 20px;
   }
-  .hero-section .hero-inner {
+  .hero-inner-modern {
     grid-template-columns: 1fr;
+    gap: 2.5rem;
   }
-  .hero-section .hero-left-blank {
-    display: none;
+  .hero-right-console {
+    justify-content: center;
   }
-  .hero-section .hero-glass-card {
+  .hero-glass-card-modern {
     max-width: 100%;
-    justify-self: center;
     padding: 1.5rem 1.2rem;
   }
   .fullscreen-section .grid-4,
   .fullscreen-section .grid-3 {
     grid-template-columns: 1fr;
+  }
+  .scroll-hint {
+    display: none;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE HERO SECTION — MOBILE OPTIMIZATION
+   ============================================================ */
+@media (max-width: 900px) {
+  .snap-container {
+    height: auto;
+    overflow-y: visible;
+    scroll-snap-type: none;
+  }
+
+  /* Memberi ruang aman atas agar tidak tertutup floating navbar */
+  .fullscreen-section.hero-section {
+    min-height: 100vh;
+    padding: 110px 16px 50px !important; 
+    box-sizing: border-box;
+  }
+
+  .hero-section .hero-content {
+    padding: 0;
+  }
+
+  .hero-inner-modern {
+    grid-template-columns: 1fr;
+    gap: 1.8rem;
+  }
+
+  /* Penyesuaian Font Sisi Kiri (Mobile) */
+  .hero-title-modern {
+    font-size: clamp(1.6rem, 6.5vw, 2.2rem) !important;
+    line-height: 1.25;
+    margin-bottom: 0.8rem;
+  }
+
+  .hero-desc-modern {
+    font-size: 0.9rem !important;
+    line-height: 1.55;
+    margin-bottom: 1.4rem;
+  }
+
+  .status-badge-glow {
+    font-size: 0.75rem !important;
+    padding: 0.35rem 0.85rem !important;
+  }
+
+  /* Penyesuaian Glass Card Konsol Sisi Kanan (Mobile) */
+  .hero-glass-card-modern {
+    max-width: 100% !important;
+    padding: 1.4rem 1.2rem !important;
+    border-radius: 20px !important;
+  }
+
+  .console-text {
+    font-size: 0.85rem !important;
+    margin-bottom: 1.2rem;
+  }
+
+  .stat-pill-item {
+    padding: 0.7rem 1rem !important;
+  }
+
+  .stat-pill-item strong {
+    font-size: 1.05rem !important;
+  }
+
+  .stat-pill-item span {
+    font-size: 0.78rem !important;
+  }
+}
+
+/* Penyesuaian khusus untuk Smartphone Layar Kecil (<= 560px) */
+@media (max-width: 560px) {
+  .fullscreen-section.hero-section {
+    padding-top: 100px !important;
+  }
+
+  .hero-actions-modern {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hero-actions-modern .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
