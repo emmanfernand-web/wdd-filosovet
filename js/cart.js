@@ -16,8 +16,8 @@ const PRODUCTS = [
   { id: 12, name: 'Kalung Kucing motif',            cat: 'aksesoris',price: 35000,  stock: 30, icon: '🔔', image: 'cat_collars.jpeg', sold: 142 },
   { id: 13, name: 'Mainan Bola & Tali Anjing',      cat: 'aksesoris',price: 29000,  stock: 26, icon: '🎾', image: 'dog_toy.jpeg', sold: 210 },
   { id: 14, name: 'Kandang Travel Size M',          cat: 'aksesoris',price: 320000, stock: 7,  icon: '🧳', image: 'pet_create.jpeg', sold: 61 },
-  { id: 15, name: 'Termometer Digital Hewan',       cat: 'almed',    price: 85000,  stock: 14, icon: '🌡️', sold: 77 },
-  { id: 16, name: 'Tabung Pemberi Obat Oral',       cat: 'almed',    price: 25000,  stock: 20, icon: '💉', sold: 93 },
+  
+  
 ];
 const CAT_LABEL = { makanan: 'Makanan', obat: 'Obat & Vitamin', skincare: 'Skincare', aksesoris: 'Aksesoris', almed: 'Alat Medis' };
 
