@@ -234,5 +234,11 @@ function checkout() {
   const notaTotal = document.getElementById('notaTotal');
   if (notaTotal) notaTotal.textContent = rupiah(total);
   const notaModal = document.getElementById('notaModal');
-  if (notaModal) notaModal.style.display = 'grid';
+  if (notaModal) {
+    notaModal.classList.add('is-open');
+    // Close on overlay click (outside sheet)
+    notaModal.onclick = (e) => { if (e.target === notaModal) notaModal.classList.remove('is-open'); };
+  }
+  const btnClose = document.getElementById('btnNotaClose');
+  if (btnClose) btnClose.onclick = () => notaModal && notaModal.classList.remove('is-open');
 }
