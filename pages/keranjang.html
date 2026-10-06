@@ -104,18 +104,46 @@
 </section>
 
 <!-- MODAL NOTA DIGITAL -->
-<div id="notaModal" style="display:none;position:fixed;inset:0;background:rgba(15,23,42,.65);z-index:2000;place-items:center;backdrop-filter:blur(4px);">
-  <div class="card no-hover" style="max-width:430px;width:92%">
-    <div class="text-center mb-3">
-      <div style="font-size:3rem;margin-bottom:.5rem">&#9989;</div>
-      <h3>Pembayaran Berhasil</h3>
-      <p class="muted" style="font-size:.9rem">Nota transaksi digital telah diterbitkan.</p>
+<div id="notaModal" class="nota-overlay">
+  <div class="nota-sheet">
+    <!-- Header dengan ikon centang -->
+    <div class="nota-header">
+      <div class="nota-success-badge">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"
+             aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h3 class="nota-title">Pembayaran Berhasil</h3>
+      <p class="nota-subtitle">Terima kasih — transaksi Anda telah selesai diproses.</p>
     </div>
-    <div class="summary-row"><span>No. Nota</span><strong id="notaNo"></strong></div>
-    <div class="summary-row"><span>Item</span><strong id="notaItems"></strong></div>
-    <div class="summary-row"><span>Metode</span><strong id="notaPay"></strong></div>
-    <div class="summary-row total"><span>Total Dibayar</span><span id="notaTotal"></span></div>
-    <button class="btn btn-primary btn-block" onclick="document.getElementById('notaModal').style.display='none'" style="margin-top:1rem">Selesai</button>
+
+    <!-- Pemisah bergaya amplop / struk -->
+    <div class="nota-tear"></div>
+
+    <!-- Detail struk -->
+    <div class="nota-body">
+      <div class="nota-row">
+        <span class="nota-label">No. Nota</span>
+        <strong class="nota-value" id="notaNo"></strong>
+      </div>
+      <div class="nota-row">
+        <span class="nota-label">Item</span>
+        <strong class="nota-value" id="notaItems"></strong>
+      </div>
+      <div class="nota-row">
+        <span class="nota-label">Metode</span>
+        <strong class="nota-value" id="notaPay"></strong>
+      </div>
+      <div class="nota-row nota-total-row">
+        <span class="nota-label-total">Total Dibayar</span>
+        <span class="nota-value-total" id="notaTotal"></span>
+      </div>
+    </div>
+
+    <!-- Aksi -->
+    <div class="nota-footer">
+      <button class="btn btn-primary btn-block" id="btnNotaClose">Selesai</button>
+    </div>
   </div>
 </div>
 
