@@ -1,0 +1,259 @@
+/* ============================================================
+   FILOSOVET — css/booking.css (Fixed Layout Grid & Responsive)
+   ============================================================ */
+
+/* ---------- 1. Anti-Overflow Container & Main Grid ---------- */
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 1.8rem;
+  align-items: start;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* PERBAIKAN UTAMA: Mencegah Grid Item Membesar Melebihi Layar */
+.cart-layout > div {
+  min-width: 0 !important;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ---------- 2. Kartu Steps ---------- */
+.card {
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 16px);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.card h3 {
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--text, #0f172a);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 1.2rem;
+}
+
+/* ---------- 3. Step 1: Pilih Layanan (Segmented Bar) ---------- */
+#serviceTabs.tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(15, 118, 110, 0.06);
+  padding: 6px;
+  border-radius: 999px;
+  border: 1px solid var(--border, #e2e8f0);
+  margin-bottom: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#serviceTabs .tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  border: 0;
+  background: transparent;
+  font-weight: 700;
+  font-size: 0.92rem;
+  color: var(--muted, #64748b);
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-sizing: border-box;
+}
+
+#serviceTabs .tab:hover {
+  color: var(--primary, #0f766e);
+  background: rgba(255, 255, 255, 0.6);
+}
+
+#serviceTabs .tab.active {
+  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.28);
+}
+
+#serviceDetail {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  width: 100%;
+}
+
+/* ---------- 4. Step 2: Pilih Tanggal (Scrollable Bar) ---------- */
+#dateTabs.tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 8px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+#dateTabs .tab {
+  flex: 0 0 auto;
+  padding: 0.65rem 1.1rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border, #e2e8f0);
+  background: #ffffff;
+  font-weight: 600;
+  font-size: 0.88rem;
+  color: var(--text, #0f172a);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#dateTabs .tab:hover {
+  border-color: var(--primary, #0f766e);
+  color: var(--primary, #0f766e);
+  background: var(--primary-light, #ccfbf1);
+}
+
+#dateTabs .tab.active {
+  background: var(--primary, #0f766e) !important;
+  color: #ffffff !important;
+  border-color: var(--primary, #0f766e) !important;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+}
+
+/* ---------- 5. Step 3: Pilih Slot Waktu ---------- */
+#slotGrid.tabs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+#slotGrid .tab {
+  padding: 0.75rem 0.5rem;
+  text-align: center;
+  border-radius: 12px;
+  border: 1.5px solid var(--border, #e2e8f0);
+  background: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text, #0f172a);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#slotGrid .tab:hover {
+  border-color: var(--primary, #0f766e);
+  color: var(--primary, #0f766e);
+  background: var(--primary-light, #ccfbf1);
+}
+
+#slotGrid .tab.active {
+  background: var(--primary, #0f766e) !important;
+  color: #ffffff !important;
+  border-color: var(--primary, #0f766e) !important;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.2);
+}
+
+#slotGrid .tab.disabled,
+#slotGrid .tab:disabled {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  border-color: #e2e8f0 !important;
+  cursor: not-allowed;
+  box-shadow: none !important;
+}
+
+/* ---------- 6. Ringkasan Booking Sticky (Kolom Kanan) ---------- */
+.summary-card {
+  position: sticky;
+  top: 100px;
+  background: var(--surface, #ffffff);
+  border: 1px solid var(--border, #e2e8f0);
+  border-radius: var(--radius, 16px);
+  padding: 1.8rem;
+  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.summary-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--border, #e2e8f0);
+  font-size: 0.92rem;
+}
+
+.summary-row span {
+  color: var(--muted, #64748b);
+  font-weight: 500;
+}
+
+.summary-row strong {
+  color: var(--text, #0f172a);
+  font-weight: 700;
+  text-align: right;
+}
+
+.summary-row.total {
+  border-bottom: 0;
+  border-top: 2px solid var(--border, #e2e8f0);
+  margin-top: 0.6rem;
+  padding-top: 1rem;
+  font-size: 1.15rem;
+}
+
+.summary-row.total span {
+  color: var(--text, #0f172a);
+  font-weight: 800;
+}
+
+.summary-row.total span:last-child {
+  color: var(--primary, #0f766e);
+  font-weight: 800;
+}
+
+/* ---------- 7. Responsive Mobile View (<= 900px) ---------- */
+@media (max-width: 900px) {
+  .cart-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1.5rem !important;
+    width: 100% !important;
+  }
+
+  .summary-card {
+    position: static !important;
+    width: 100% !important;
+  }
+
+  #serviceTabs.tabs {
+    grid-template-columns: 1fr;
+    border-radius: 16px;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 0;
+  }
+}
+
+@media (max-width: 560px) {
+  #slotGrid.tabs {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}

@@ -1,5 +1,5 @@
 /* ============================================================
-   FILOSOVET — components/footer.css (Footer Layout & Branding)
+   FILOSOVET — components/footer.css (Responsive & Compact Mobile)
    ============================================================ */
 
 .site-footer {
@@ -61,11 +61,65 @@
   margin-right: 10px !important;
 }
 
-/* Responsive Footer */
+/* ============================================================
+   RESPONSIVE FOOTER (TABLET & MOBILE)
+   ============================================================ */
 @media (max-width: 900px) {
-  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .site-footer {
+    margin-top: 60px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.8rem 1.2rem;
+    padding: 48px 0 32px;
+  }
 }
 
-@media (max-width: 768px) {
-  .footer-grid { grid-template-columns: 1fr; }
+@media (max-width: 600px) {
+  .site-footer {
+    margin-top: 40px;
+  }
+
+  /* Mengurangi padding vertikal dan menyusun grid lebih padat */
+  .footer-grid {
+    grid-template-columns: 1fr 1fr; /* Membagi menu menjadi 2 kolom menyamping */
+    gap: 1.5rem 1rem;
+    padding: 32px 0 24px;
+  }
+
+  /* Kolom Branding & Deskripsi Utama dibuat selebar 2 kolom penuh */
+  .footer-grid > div:first-child {
+    grid-column: span 2;
+  }
+
+  .site-footer .brand {
+    margin-bottom: 0.5rem !important;
+    font-size: 1.15rem;
+  }
+
+  .site-footer .brand .logo {
+    width: 30px !important;
+    height: 30px !important;
+  }
+
+  .site-footer p {
+    font-size: 0.82rem;
+    line-height: 1.45;
+  }
+
+  .site-footer h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .site-footer a {
+    font-size: 0.84rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .footer-bottom {
+    padding: 1rem 0;
+    font-size: 0.78rem;
+  }
 }

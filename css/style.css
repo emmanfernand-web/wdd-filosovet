@@ -1,4 +1,6 @@
-   /* FILOSOVET — style.css (Global Foundation & Utilities Only) */
+/* ============================================================
+   FILOSOVET — css/style.css (Global Foundation & Utilities Only)
+   ============================================================ */
 :root {
   --primary: #0f766e; 
   --primary-dark: #0b5a54; 
@@ -7,15 +9,15 @@
   --accent-dark: #b45309;
   --danger: #dc2626; 
   --danger-bg: #fee2e2;
-  --bg: #f7f9fc; 
+  --bg: #f8fafc; 
   --surface: #ffffff; 
-  --border: #e4ecf1;
+  --border: #e2e8f0;
   --text: #0f172a; 
   --muted: #64748b;
   --radius: 16px; 
-  --shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.1);
-  --shadow-hover: 0 20px 35px -10px rgba(15, 118, 110, 0.2);
-  --shadow-sm: 0 2px 12px rgba(15, 23, 42, 0.05);
+  --shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 20px 35px -10px rgba(15, 118, 110, 0.18);
+  --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
   --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -26,7 +28,6 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
-
 
 /* ---------- 1. Layout Container & Spacing ---------- */
 .container { width: min(1360px, 94%); margin: 0 auto; }
@@ -68,7 +69,6 @@ ul { list-style: none; }
 }
 .card:hover .card-icon { transform: scale(1.1) rotate(6deg); }
 
-/* ---------- Card Service & Image ---------- */
 .card-service {
   display: flex;
   flex-direction: column;
@@ -103,7 +103,6 @@ ul { list-style: none; }
   transform: scale(1.06);
 }
 
-/* No-hover modifier: disable lift animation on large content cards */
 .card.no-hover:hover {
   transform: none;
   box-shadow: var(--shadow-sm);
@@ -115,25 +114,6 @@ ul { list-style: none; }
 }
 .card.no-hover:hover .card-icon {
   transform: none;
-}
-
-/* Service Banner Image (Layanan Detail Page) */
-.service-banner-img {
-  width: 100%;
-  height: 280px;
-  border-radius: 20px;
-  overflow: hidden;
-  background: #f1f5f9;
-}
-.service-banner-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-.service-banner-img:hover img {
-  transform: scale(1.05);
 }
 
 .grid { display: grid; gap: 1.5rem; }
@@ -200,18 +180,7 @@ tr:hover td { background: #f1f5f9; }
 .page-hero h1 { font-size: 2.4rem; margin-bottom: 0.4rem; font-weight: 800; color: #fff; }
 .breadcrumb { font-size: 0.88rem; opacity: 0.85; color: #fff; }
 
-/* ---------- 8. UI Elements (Tabs, Animations, Toast) ---------- */
-.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1.5rem; }
-.tab {
-  padding: 0.65rem 1.5rem; border-radius: 999px; border: 1.5px solid var(--border); background: #fff;
-  font-weight: 600; cursor: pointer; font-size: 0.9rem; color: var(--muted); font-family: var(--font); transition: var(--transition);
-}
-.tab:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
-.tab.active {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-  color: #fff !important; border-color: transparent; box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
-}
-
+/* ---------- 8. UI Elements (Animations & Toast) ---------- */
 .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease; }
 .js-observer .reveal { opacity: 0; transform: translateY(20px); }
 .js-observer .reveal.visible { opacity: 1 !important; transform: translateY(0) !important; }
@@ -235,5 +204,4 @@ tr:hover td { background: #f1f5f9; }
   .page-hero { padding: 120px 0 44px; }
   .page-hero h1 { font-size: 1.8rem; }
   .form-row { grid-template-columns: 1fr; }
-  .cart-layout { grid-template-columns: 1fr !important; }
 }

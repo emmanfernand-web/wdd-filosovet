@@ -123,7 +123,7 @@ html.dark-mode .summary-row strong {
   color: #f8fafc !important;
 }
 
-/* Header Kapsul di Dark Mode */
+/* Header Kapsul di Dark Mode (Desktop) */
 html.dark-mode .site-header .nav-wrap {
   background: rgba(23, 32, 54, 0.92) !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
@@ -141,6 +141,31 @@ html.dark-mode .main-nav a {
 html.dark-mode .main-nav a:hover {
   background: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
+}
+
+/* FIX: MOBILE DROPDOWN MENU DI DARK MODE (SOLID BACKGROUND) */
+@media (max-width: 900px) {
+  html.dark-mode .main-nav {
+    background: #172036 !important;
+    border: 1px solid #283553 !important;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+  }
+
+  html.dark-mode .main-nav a {
+    color: #f8fafc !important;
+  }
+
+  html.dark-mode .main-nav a:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+  }
+
+  html.dark-mode .main-nav a.active {
+    background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54)) !important;
+    color: #ffffff !important;
+  }
 }
 
 /* FIX: Ikon & Tombol Keranjang Belanja di Dark Mode */
@@ -413,7 +438,7 @@ html.dark-mode .admin-user .theme-toggle-btn {
 }
 
 /* ============================================================
-   FIX: SAKLAR THEME TOGGLE MURNI TRANS PARAN (GLOBAL & ADMIN)
+   FIX: SAKLAR THEME TOGGLE MURNI TRANSPARAN (GLOBAL & ADMIN)
    ============================================================ */
 
 /* Hilangkan Latar Belakang & Border Kotak Pembungkus Admin User */
@@ -487,4 +512,132 @@ html.dark-mode .admin-user .theme-toggle-btn {
   background: transparent !important;
   border: none !important;
   box-shadow: none !important;
+}
+
+/* ============================================================
+   FIX DARK MODE: BUTTON LAYANAN & TOMBOL FILTER TOKO (MOBILE)
+   ============================================================ */
+
+/* 1. Perbaikan Button / Tab Kategori di Halaman Layanan */
+html.dark-mode .tab-group,
+html.dark-mode .tabs-wrap,
+html.dark-mode .category-tabs,
+html.dark-mode div[class*="tab"] {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark-mode .tab,
+html.dark-mode .tab-btn {
+  background-color: transparent !important;
+  color: #cbd5e1 !important;
+  border-color: transparent !important;
+}
+
+html.dark-mode .tab:hover,
+html.dark-mode .tab-btn:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .tab.active,
+html.dark-mode .tab-btn.active {
+  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3) !important;
+}
+
+/* 2. Perbaikan Global .btn-outline & Tombol Filter Toko Mobile */
+html.dark-mode .btn-outline {
+  background: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+  color: #5eead4 !important;
+}
+
+html.dark-mode .btn-outline:hover {
+  background: rgba(20, 184, 166, 0.2) !important;
+  border-color: #2dd4bf !important;
+  color: #ffffff !important;
+}
+
+/* Khusus Tombol Filter Toko di Mobile View */
+html.dark-mode .mobile-filter-btn,
+html.dark-mode #toggleFilterBtn {
+  background: var(--surface, #172036) !important;
+  border: 1.5px solid var(--border, #283553) !important;
+  color: #5eead4 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+html.dark-mode .mobile-filter-btn svg,
+html.dark-mode #toggleFilterBtn svg {
+  stroke: #5eead4 !important;
+}
+
+html.dark-mode .mobile-filter-btn:hover,
+html.dark-mode #toggleFilterBtn:hover {
+  background: rgba(20, 184, 166, 0.2) !important;
+  border-color: #2dd4bf !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .mobile-filter-btn:hover svg,
+html.dark-mode #toggleFilterBtn:hover svg {
+  stroke: #ffffff !important;
+}
+
+/* ============================================================
+   FIX DARK MODE: BADGE & KETERANGAN HEWAN PELIHARAAN (PROFIL)
+   ============================================================ */
+
+/* Kartu Hewan di Dalam Panel Profil */
+html.dark-mode #panelHewan .card,
+html.dark-mode #panelHewan .pet-card,
+html.dark-mode .pet-card {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+}
+
+/* Lencana/Badge Hijau (Contoh: Vaksin Lengkap) */
+html.dark-mode #panelHewan span[style*="dcfce7" i],
+html.dark-mode #panelHewan span[style*="d1fae5" i],
+html.dark-mode #panelHewan span[style*="166534" i],
+html.dark-mode #panelHewan .badge-success,
+html.dark-mode #panelHewan .badge-green,
+html.dark-mode .pet-card span[style*="dcfce7" i] {
+  background: rgba(34, 197, 94, 0.2) !important;
+  background-color: rgba(34, 197, 94, 0.2) !important;
+  color: #4ade80 !important;
+  border: 1px solid rgba(74, 222, 128, 0.35) !important;
+}
+
+/* Lencana/Badge Biru / Ungu (Contoh: Steril) */
+html.dark-mode #panelHewan span[style*="e0e7ff" i],
+html.dark-mode #panelHewan span[style*="dbeafe" i],
+html.dark-mode #panelHewan span[style*="3730a3" i],
+html.dark-mode #panelHewan .badge-info,
+html.dark-mode #panelHewan .badge-blue,
+html.dark-mode .pet-card span[style*="e0e7ff" i] {
+  background: rgba(99, 102, 241, 0.2) !important;
+  background-color: rgba(99, 102, 241, 0.2) !important;
+  color: #a5b4fc !important;
+  border: 1px solid rgba(165, 180, 252, 0.35) !important;
+}
+
+/* Lencana/Badge Kuning / Oranye / Amber (Contoh: Vaksin diperbarui 2 bln lagi) */
+html.dark-mode #panelHewan span[style*="fef3c7" i],
+html.dark-mode #panelHewan span[style*="fef08a" i],
+html.dark-mode #panelHewan span[style*="fffbeb" i],
+html.dark-mode #panelHewan span[style*="fef9c3" i],
+html.dark-mode #panelHewan span[style*="92400e" i],
+html.dark-mode #panelHewan .badge-warning,
+html.dark-mode #panelHewan .badge-amber,
+html.dark-mode #panelHewan .badge-yellow,
+html.dark-mode .pet-card span[style*="fef3c7" i],
+html.dark-mode .pet-card span[style*="92400e" i] {
+  background: rgba(245, 158, 11, 0.22) !important;
+  background-color: rgba(245, 158, 11, 0.22) !important;
+  color: #fbbf24 !important;
+  border: 1px solid rgba(251, 191, 36, 0.4) !important;
 }
