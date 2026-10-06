@@ -90,17 +90,21 @@ function applyFilter() {
     return;
   }
 
+  /* PERBAIKAN: Membaca p.image dari cart.js */
   grid.innerHTML = filtered.map(p => `
     <div class="product-card">
       <div class="product-thumb">
-        <img src="${p.img || '../assets/images/pet_store.jpeg'}" alt="${p.name}" class="product-img" onerror="this.onerror=null;this.parentElement.innerHTML='${p.icon||'📦'}';">
+        ${p.image 
+          ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="product-img" onerror="this.onerror=null;this.parentElement.innerHTML='${p.icon || '📦'}';">`
+          : (p.icon || '📦')
+        }
       </div>
       <div class="product-body">
-        <span class="product-cat">${p.cat}</span>
+        <span class="product-cat">${CAT_LABEL[p.cat] || p.cat}</span>
         <div class="product-name" title="${p.name}">${p.name}</div>
         <div class="product-stock ${p.stock < 10 ? 'low' : ''}">✓ ${p.stock} stok · ${p.sold || 0} terjual</div>
         <div class="product-price">${rupiah(p.price)}</div>
-        <button class="btn btn-primary btn-sm" onclick="addToCart(${p.id})">+ Keranjang</button>
+        <button class="btn btn-primary btn-sm" ${p.stock === 0 ? 'disabled' : ''} onclick="addToCart(${p.id})">+ Keranjang</button>
       </div>
     </div>
   `).join('');
