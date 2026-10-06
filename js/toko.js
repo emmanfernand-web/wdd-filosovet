@@ -1,6 +1,7 @@
 /* ============================================================
-   FILOSOVET — toko.js
+   FILOSOVET — js/toko.js (Interactive Filter & Mobile Drawer)
    ============================================================ */
+
 document.addEventListener('DOMContentLoaded', () => {
   initShop();
 });
@@ -14,12 +15,12 @@ function initShop() {
     return;
   }
 
-  // Render produk langsung begitu halaman dibuka
+  // 1. Render Awal Produk
   applyFilter();
 
-  // Listener untuk pencarian & filter
-  const searchInput = document.getElementById('searchInput') || document.querySelector('.search-box input');
-  const sortSelect = document.getElementById('sortSelect') || document.querySelector('select[id*="sort"]');
+  // 2. Event Listener Filter & Search
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
   const categoryChecks = document.querySelectorAll('.filter-check input');
   const resetBtn = document.getElementById('resetFilter');
 
@@ -35,25 +36,39 @@ function initShop() {
       applyFilter();
     });
   }
+
+  // 3. Handler Toggle Button Filter khusus Mobile View
+  const toggleBtn = document.getElementById('toggleFilterBtn');
+  const filterSidebar = document.getElementById('filterSidebar');
+  const closeFilterBtn = document.getElementById('closeFilterBtn');
+
+  if (toggleBtn && filterSidebar) {
+    toggleBtn.addEventListener('click', () => {
+      filterSidebar.classList.toggle('open');
+    });
+  }
+
+  if (closeFilterBtn && filterSidebar) {
+    closeFilterBtn.addEventListener('click', () => {
+      filterSidebar.classList.remove('open');
+    });
+  }
 }
 
 function applyFilter() {
-  const grid = document.getElementById('productGrid') || document.querySelector('.product-grid');
+  const grid = document.getElementById('productGrid');
   if (!grid || typeof PRODUCTS === 'undefined') return;
 
-  const searchInput = document.getElementById('searchInput') || document.querySelector('.search-box input');
-  const sortSelect = document.getElementById('sortSelect') || document.querySelector('select[id*="sort"]');
+  const searchInput = document.getElementById('searchInput');
+  const sortSelect = document.getElementById('sortSelect');
   const categoryChecks = document.querySelectorAll('.filter-check input');
-  const countEl = document.getElementById('productCount') || document.querySelector('.shop-layout span.muted');
+  const countEl = document.getElementById('resultInfo');
 
   const keyword = searchInput ? searchInput.value.toLowerCase().trim() : '';
 
   const selectedCategories = Array.from(categoryChecks)
     .filter(chk => chk.checked)
-    .map(chk => {
-      const label = chk.closest('label');
-      return label ? label.textContent.trim().toLowerCase() : '';
-    });
+    .map(chk => chk.value.toLowerCase());
 
   let filtered = PRODUCTS.filter(p => {
     const matchSearch = p.name.toLowerCase().includes(keyword) || p.cat.toLowerCase().includes(keyword);
@@ -77,11 +92,13 @@ function applyFilter() {
 
   grid.innerHTML = filtered.map(p => `
     <div class="product-card">
-      <div class="product-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="product-img">` : p.icon}</div>
+      <div class="product-thumb">
+        <img src="${p.img || '../assets/images/pet_store.jpeg'}" alt="${p.name}" class="product-img" onerror="this.onerror=null;this.parentElement.innerHTML='${p.icon||'📦'}';">
+      </div>
       <div class="product-body">
         <span class="product-cat">${p.cat}</span>
-        <div class="product-name">${p.name}</div>
-        <div class="product-stock ${p.stock < 10 ? 'low' : ''}">✓ ${p.stock} tersedia · ${p.sold || 0} terjual</div>
+        <div class="product-name" title="${p.name}">${p.name}</div>
+        <div class="product-stock ${p.stock < 10 ? 'low' : ''}">✓ ${p.stock} stok · ${p.sold || 0} terjual</div>
         <div class="product-price">${rupiah(p.price)}</div>
         <button class="btn btn-primary btn-sm" onclick="addToCart(${p.id})">+ Keranjang</button>
       </div>

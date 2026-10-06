@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Booking Layanan | Filosovet Petshop &amp; Klinik Hewan</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Booking Layanan | Filosovet Petshop &amp; Klinik Hewan</title>
 
-<!-- Pre-script Anti Flashing Dark Mode -->
-<script>
-  if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-    document.documentElement.classList.add('dark-mode');
-  }
-</script>
+  <!-- Pre-script Anti Flashing Dark Mode -->
+  <script>
+    if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      document.documentElement.classList.add('dark-mode');
+    }
+  </script>
 
-  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <!-- CSS Utama & Fondasi Global -->
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/shop.css">
 
-  <!-- CSS Komponen Terpisah -->
+  <!-- CSS Komponen Header & Footer -->
   <link rel="stylesheet" href="../css/components/header.css">
   <link rel="stylesheet" href="../css/components/footer.css">
   
+  <!-- CSS Khusus Halaman Booking -->
+  <link rel="stylesheet" href="../css/booking.css">
+
   <!-- CSS Mode Malam (Paling Bawah) -->
   <link rel="stylesheet" href="../css/dark.css">
 </head>

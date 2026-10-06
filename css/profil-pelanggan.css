@@ -1,0 +1,232 @@
+/* ============================================================
+   FILOSOVET — css/profil-pelanggan.css
+   Layout & Responsive Profil Pelanggan (Fixed Desktop Width)
+   ============================================================ */
+
+/* 1. Layout Utama Profil (Desktop — Diperlebar & Proporsional) */
+.profile-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2rem;
+  align-items: start;
+  width: min(1280px, 92%);
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.profile-sidebar {
+  position: sticky;
+  top: 100px;
+  z-index: 10;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.profile-main {
+  min-width: 0;
+  width: 100%;
+}
+
+.profile-nav {
+  display: grid;
+  gap: 0.4rem;
+}
+
+/* 2. Styling Navigasi Link Sidebar */
+.side-link {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text, #0f172a);
+  background: transparent;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.side-link-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: var(--primary-light, #ccfbf1);
+  color: var(--primary, #0f766e);
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.side-link:hover {
+  background: var(--primary-light, #ccfbf1);
+  color: var(--primary-dark, #0b5a54);
+}
+
+.side-link.active {
+  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
+}
+
+.side-link.active .side-link-icon {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+/* 3. Panel & Tabel Responsif */
+.prof-panel {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+
+.table-wrap {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  display: block;
+  border-radius: 12px;
+  margin-top: 0.5rem;
+  box-sizing: border-box;
+}
+
+.table-wrap table {
+  width: 100%;
+  min-width: 540px;
+  border-collapse: collapse;
+}
+
+.table-wrap th,
+.table-wrap td {
+  padding: 0.75rem 0.85rem;
+  white-space: nowrap;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* Status Chip */
+.status-chip {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.status-selesai {
+  background-color: #dcfce7;
+  color: #15803d;
+}
+
+.status-menunggu {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.status-proses {
+  background-color: #e0f2fe;
+  color: #0369a1;
+}
+
+/* ============================================================
+   4. RESPONSIF MOBILE VIEW (HP & TABLET <= 900px)
+   ============================================================ */
+@media (max-width: 900px) {
+  .profile-layout {
+    grid-template-columns: 1fr !important;
+    gap: 1.2rem !important;
+    width: 100% !important;
+    padding: 0 1.25rem !important;
+    box-sizing: border-box !important;
+  }
+
+  .profile-sidebar {
+    position: static !important;
+    top: auto !important;
+    width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .profile-main {
+    width: 100% !important;
+    min-width: 0 !important;
+  }
+
+  .prof-panel {
+    padding: 1.25rem 1rem !important;
+    border-radius: 16px !important;
+  }
+
+  .prof-panel h3 {
+    font-size: 1.1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr !important;
+    gap: 0.8rem;
+  }
+
+  #panelHewan .grid-2 {
+    grid-template-columns: 1fr !important;
+    gap: 1rem;
+  }
+
+  .table-wrap {
+    border: 1px solid var(--border, #e2e8f0);
+  }
+
+  .table-wrap th,
+  .table-wrap td {
+    font-size: 0.82rem !important;
+    padding: 0.65rem 0.7rem !important;
+  }
+}
+
+/* ============================================================
+   5. SUPPORT DARK MODE PROFIL
+   ============================================================ */
+html.dark-mode .profile-sidebar,
+html.dark-mode .prof-panel {
+  background-color: var(--surface, #172036) !important;
+  border-color: var(--border, #283553) !important;
+  color: var(--text, #f8fafc) !important;
+}
+
+html.dark-mode .side-link {
+  color: #cbd5e1 !important;
+}
+
+html.dark-mode .side-link:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .side-link.active {
+  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54)) !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .status-selesai {
+  background-color: rgba(22, 101, 52, 0.3) !important;
+  color: #4ade80 !important;
+}
+
+html.dark-mode .status-menunggu {
+  background-color: rgba(180, 83, 9, 0.3) !important;
+  color: #fbbf24 !important;
+}
+
+html.dark-mode .status-proses {
+  background-color: rgba(3, 105, 161, 0.3) !important;
+  color: #38bdf8 !important;
+}

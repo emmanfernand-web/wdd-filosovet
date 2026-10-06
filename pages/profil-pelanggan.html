@@ -12,10 +12,9 @@
   }
 </script>
 
-  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <!-- CSS Utama (Hanya Panggil style.css dan profil-pelanggan.css) -->
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/shop.css">
-  <link rel="stylesheet" href="../css/admin.css">
+  <link rel="stylesheet" href="../css/profil-pelanggan.css">
 
   <!-- CSS Komponen Terpisah -->
   <link rel="stylesheet" href="../css/components/header.css">
@@ -64,16 +63,16 @@
 
 <!-- MAIN CONTENT -->
 <section class="section">
-  <div class="container cart-layout" style="display: grid; grid-template-columns: 280px 1fr; gap: 2rem; align-items: start;">
-    <!-- MENU SAMPING (STICKY SIDEBAR) -->
-    <aside class="card profile-sidebar no-hover" style="position:sticky;top:100px;z-index:10">
+  <div class="container profile-layout">
+    <!-- MENU SAMPING (SIDEBAR) -->
+    <aside class="card profile-sidebar no-hover">
       <div class="text-center mb-4">
         <div class="avatar" style="width:72px;height:72px;font-size:1.6rem;margin:0 auto .8rem" id="profilAvatar">A</div>
         <h3 id="profilName">Pengunjung</h3>
         <p class="muted" style="font-size:.85rem" id="profilEmail">—</p>
         <span class="badge badge-teal" style="margin-top:.5rem">Member Filosovet</span>
       </div>
-      <nav class="profile-nav" style="display:grid;gap:.4rem">
+      <nav class="profile-nav">
         <a href="#panelProfil" class="side-link active" data-panel="panelProfil">
           <span class="side-link-icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -108,8 +107,8 @@
       <button class="btn btn-danger btn-sm btn-block" style="margin-top:1rem" onclick="logout()">Keluar Akun</button>
     </aside>
 
-    <!-- PANEL KONTEN KANAN -->
-    <div>
+    <!-- PANEL KONTEN KANAN (DIKUNCI DENGAN CLASS profile-main) -->
+    <div class="profile-main">
       <!-- 1. DATA DIRI -->
       <div class="card mb-4 prof-panel no-hover" id="panelProfil">
         <h3 class="mb-3">Data Diri</h3>
@@ -218,7 +217,7 @@
   <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
 </footer>
 
-<!-- SCRIPTS (Urutan Panggilan Sesuai Struktur Folder Baru) -->
+<!-- SCRIPTS -->
 <script src="../js/cart.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/dark-mode.js"></script>

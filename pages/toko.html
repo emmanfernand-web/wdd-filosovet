@@ -12,10 +12,9 @@
   }
 </script>
 
-  <!-- CSS Utama (Gunakan ../ untuk keluar dari folder pages/) -->
+  <!-- CSS Utama -->
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/shop.css">
-  <link rel="stylesheet" href="../css/admin.css">
 
   <!-- CSS Komponen Terpisah -->
   <link rel="stylesheet" href="../css/components/header.css">
@@ -65,13 +64,14 @@
 <!-- KONTEN TOKO -->
 <section class="section">
   <div class="container shop-layout">
-    <!-- FILTER (SIDEBAR KIRI) -->
-    <aside class="card filter-card no-hover">
-      <h3>Filter Produk</h3>
-      <div class="filter-group">
-        <label>Pencarian</label>
-        <div class="search-box"><input type="text" id="searchInput" placeholder="Cari produk..."></div>
+    
+    <!-- FILTER SIDEBAR (KIRI PADA DESKTOP, POPUP/COLLAPSE PADA MOBILE) -->
+    <aside class="card filter-card no-hover" id="filterSidebar">
+      <div class="filter-card-header">
+        <h3>Filter Produk</h3>
+        <button class="close-filter-btn" id="closeFilterBtn" aria-label="Tutup Filter">&times;</button>
       </div>
+
       <div class="filter-group">
         <label>Kategori</label>
         <div id="catFilters">
@@ -82,6 +82,7 @@
           <label class="filter-check"><input type="checkbox" value="almed" checked> Alat Medis</label>
         </div>
       </div>
+
       <div class="filter-group">
         <label>Urutkan</label>
         <select id="sortSelect">
@@ -91,14 +92,32 @@
           <option value="name-asc">Nama A–Z</option>
         </select>
       </div>
+
       <button class="btn btn-outline btn-sm btn-block" id="resetFilter">Reset Filter</button>
     </aside>
 
-    <!-- GRID PRODUK (KANAN) -->
-    <div>
+    <!-- AREA UTAMA TOKO (SEARCH BAR, BUTTON FILTER MOBILE, & GRID PRODUK) -->
+    <div class="shop-main-content">
+      
+      <!-- TOP CONTROL: SEARCH BAR (DESKTOP & MOBILE) & TOMBOL FILTER (KHUSUS MOBILE) -->
+      <div class="shop-top-bar">
+        <div class="search-box main-search-box">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <input type="text" id="searchInput" placeholder="Cari makanan, obat, aksesoris...">
+        </div>
+
+        <button class="btn btn-outline mobile-filter-btn" id="toggleFilterBtn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          <span>Filter Produk</span>
+        </button>
+      </div>
+
       <p class="muted mb-3" id="resultInfo" style="font-size:.9rem"></p>
+
+      <!-- GRID PRODUK -->
       <div class="product-grid" id="productGrid"></div>
     </div>
+
   </div>
 </section>
 
@@ -136,7 +155,7 @@
   <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
 </footer>
 
-<!-- SCRIPTS (Urutan Harus Tepat & Menggunakan ../) -->
+<!-- SCRIPTS -->
 <script src="../js/cart.js"></script>
 <script src="../js/toko.js"></script>
 <script src="../js/main.js"></script>
