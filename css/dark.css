@@ -1,13 +1,21 @@
 /* ============================================================
-   FILOSOVET — dark.css (High-Contrast Precise Dark Mode)
+   FILOSOVET — dark.css (Warm Dark Mode: Sage & Brown Palette)
    ============================================================ */
-:root.dark-mode {
-  --bg: #0b1329;
-  --surface: #172036;
-  --text: #f8fafc;
-  --muted: #94a3b8;
-  --border: #283553;
-  --primary-light: rgba(20, 184, 166, 0.25);
+:root.dark-mode,
+html.dark-mode {
+  --bg: #1C221D;              /* Warm dark green-brown background */
+  --surface: #273028;         /* Warm dark surface for cards */
+  --surface-alt: #202721;     /* Secondary dark section background */
+  --border: #3A453B;          /* Soft warm dark border */
+  --text: #F5F0E6;            /* Warm beige light text */
+  --muted: #A3ACA2;           /* Soft sage-grey muted text */
+  --primary: #8FA68A;         /* Lighter sage for high dark contrast */
+  --primary-dark: #6B8F71;
+  --primary-light: rgba(143, 166, 138, 0.22);
+  --accent: #E0B083;
+  --accent-dark: #C49266;
+  --danger: #E57368;
+  --danger-bg: rgba(229, 115, 104, 0.18);
   --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
   --shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
 }
@@ -35,16 +43,16 @@ html.dark-mode aside.card {
   color: var(--text) !important;
 }
 
-/* PERBAIKAN: Menimpa Kartu / Div yang Menggunakan Gradient Inline (#fff) */
+/* Kartu / Div dengan Gradient Inline */
 html.dark-mode .card[style*="linear-gradient"],
 html.dark-mode div[style*="linear-gradient"] {
-  background: linear-gradient(135deg, rgba(15, 118, 110, 0.35), var(--surface)) !important;
+  background: linear-gradient(135deg, rgba(143, 166, 138, 0.2), var(--surface)) !important;
   border-color: var(--border) !important;
 }
 
 html.dark-mode .card-img-wrap,
 html.dark-mode .product-thumb {
-  background-color: #0f172a !important;
+  background-color: var(--surface-alt) !important;
 }
 
 /* Kontras Judul, Paragraf & Label */
@@ -56,55 +64,71 @@ html.dark-mode strong,
 html.dark-mode label,
 html.dark-mode .sec-head h2,
 html.dark-mode .product-name {
-  color: #f8fafc !important;
+  color: var(--text) !important;
 }
 
 html.dark-mode p,
 html.dark-mode li,
 html.dark-mode span,
 html.dark-mode div {
-  color: #e2e8f0;
+  color: #E2DBD0;
 }
 
 html.dark-mode .muted,
 html.dark-mode p.muted,
 html.dark-mode span.muted,
-html.dark-mode .breadcrumb,
-html.dark-mode .breadcrumb a,
 html.dark-mode .sec-head p.muted {
-  color: #94a3b8 !important;
+  color: var(--muted) !important;
 }
 
-/* Tag Badge Section (Layanan Kami) */
+/* Tag Badge Section */
 html.dark-mode .sec-tag {
-  background-color: rgba(20, 184, 166, 0.2) !important;
-  color: #5eead4 !important;
+  background-color: var(--primary-light) !important;
+  color: var(--primary) !important;
+}
+
+/* Subpage Page Hero di Dark Mode */
+html.dark-mode .page-hero {
+  background: linear-gradient(135deg, #1C221D 0%, #273028 60%, #3A453B 100%) !important;
+}
+
+html.dark-mode .page-hero h1 {
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
+}
+
+html.dark-mode .breadcrumb,
+html.dark-mode .breadcrumb a {
+  color: #FAF6F0 !important;
+  opacity: 1 !important;
 }
 
 /* Input, Form, Select & Dropdown Options */
 html.dark-mode input,
 html.dark-mode select,
 html.dark-mode textarea {
-  background-color: #0b1329 !important;
-  color: #f8fafc !important;
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
   border-color: var(--border) !important;
+  font-family: inherit !important;
 }
 
 html.dark-mode option {
-  background-color: #172036 !important;
-  color: #f8fafc !important;
+  background-color: var(--surface) !important;
+  color: var(--text) !important;
 }
 
 html.dark-mode input::placeholder,
 html.dark-mode textarea::placeholder {
-  color: #64748b !important;
+  color: var(--muted) !important;
 }
 
 /* Tab Filter & Slot Waktu */
 html.dark-mode .tab {
-  background-color: #0b1329 !important;
+  background-color: var(--bg) !important;
   border-color: var(--border) !important;
-  color: #cbd5e1 !important;
+  color: var(--text) !important;
+  font-family: inherit !important;
 }
 
 html.dark-mode .tab.active {
@@ -115,18 +139,22 @@ html.dark-mode .tab.active {
 
 /* Kartu Ringkasan Booking */
 html.dark-mode .summary-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  width: 100% !important;
   border-color: var(--border) !important;
 }
 
 html.dark-mode .summary-row span,
 html.dark-mode .summary-row strong {
-  color: #f8fafc !important;
+  color: var(--text) !important;
 }
 
-/* Header Kapsul di Dark Mode (Desktop) */
+/* Header Kapsul di Dark Mode (Desktop) - High Contrast Navbar Links */
 html.dark-mode .site-header .nav-wrap {
-  background: rgba(23, 32, 54, 0.92) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(39, 48, 40, 0.95) !important;
+  border-color: var(--border) !important;
   box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6) !important;
 }
 
@@ -135,90 +163,137 @@ html.dark-mode .main-nav {
 }
 
 html.dark-mode .main-nav a {
-  color: #cbd5e1 !important;
+  color: #FAF6F0 !important;
+  font-weight: 600 !important;
 }
 
 html.dark-mode .main-nav a:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(255, 255, 255, 0.18) !important;
   color: #ffffff !important;
 }
 
-/* FIX: MOBILE DROPDOWN MENU DI DARK MODE (SOLID BACKGROUND) */
+html.dark-mode .main-nav a.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #ffffff !important;
+}
+
+/* Mobile Dropdown Menu */
 @media (max-width: 900px) {
   html.dark-mode .main-nav {
-    background: #172036 !important;
-    border: 1px solid #283553 !important;
+    background: var(--surface) !important;
+    border: 1px solid var(--border) !important;
     box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85) !important;
-    backdrop-filter: blur(20px) !important;
-    -webkit-backdrop-filter: blur(20px) !important;
   }
 
   html.dark-mode .main-nav a {
-    color: #f8fafc !important;
+    color: #FAF6F0 !important;
   }
 
   html.dark-mode .main-nav a:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.12) !important;
     color: #ffffff !important;
   }
 
   html.dark-mode .main-nav a.active {
-    background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54)) !important;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
     color: #ffffff !important;
   }
 }
 
-/* FIX: Ikon & Tombol Keranjang Belanja di Dark Mode */
+/* Ikon & Tombol Keranjang Belanja di Dark Mode */
 html.dark-mode .cart-link {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-  color: #f8fafc !important;
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: #FAF6F0 !important;
 }
 
 html.dark-mode .cart-link svg {
-  stroke: #f8fafc !important;
+  stroke: #FAF6F0 !important;
 }
 
 html.dark-mode .cart-link:hover {
-  border-color: #2dd4bf !important;
-  background-color: rgba(20, 184, 166, 0.15) !important;
+  border-color: var(--primary) !important;
+  background-color: var(--primary-light) !important;
 }
 
 html.dark-mode .cart-link:hover svg {
-  stroke: #2dd4bf !important;
+  stroke: var(--primary) !important;
 }
 
-/* ============================================================
-   HERO SECTION OVERRIDES IN DARK MODE
-   ============================================================ */
+/* Clean Transparent Theme Toggle Button */
+.theme-toggle-btn {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+  width: 38px !important;
+  height: 38px !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: var(--text, #3A332C) !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  transition: transform 0.25s ease, background-color 0.25s ease, color 0.25s ease !important;
+}
+
+.theme-toggle-btn:hover {
+  background: var(--primary-light, #E2EBDD) !important;
+  color: var(--primary-dark, #4F6F52) !important;
+  transform: scale(1.1) !important;
+}
+
+html.dark-mode .theme-toggle-btn {
+  color: #FAF6F0 !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+html.dark-mode .theme-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.theme-toggle-btn svg,
+.theme-toggle-btn img {
+  width: 22px !important;
+  height: 22px !important;
+  object-fit: contain !important;
+  display: block !important;
+}
+
+/* Hero Section Overrides in Dark Mode */
 html.dark-mode .hero-section .hero-overlay {
   background: 
-    radial-gradient(circle at 15% 50%, rgba(11, 19, 41, 0.88) 0%, rgba(15, 118, 110, 0.45) 50%, rgba(11, 19, 41, 0.92) 100%),
-    linear-gradient(to bottom, rgba(11, 19, 41, 0.4), rgba(11, 19, 41, 0.8)) !important;
+    radial-gradient(circle at 15% 50%, rgba(28, 34, 29, 0.9) 0%, rgba(107, 143, 113, 0.4) 50%, rgba(28, 34, 29, 0.94) 100%),
+    linear-gradient(to bottom, rgba(28, 34, 29, 0.4), rgba(28, 34, 29, 0.85)) !important;
 }
 
 html.dark-mode .status-badge-glow {
-  background: rgba(20, 184, 166, 0.15) !important;
-  border-color: rgba(45, 212, 191, 0.35) !important;
-  color: #5eead4 !important;
+  background: var(--primary-light) !important;
+  border-color: rgba(143, 166, 138, 0.4) !important;
+  color: var(--text) !important;
 }
 
 html.dark-mode .hero-desc-modern {
-  color: #cbd5e1 !important;
+  color: #E2DBD0 !important;
 }
 
 html.dark-mode .hero-glass-card-modern {
-  background: rgba(23, 32, 54, 0.72) !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  background: rgba(39, 48, 40, 0.78) !important;
+  border-color: var(--border) !important;
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
 }
 
 html.dark-mode .hero-glass-card-modern:hover {
-  border-color: rgba(45, 212, 191, 0.4) !important;
+  border-color: var(--primary) !important;
 }
 
 html.dark-mode .console-text {
-  color: #94a3b8 !important;
+  color: var(--muted) !important;
 }
 
 html.dark-mode .stat-pill-item {
@@ -227,27 +302,24 @@ html.dark-mode .stat-pill-item {
 }
 
 html.dark-mode .stat-pill-item:hover {
-  background: rgba(20, 184, 166, 0.12) !important;
-  border-color: rgba(45, 212, 191, 0.3) !important;
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
 }
 
 html.dark-mode .stat-pill-item strong {
-  color: #5eead4 !important;
+  color: var(--primary) !important;
 }
 
 html.dark-mode .stat-pill-item span {
-  color: #e2e8f0 !important;
+  color: var(--text) !important;
 }
 
 /* Keunggulan Section (bg-alt) in Dark Mode */
 html.dark-mode .fullscreen-section.bg-alt,
 html.dark-mode .keunggulan-section {
-  background-color: #0d1a30 !important;
+  background-color: var(--surface-alt) !important;
   background-image:
-    radial-gradient(circle at 1px 1px, rgba(94, 234, 212, 0.06) 1px, transparent 0) !important;
-}
-html.dark-mode .keunggulan-section::before {
-  opacity: 0.25 !important;
+    radial-gradient(circle at 1px 1px, rgba(143, 166, 138, 0.08) 1px, transparent 0) !important;
 }
 
 /* Tabel & Record Medis */
@@ -257,32 +329,26 @@ html.dark-mode .table-wrap {
 }
 
 html.dark-mode th {
-  background: #0b1329 !important;
-  color: #cbd5e1 !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
   border-color: var(--border) !important;
 }
 
 html.dark-mode td {
   border-color: var(--border) !important;
-  color: #e2e8f0 !important;
+  color: #E2DBD0 !important;
 }
 
 html.dark-mode tr:hover td {
   background: rgba(255, 255, 255, 0.04) !important;
 }
 
-/* Saklar Mode Gelap Button */
-html.dark-mode .theme-toggle-btn {
-  background: #172036 !important;
-  border-color: #283553 !important;
-}
-
 /* Service Card Link di Dark Mode */
 html.dark-mode .service-card .card-link {
-  color: #2dd4bf !important;
+  color: var(--primary) !important;
 }
 html.dark-mode .service-card .card-link:hover {
-  color: #5eead4 !important;
+  color: var(--text) !important;
 }
 
 /* Profile Sidebar in Dark Mode */
@@ -292,23 +358,18 @@ html.dark-mode .profile-sidebar {
 }
 
 html.dark-mode .side-link {
-  color: #e2e8f0 !important;
+  color: var(--text) !important;
 }
 
 html.dark-mode .side-link-icon {
-  background: rgba(20, 184, 166, 0.2) !important;
-  color: #2dd4bf !important;
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
 }
 
 html.dark-mode .side-link:hover {
-  background: rgba(20, 184, 166, 0.15) !important;
-  border-color: rgba(20, 184, 166, 0.3) !important;
-  color: #5eead4 !important;
-}
-
-html.dark-mode .side-link:hover .side-link-icon {
-  background: rgba(15, 118, 110, 0.6) !important;
-  color: #fff !important;
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+  color: #ffffff !important;
 }
 
 html.dark-mode .side-link.active {
@@ -316,328 +377,75 @@ html.dark-mode .side-link.active {
   color: #fff !important;
 }
 
-html.dark-mode .side-link.active .side-link-icon {
-  background: rgba(255, 255, 255, 0.15) !important;
-  color: #fff !important;
-}
-
-/* Scroll hint on hero */
-html.dark-mode .scroll-hint {
-  color: rgba(255, 255, 255, 0.75);
-}
-
-/* ============================================================
-   ADMIN DASHBOARD — DARK MODE OVERRIDES
-   ============================================================ */
-html.dark-mode .admin-layout,
-html.dark-mode .admin-main {
-  background-color: var(--bg, #0b1329) !important;
-  color: var(--text, #f8fafc) !important;
-}
-
-/* Sidebar Admin */
-html.dark-mode .admin-sidebar {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-}
-
-html.dark-mode .admin-menu a {
-  color: #94a3b8 !important;
-}
-
-html.dark-mode .admin-menu a:hover,
-html.dark-mode .admin-menu a.active {
-  background: rgba(20, 184, 166, 0.18) !important;
-  color: #2dd4bf !important;
-}
-
-/* Topbar Admin */
-html.dark-mode .admin-topbar {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-}
-
-html.dark-mode .admin-topbar h1 {
-  color: #f8fafc !important;
-}
-
-/* Kartu Statistik & Panel */
-html.dark-mode .stat-card,
-html.dark-mode .panel,
-html.dark-mode .chart-wrap {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
-}
-
-html.dark-mode .stat-label {
-  color: #94a3b8 !important;
-}
-
-html.dark-mode .stat-value {
-  color: #f8fafc !important;
-}
-
-/* Alert Peringatan Stok Top Banner */
-html.dark-mode .alert-banner {
-  background-color: rgba(220, 38, 38, 0.15) !important;
-  border: 1px solid rgba(220, 38, 38, 0.35) !important;
-  color: #fca5a5 !important;
-}
-
-/* Peringatan Stok Item List Card */
-html.dark-mode #lowStockList > div,
-html.dark-mode .low-stock-item {
-  background-color: rgba(239, 68, 68, 0.12) !important;
-  border-color: rgba(239, 68, 68, 0.25) !important;
-  color: #f8fafc !important;
-}
-
-html.dark-mode #lowStockList span {
-  color: #f8fafc !important;
-}
-
-/* Grafik Batang (Bar Chart) */
-html.dark-mode .bar-chart .bar {
-  background: linear-gradient(180deg, #2dd4bf 0%, #0f766e 100%) !important;
-}
-
-html.dark-mode .bar-chart .bar span {
-  color: #94a3b8 !important;
-}
-
-/* Tabel Admin */
-html.dark-mode .admin-main th {
-  background-color: #0b1329 !important;
-  color: #cbd5e1 !important;
-}
-
-html.dark-mode .admin-main td {
-  color: #e2e8f0 !important;
-  border-color: var(--border, #283553) !important;
-}
-
-/* Saklar Tombol Mode Gelap di Topbar Admin */
-html.dark-mode .admin-user .theme-toggle-btn {
-  background-color: #0b1329 !important;
-  border-color: #283553 !important;
-}
-
-html.dark-mode .admin-user .user-name {
-  color: #f8fafc !important;
-}
-
-html.dark-mode .admin-user {
-  background: rgba(255, 255, 255, 0.06) !important;
-  border: 1px solid var(--border, #283553) !important;
-}
-
-html.dark-mode .admin-user .theme-toggle-btn {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-}
-
-/* ============================================================
-   FIX: SAKLAR THEME TOGGLE MURNI TRANSPARAN (GLOBAL & ADMIN)
-   ============================================================ */
-
-/* Hilangkan Latar Belakang & Border Kotak Pembungkus Admin User */
-.admin-user {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-  padding: 0 !important;
-}
-
-/* Saklar Toggle Mode Terang/Gelap di Seluruh Website */
-.theme-toggle-btn,
-html.dark-mode .theme-toggle-btn,
-.admin-user .theme-toggle-btn,
-html.dark-mode .admin-user .theme-toggle-btn {
-  background: transparent !important;
-  border: none !important;
-  outline: none !important;
-  box-shadow: none !important;
-  border-radius: 50% !important;
-  width: 38px !important;
-  height: 38px !important;
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  cursor: pointer !important;
-  transition: transform 0.25s ease, opacity 0.25s ease !important;
-}
-
-.theme-toggle-btn:hover {
-  transform: scale(1.12) !important;
-  opacity: 0.85 !important;
-  background: transparent !important;
-}
-
-.theme-toggle-btn img {
-  width: 24px !important;
-  height: 24px !important;
-  object-fit: contain !important;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
-}
-
-/* ============================================================
-   FIX DARK MODE: TOPBAR & ADMIN USER CLEAR BACKGROUND
-   ============================================================ */
-
-/* Hilangkan latar belakang gelap menyisa pada topbar & admin-user */
-html.dark-mode .admin-topbar,
-html.dark-mode .admin-user {
-  background: transparent !important;
-  background-color: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* Teks Admin & Hari/Tanggal di Dark Mode */
-html.dark-mode .admin-topbar h1,
-html.dark-mode .admin-user .user-name,
-html.dark-mode .admin-user {
-  color: #f8fafc !important;
-}
-
-html.dark-mode .admin-topbar .muted {
-  color: #94a3b8 !important;
-}
-
-/* Tombol Saklar Melayang Transparan */
-html.dark-mode .admin-user .theme-toggle-btn {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
-}
-
-/* ============================================================
-   FIX DARK MODE: BUTTON LAYANAN & TOMBOL FILTER TOKO (MOBILE)
-   ============================================================ */
-
-/* 1. Perbaikan Button / Tab Kategori di Halaman Layanan */
-html.dark-mode .tab-group,
-html.dark-mode .tabs-wrap,
-html.dark-mode .category-tabs,
-html.dark-mode div[class*="tab"] {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4) !important;
-}
-
-html.dark-mode .tab,
-html.dark-mode .tab-btn {
-  background-color: transparent !important;
-  color: #cbd5e1 !important;
-  border-color: transparent !important;
-}
-
-html.dark-mode .tab:hover,
-html.dark-mode .tab-btn:hover {
-  background-color: rgba(255, 255, 255, 0.08) !important;
-  color: #ffffff !important;
-}
-
-html.dark-mode .tab.active,
-html.dark-mode .tab-btn.active {
-  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54)) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 12px rgba(15, 118, 110, 0.3) !important;
-}
-
-/* 2. Perbaikan Global .btn-outline & Tombol Filter Toko Mobile */
+/* Global .btn-outline & Tombol Filter Toko Mobile in Dark Mode */
 html.dark-mode .btn-outline {
-  background: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-  color: #5eead4 !important;
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+  color: var(--primary) !important;
 }
 
 html.dark-mode .btn-outline:hover {
-  background: rgba(20, 184, 166, 0.2) !important;
-  border-color: #2dd4bf !important;
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
   color: #ffffff !important;
 }
 
-/* Khusus Tombol Filter Toko di Mobile View */
 html.dark-mode .mobile-filter-btn,
 html.dark-mode #toggleFilterBtn {
-  background: var(--surface, #172036) !important;
-  border: 1.5px solid var(--border, #283553) !important;
-  color: #5eead4 !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+  background: var(--surface) !important;
+  border: 1.5px solid var(--border) !important;
+  color: var(--primary) !important;
 }
 
 html.dark-mode .mobile-filter-btn svg,
 html.dark-mode #toggleFilterBtn svg {
-  stroke: #5eead4 !important;
+  stroke: var(--primary) !important;
 }
 
-html.dark-mode .mobile-filter-btn:hover,
-html.dark-mode #toggleFilterBtn:hover {
-  background: rgba(20, 184, 166, 0.2) !important;
-  border-color: #2dd4bf !important;
-  color: #ffffff !important;
+/* Badges in Dark Mode */
+html.dark-mode .badge-green,
+html.dark-mode .badge-teal,
+html.dark-mode .badge-blue {
+  background: var(--primary-light) !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--border) !important;
 }
 
-html.dark-mode .mobile-filter-btn:hover svg,
-html.dark-mode #toggleFilterBtn:hover svg {
-  stroke: #ffffff !important;
+html.dark-mode .badge-amber {
+  background: rgba(224, 176, 131, 0.2) !important;
+  color: var(--accent) !important;
+  border: 1px solid rgba(224, 176, 131, 0.35) !important;
 }
 
-/* ============================================================
-   FIX DARK MODE: BADGE & KETERANGAN HEWAN PELIHARAAN (PROFIL)
-   ============================================================ */
-
-/* Kartu Hewan di Dalam Panel Profil */
-html.dark-mode #panelHewan .card,
-html.dark-mode #panelHewan .pet-card,
-html.dark-mode .pet-card {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
+html.dark-mode .badge-red {
+  background: var(--danger-bg) !important;
+  color: var(--danger) !important;
+  border: 1px solid rgba(229, 115, 104, 0.35) !important;
 }
 
-/* Lencana/Badge Hijau (Contoh: Vaksin Lengkap) */
-html.dark-mode #panelHewan span[style*="dcfce7" i],
-html.dark-mode #panelHewan span[style*="d1fae5" i],
-html.dark-mode #panelHewan span[style*="166534" i],
-html.dark-mode #panelHewan .badge-success,
-html.dark-mode #panelHewan .badge-green,
-html.dark-mode .pet-card span[style*="dcfce7" i] {
-  background: rgba(34, 197, 94, 0.2) !important;
-  background-color: rgba(34, 197, 94, 0.2) !important;
-  color: #4ade80 !important;
-  border: 1px solid rgba(74, 222, 128, 0.35) !important;
+/* Footer in Dark Mode */
+html.dark-mode .site-footer {
+  background: #202721 !important;
+  color: #FAF6F0 !important;
 }
 
-/* Lencana/Badge Biru / Ungu (Contoh: Steril) */
-html.dark-mode #panelHewan span[style*="e0e7ff" i],
-html.dark-mode #panelHewan span[style*="dbeafe" i],
-html.dark-mode #panelHewan span[style*="3730a3" i],
-html.dark-mode #panelHewan .badge-info,
-html.dark-mode #panelHewan .badge-blue,
-html.dark-mode .pet-card span[style*="e0e7ff" i] {
-  background: rgba(99, 102, 241, 0.2) !important;
-  background-color: rgba(99, 102, 241, 0.2) !important;
-  color: #a5b4fc !important;
-  border: 1px solid rgba(165, 180, 252, 0.35) !important;
+html.dark-mode .site-footer h4 {
+  color: #FFFFFF !important;
 }
 
-/* Lencana/Badge Kuning / Oranye / Amber (Contoh: Vaksin diperbarui 2 bln lagi) */
-html.dark-mode #panelHewan span[style*="fef3c7" i],
-html.dark-mode #panelHewan span[style*="fef08a" i],
-html.dark-mode #panelHewan span[style*="fffbeb" i],
-html.dark-mode #panelHewan span[style*="fef9c3" i],
-html.dark-mode #panelHewan span[style*="92400e" i],
-html.dark-mode #panelHewan .badge-warning,
-html.dark-mode #panelHewan .badge-amber,
-html.dark-mode #panelHewan .badge-yellow,
-html.dark-mode .pet-card span[style*="fef3c7" i],
-html.dark-mode .pet-card span[style*="92400e" i] {
-  background: rgba(245, 158, 11, 0.22) !important;
-  background-color: rgba(245, 158, 11, 0.22) !important;
-  color: #fbbf24 !important;
-  border: 1px solid rgba(251, 191, 36, 0.4) !important;
+html.dark-mode .site-footer p,
+html.dark-mode .site-footer a {
+  color: #FAF6F0 !important;
+  opacity: 0.95 !important;
+}
+
+html.dark-mode .site-footer a:hover {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+html.dark-mode .footer-bottom {
+  border-top-color: rgba(255, 255, 255, 0.2) !important;
+  color: #FAF6F0 !important;
+  opacity: 0.9 !important;
 }

@@ -2,22 +2,26 @@
    FILOSOVET — css/style.css (Global Foundation & Utilities Only)
    ============================================================ */
 :root {
-  --primary: #0f766e; 
-  --primary-dark: #0b5a54; 
-  --primary-light: #ccfbf1;
-  --accent: #f59e0b; 
-  --accent-dark: #b45309;
-  --danger: #dc2626; 
-  --danger-bg: #fee2e2;
-  --bg: #f8fafc; 
-  --surface: #ffffff; 
-  --border: #e2e8f0;
-  --text: #0f172a; 
-  --muted: #64748b;
-  --radius: 16px; 
-  --shadow: 0 12px 30px -6px rgba(15, 23, 42, 0.08);
-  --shadow-hover: 0 20px 35px -10px rgba(15, 118, 110, 0.18);
-  --shadow-sm: 0 4px 12px rgba(15, 23, 42, 0.04);
+  /* Sage & Beige Palette (Light Mode - Primary) */
+  --bg: #F5F0E6;              /* Warm beige background */
+  --surface: #FAF6F0;         /* Lighter cream surface */
+  --surface-alt: #EFE9DE;     /* Soft secondary background */
+  --primary: #6B8F71;         /* Sage main accent */
+  --primary-dark: #4F6F52;    /* Darker sage for active/hover states */
+  --primary-light: #E2EBDD;   /* Soft pale sage for badges & highlights */
+  --accent: #D4A373;          /* Soft warm amber/beige accent */
+  --accent-dark: #B38054;     /* Darker warm accent */
+  --accent-light: #FCE8D5;    /* Soft pale amber background */
+  --danger: #C85A54;          /* Soft warm red */
+  --danger-bg: #F9E8E7;       /* Soft red background */
+  --border: #E0D8C8;          /* Soft warm border */
+  --text: #3A332C;            /* Dark warm brown/grey text (not pitch black) */
+  --muted: #7A7067;           /* Warm muted text */
+  --text-light: #FFFFFF;
+  --radius: 16px;
+  --shadow: 0 12px 30px -6px rgba(58, 51, 44, 0.08);
+  --shadow-hover: 0 20px 35px -10px rgba(107, 143, 113, 0.22);
+  --shadow-sm: 0 4px 12px rgba(58, 51, 44, 0.05);
   --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
   --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -28,6 +32,11 @@ body { font-family: var(--font); background: var(--bg); color: var(--text); line
 img { max-width: 100%; display: block; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; }
+
+/* Ensure all buttons, inputs, selects, textareas inherit the exact same font-family */
+button, input, select, textarea {
+  font-family: inherit;
+}
 
 /* ---------- 1. Layout Container & Spacing ---------- */
 .container { width: min(1360px, 94%); margin: 0 auto; }
@@ -42,15 +51,21 @@ ul { list-style: none; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0.8rem 1.8rem;
   border-radius: 999px; border: 0; font-weight: 700; font-size: 0.95rem; cursor: pointer;
-  transition: var(--transition); font-family: var(--font); position: relative; overflow: hidden;
+  transition: var(--transition); font-family: inherit; position: relative; overflow: hidden;
 }
 .btn:active { transform: scale(0.97); }
-.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: #fff; box-shadow: 0 6px 16px rgba(15, 118, 110, 0.25); }
-.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
-.btn-accent { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: #fff; box-shadow: 0 6px 16px rgba(245, 158, 11, 0.25); }
-.btn-accent:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(245, 158, 11, 0.35); }
-.btn-outline { background: #fff; border: 2px solid var(--primary); color: var(--primary); }
-.btn-outline:hover { background: var(--primary-light); transform: translateY(-2px); }
+.btn:disabled, button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: var(--text-light); box-shadow: 0 6px 16px rgba(79, 111, 82, 0.25); }
+.btn-primary:hover:not(:disabled) { transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.btn-accent { background: linear-gradient(135deg, var(--accent), var(--accent-dark)); color: var(--text-light); box-shadow: 0 6px 16px rgba(212, 163, 115, 0.25); }
+.btn-accent:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(212, 163, 115, 0.35); }
+.btn-outline { background: var(--surface); border: 2px solid var(--primary); color: var(--primary); }
+.btn-outline:hover:not(:disabled) { background: var(--primary-light); transform: translateY(-2px); }
 .btn-danger { background: var(--danger-bg); color: var(--danger); }
 .btn-sm { padding: 0.45rem 1.1rem; font-size: 0.85rem; border-radius: 999px; }
 .btn-block { width: 100%; }
@@ -61,10 +76,10 @@ ul { list-style: none; }
   padding: 1.8rem; box-shadow: var(--shadow-sm); transition: var(--transition);
 }
 .card:hover {
-  box-shadow: var(--shadow); transform: translateY(-4px); border-color: rgba(15, 118, 110, 0.2);
+  box-shadow: var(--shadow); transform: translateY(-4px); border-color: rgba(107, 143, 113, 0.3);
 }
 .card-icon {
-  width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, var(--primary-light), #e0f2fe);
+  width: 64px; height: 64px; border-radius: 20px; background: linear-gradient(135deg, var(--primary-light), var(--surface-alt));
   display: grid; place-items: center; font-size: 1.9rem; margin-bottom: 1.2rem; transition: var(--transition);
 }
 .card:hover .card-icon { transform: scale(1.1) rotate(6deg); }
@@ -83,7 +98,7 @@ ul { list-style: none; }
   border-radius: 12px;
   overflow: hidden;
   margin-bottom: 1.25rem;
-  background: #f1f5f9;
+  background: var(--surface-alt);
 }
 .card-img-wrap .card-img,
 .card-img {
@@ -122,34 +137,34 @@ ul { list-style: none; }
 .grid-4 { grid-template-columns: repeat(4, 1fr); }
 
 /* ---------- 4. Global Components: Badges ---------- */
-.badge { display: inline-block; padding: 0.25rem 0.8rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; }
-.badge-green { background: #dcfce7; color: #166534; }
-.badge-amber { background: #fef3c7; color: #92400e; }
+.badge { display: inline-block; padding: 0.25rem 0.8rem; border-radius: 999px; font-size: 0.75rem; font-weight: 700; font-family: inherit; }
+.badge-green { background: var(--primary-light); color: var(--primary-dark); }
+.badge-amber { background: var(--accent-light); color: var(--accent-dark); }
 .badge-red { background: var(--danger-bg); color: var(--danger); }
-.badge-blue { background: #dbeafe; color: #1d4ed8; }
+.badge-blue { background: var(--primary-light); color: var(--primary-dark); }
 .badge-teal { background: var(--primary-light); color: var(--primary-dark); }
 
 /* ---------- 5. Global Forms & Tables ---------- */
 label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 0.4rem; color: var(--text); }
 input, select, textarea {
   width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 12px;
-  font-family: var(--font); font-size: 0.95rem; background: #fff; color: var(--text); transition: var(--transition);
+  font-family: inherit; font-size: 0.95rem; background: var(--surface); color: var(--text); transition: var(--transition);
 }
 input:focus, select:focus, textarea:focus {
-  outline: 0; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+  outline: 0; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(107, 143, 113, 0.18);
 }
 .form-group { margin-bottom: 1.2rem; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-.table-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.table-wrap { overflow-x: auto; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
 table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-th { background: #f8fafc; text-align: left; padding: 1rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); border-bottom: 1px solid var(--border); }
+th { background: var(--surface-alt); text-align: left; padding: 1rem; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.6px; color: var(--muted); border-bottom: 1px solid var(--border); }
 td { padding: 1rem; border-top: 1px solid var(--border); }
-tr:hover td { background: #f1f5f9; }
+tr:hover td { background: var(--primary-light); }
 
 /* ---------- 6. Reusable Section Headings ---------- */
 .sec-head { max-width: 700px; margin: 0 auto 3.5rem; text-align: center; }
-.sec-head h2 { font-size: 2.2rem; margin-bottom: 0.6rem; font-weight: 800; letter-spacing: -0.5px; }
+.sec-head h2 { font-size: 2.2rem; margin-bottom: 0.6rem; font-weight: 800; letter-spacing: -0.5px; color: var(--text); }
 .sec-tag {
   display: inline-block; background: var(--primary-light); color: var(--primary-dark);
   padding: 0.35rem 1.1rem; border-radius: 999px; font-size: 0.82rem; font-weight: 700; margin-bottom: 0.8rem;
@@ -157,13 +172,13 @@ tr:hover td { background: #f1f5f9; }
 
 /* ---------- 7. Reusable Banners ---------- */
 .cta-banner {
-  background: linear-gradient(135deg, var(--primary), #14b8a6); border-radius: 32px; color: #fff;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border-radius: 32px; color: #fff;
   padding: 4rem 2rem; text-align: center; margin: 0 auto; max-width: 1100px;
-  box-shadow: 0 20px 40px -10px rgba(15, 118, 110, 0.4);
+  box-shadow: 0 20px 40px -10px rgba(79, 111, 82, 0.4);
 }
 
 .page-hero {
-  background: linear-gradient(135deg, #073d38 0%, #0f766e 55%, #0d9488 100%);
+  background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 55%, #7C9F82 100%);
   color: #fff;
   padding: 140px 0 56px;
   position: relative;
@@ -173,12 +188,34 @@ tr:hover td { background: #f1f5f9; }
   content: '';
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.05) 1px, transparent 0);
+  background-image: radial-gradient(circle at 2px 2px, rgba(255,255,255,0.06) 1px, transparent 0);
   background-size: 32px 32px;
   pointer-events: none;
 }
-.page-hero h1 { font-size: 2.4rem; margin-bottom: 0.4rem; font-weight: 800; color: #fff; }
-.breadcrumb { font-size: 0.88rem; opacity: 0.85; color: #fff; }
+.page-hero h1 {
+  font-size: 2.4rem;
+  margin-bottom: 0.4rem;
+  font-weight: 800;
+  color: #FFFFFF !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+.breadcrumb {
+  font-size: 0.95rem;
+  font-weight: 600;
+  opacity: 1 !important;
+  color: #FAF6F0 !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.breadcrumb a {
+  color: #FAF6F0 !important;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s ease;
+}
+.breadcrumb a:hover {
+  opacity: 0.85;
+  color: #FFFFFF !important;
+}
 
 /* ---------- 8. UI Elements (Animations & Toast) ---------- */
 .reveal { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease; }
@@ -189,10 +226,11 @@ tr:hover td { background: #f1f5f9; }
   position: fixed; bottom: 28px; right: 28px; background: var(--primary-dark); color: #fff;
   padding: 1rem 1.6rem; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); font-weight: 600;
   opacity: 0; transform: translateY(20px) scale(0.95); transition: var(--transition); z-index: 9999; pointer-events: none;
+  font-family: inherit;
 }
 .toast.show { opacity: 1; transform: translateY(0) scale(1); }
-.toast.success { background: linear-gradient(135deg, #15803d, #166534); }
-.toast.error { background: linear-gradient(135deg, var(--danger), #b91c1c); }
+.toast.success { background: linear-gradient(135deg, var(--primary-dark), var(--primary)); }
+.toast.error { background: linear-gradient(135deg, var(--danger), #A63F3A); }
 
 /* ---------- 9. Base Responsive Grid ---------- */
 @media (max-width: 1100px) {

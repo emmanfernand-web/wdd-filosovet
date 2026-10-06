@@ -21,108 +21,161 @@ const PRODUCTS = [
 ];
 const CAT_LABEL = { makanan: 'Makanan', obat: 'Obat & Vitamin', skincare: 'Skincare', aksesoris: 'Aksesoris', almed: 'Alat Medis' };
 
+/* ---------- Animasi Terbang ke Keranjang ---------- */
+function animateFlyToCart(sourceEl) {
+  if (!sourceEl) return;
+  
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    return;
+  }
+
+  const targetEl = document.querySelector('.cart-link');
+  if (!targetEl) return;
+
+  const cardEl = sourceEl.closest('.product-card') || sourceEl;
+  const thumbEl = cardEl.querySelector('.product-thumb img') || cardEl.querySelector('.product-thumb') || sourceEl;
+
+  const srcRect = (thumbEl || sourceEl).getBoundingClientRect();
+  const targetRect = targetEl.getBoundingClientRect();
+
+  const flyer = document.createElement('div');
+  flyer.className = 'cart-flyer';
+  flyer.style.cssText = `
+    position: fixed;
+    z-index: 99999;
+    left: ${srcRect.left + srcRect.width / 2 - 24}px;
+    top: ${srcRect.top + srcRect.height / 2 - 24}px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    pointer-events: none;
+    transition: left 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
+                top 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
+                width 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
+                height 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
+                opacity 700ms ease,
+                transform 700ms ease;
+    border: 2px solid var(--primary, #6B8F71);
+    background: var(--surface, #FAF6F0);
+  `;
+
+  const img = thumbEl.tagName === 'IMG' ? thumbEl : (thumbEl.querySelector ? thumbEl.querySelector('img') : null);
+  if (img && img.src) {
+    flyer.innerHTML = `<img src="${img.src}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
+  } else {
+    flyer.innerHTML = `<div style="display:grid;place-items:center;height:100%;font-size:1.3rem;background:var(--primary,#6B8F71);color:#fff">🛒</div>`;
+  }
+
+  document.body.appendChild(flyer);
+
+  requestAnimationFrame(() => {
+    flyer.style.left = `${targetRect.left + targetRect.width / 2 - 12}px`;
+    flyer.style.top = `${targetRect.top + targetRect.height / 2 - 12}px`;
+    flyer.style.width = '24px';
+    flyer.style.height = '24px';
+    flyer.style.opacity = '0.3';
+    flyer.style.transform = 'scale(0.3) rotate(360deg)';
+  });
+
+  setTimeout(() => {
+    flyer.remove();
+    if (targetEl.animate) {
+      targetEl.animate([
+        { transform: 'scale(1)' },
+        { transform: 'scale(1.35) rotate(-8deg)' },
+        { transform: 'scale(0.95)' },
+        { transform: 'scale(1)' }
+      ], { duration: 350, easing: 'ease-out' });
+    }
+  }, 700);
+}
+
 /* ---------- Keranjang (localStorage) ---------- */
-function addToCart(id, qty = 1) {
+function addToCart(id, qty = 1, triggerEl = null) {
   const p = PRODUCTS.find(x => x.id === id);
-  if (!p || p.stock === 0) return toast('Maaf, stok produk habis', 'error');
+  if (!p || p.stock <= 0) {
+    toast('Maaf, barang ini sedang habis', 'error');
+    return;
+  }
   const cart = getCart();
   const item = cart.find(x => x.id === id);
-  if (item) item.qty = Math.min(item.qty + qty, p.stock);
-  else cart.push({ id, qty: Math.min(qty, p.stock) });
+  if (item) {
+    if (item.qty >= p.stock) {
+      toast(`Stok maksimum (${p.stock}) tercapai`, 'error');
+      return;
+    }
+    item.qty = Math.min(item.qty + qty, p.stock);
+  } else {
+    cart.push({ id, qty: Math.min(qty, p.stock) });
+  }
+
+  const sourceEl = triggerEl || (window.event ? window.event.target : null);
+  animateFlyToCart(sourceEl);
+
   saveCart(cart);
   toast(`${p.name} ditambahkan ke keranjang`);
 }
+
 function setQty(id, qty) {
   const p = PRODUCTS.find(x => x.id === id);
   let cart = getCart();
   const item = cart.find(x => x.id === id);
   if (!item) return;
   if (qty <= 0) cart = cart.filter(x => x.id !== id);
-  else item.qty = Math.min(qty, p.stock);
+  else item.qty = Math.min(qty, p ? p.stock : qty);
   saveCart(cart);
   if (typeof renderCartPage === 'function') renderCartPage();
 }
+
 function getCartDetailed() {
-  return getCart().map(i => ({ ...PRODUCTS.find(p => p.id === i.id), qty: i.qty }));
-}
-
-/* ---------- Halaman Toko ---------- */
-function initToko() {
-  const grid = document.getElementById('productGrid');
-  const search = document.getElementById('searchInput');
-  const sort = document.getElementById('sortSelect');
-  const checks = document.querySelectorAll('#catFilters input');
-
-  function render() {
-    const q = search.value.toLowerCase();
-    const cats = [...checks].filter(c => c.checked).map(c => c.value);
-    let list = PRODUCTS.filter(p => cats.includes(p.cat) && p.name.toLowerCase().includes(q));
-    if (sort.value === 'murah') list.sort((a, b) => a.price - b.price);
-    else if (sort.value === 'mahal') list.sort((a, b) => b.price - a.price);
-    else if (sort.value === 'nama') list.sort((a, b) => a.name.localeCompare(b.name));
-    else list.sort((a, b) => b.sold - a.sold);
-
-    document.getElementById('resultInfo').textContent = `Menampilkan ${list.length} produk`;
-    grid.innerHTML = list.length ? list.map(p => `
-      <div class="product-card">
-        <div class="product-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="product-img">` : p.icon}</div>
-        <div class="product-body">
-          <span class="product-cat">${CAT_LABEL[p.cat]}</span>
-          <div class="product-name">${p.name}</div>
-          <div class="product-stock ${p.stock < 5 ? 'low' : ''}">${p.stock === 0 ? '❌ Stok habis' : p.stock < 5 ? `⚠️ Sisa ${p.stock}` : `✔ ${p.stock} tersedia`} · ${p.sold} terjual</div>
-          <div class="product-price">${rupiah(p.price)}</div>
-          <button class="btn btn-primary btn-sm" ${p.stock === 0 ? 'disabled' : ''} onclick="addToCart(${p.id})">+ Keranjang</button>
-        </div>
-      </div>`).join('')
-      : `<div class="empty" style="grid-column:1/-1"><div class="big">🔍</div><p>Tidak ada produk yang cocok.</p></div>`;
-  }
-
-  search.addEventListener('input', render);
-  sort.addEventListener('change', render);
-  checks.forEach(c => c.addEventListener('change', render));
-  document.getElementById('resetFilter').onclick = () => {
-    search.value = ''; sort.value = 'populer';
-    checks.forEach(c => c.checked = true);
-    render();
-  };
-  render();
+  return getCart().map(i => {
+    const p = PRODUCTS.find(prod => prod.id === i.id);
+    return p ? { ...p, qty: i.qty } : null;
+  }).filter(Boolean);
 }
 
 /* ---------- Halaman Keranjang ---------- */
 let promo = 0;
 function initKeranjang() {
   renderCartPage();
-  document.getElementById('applyPromo').onclick = () => {
-    const v = document.getElementById('promoInput').value.trim().toUpperCase();
-    if (v === 'FILO10') { promo = 0.10; toast('Kode promo FILO10 dipakai — diskon 10%'); }
-    else { promo = 0; toast('Kode promo tidak valid', 'error'); }
-    renderCartPage();
-  };
+  const applyPromoBtn = document.getElementById('applyPromo');
+  if (applyPromoBtn) {
+    applyPromoBtn.onclick = () => {
+      const v = document.getElementById('promoInput')?.value.trim().toUpperCase() || '';
+      if (v === 'FILO10') { promo = 0.10; toast('Kode promo FILO10 dipakai — diskon 10%'); }
+      else { promo = 0; toast('Kode promo tidak valid', 'error'); }
+      renderCartPage();
+    };
+  }
   document.querySelectorAll('input[name=ship]').forEach(r => r.addEventListener('change', renderCartPage));
-  document.getElementById('btnCheckout').onclick = checkout;
+  const btnCheckout = document.getElementById('btnCheckout');
+  if (btnCheckout) btnCheckout.onclick = checkout;
 }
 
 function renderCartPage() {
   const wrap = document.getElementById('cartItems');
+  if (!wrap) return;
   const items = getCartDetailed();
   if (!items.length) {
-    wrap.innerHTML = `<div class="empty"><div class="big">🛒</div><h3>Keranjang kosong</h3><p>Belum ada produk yang dipilih.</p><a href="toko.html" class="btn btn-primary btn-sm" style="margin-top:1rem">Mulai Belanja</a></div>`;
+    wrap.innerHTML = `<div class="empty" style="text-align:center;padding:2.5rem 0"><div class="big" style="font-size:3rem;margin-bottom:0.5rem">🛒</div><h3>Keranjang kosong</h3><p class="muted">Belum ada produk yang dipilih.</p><a href="toko.html" class="btn btn-primary btn-sm" style="margin-top:1rem">Mulai Belanja</a></div>`;
   } else {
     wrap.innerHTML = items.map(p => `
       <div class="cart-item">
-        <div class="cart-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="cart-img" style="width:100%;height:100%;object-fit:cover;border-radius:14px">` : p.icon}</div>
-        <div>
+        <div class="cart-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="cart-img">` : (p.icon || '📦')}</div>
+        <div class="cart-info">
           <div class="cart-name">${p.name}</div>
-          <div class="cart-price">${rupiah(p.price)}</div>
-          <div class="qty-control" style="margin-top:.4rem">
-            <button class="qty-btn" onclick="setQty(${p.id}, ${p.qty - 1})">−</button>
+          <div class="cart-unit-price">${rupiah(p.price)} / item</div>
+          <div class="qty-control">
+            <button type="button" class="qty-btn" onclick="setQty(${p.id}, ${p.qty - 1})" aria-label="Kurangi kuantitas">−</button>
             <span class="qty-num">${p.qty}</span>
-            <button class="qty-btn" onclick="setQty(${p.id}, ${p.qty + 1})">+</button>
+            <button type="button" class="qty-btn" onclick="setQty(${p.id}, ${p.qty + 1})" aria-label="Tambah kuantitas">+</button>
           </div>
         </div>
         <div class="cart-right">
           <div class="line-total">${rupiah(p.price * p.qty)}</div>
-          <button class="remove-btn" onclick="setQty(${p.id}, 0)">🗑 Hapus</button>
+          <button type="button" class="remove-btn" onclick="setQty(${p.id}, 0)">🗑 Hapus</button>
         </div>
       </div>`).join('');
   }
@@ -132,12 +185,23 @@ function renderCartPage() {
   const ongkir = ambil || subtotal === 0 ? 0 : 15000;
   const diskon = Math.round(subtotal * promo);
 
-  document.getElementById('sumSubtotal').textContent = rupiah(subtotal);
-  document.getElementById('rowDiskon').style.display = diskon > 0 ? 'flex' : 'none';
-  document.getElementById('sumDiskon').textContent = '-' + rupiah(diskon);
-  document.getElementById('sumOngkir').textContent = ongkir === 0 ? 'GRATIS' : rupiah(ongkir);
-  document.getElementById('sumTotal').textContent = rupiah(subtotal - diskon + ongkir);
-  document.getElementById('btnCheckout').disabled = items.length === 0;
+  const sumSub = document.getElementById('sumSubtotal');
+  if (sumSub) sumSub.textContent = rupiah(subtotal);
+
+  const rowDiskon = document.getElementById('rowDiskon');
+  if (rowDiskon) rowDiskon.style.display = diskon > 0 ? 'flex' : 'none';
+
+  const sumDiskon = document.getElementById('sumDiskon');
+  if (sumDiskon) sumDiskon.textContent = '-' + rupiah(diskon);
+
+  const sumOngkir = document.getElementById('sumOngkir');
+  if (sumOngkir) sumOngkir.textContent = ongkir === 0 ? 'GRATIS' : rupiah(ongkir);
+
+  const sumTotal = document.getElementById('sumTotal');
+  if (sumTotal) sumTotal.textContent = rupiah(subtotal - diskon + ongkir);
+
+  const btnCheckout = document.getElementById('btnCheckout');
+  if (btnCheckout) btnCheckout.disabled = items.length === 0;
 }
 
 function checkout() {
@@ -148,25 +212,27 @@ function checkout() {
   const ongkir = ambil ? 0 : 15000;
   const total = subtotal - Math.round(subtotal * promo) + ongkir;
 
-  // Simulasi pembayaran
-  if (Math.random() < 0.05) { toast('Pembayaran gagal, silakan coba lagi', 'error'); return; }
-
+  const payMethodEl = document.getElementById('payMethod');
   const nota = {
     no: 'INV-' + Date.now().toString(36).toUpperCase(),
     tanggal: new Date().toISOString(),
     item: items.reduce((s, p) => s + p.qty, 0),
-    total, metode: document.getElementById('payMethod').value,
+    total, metode: payMethodEl ? payMethodEl.value : 'Transfer Bank',
     produk: items.map(p => `${p.name} x${p.qty}`)
   };
   const hist = JSON.parse(localStorage.getItem('fv_orders') || '[]');
   hist.unshift(nota);
   localStorage.setItem('fv_orders', JSON.stringify(hist));
 
-  // Kurangi stok (simulasi) & kosongkan keranjang
   saveCart([]);
-  document.getElementById('notaNo').textContent = nota.no;
-  document.getElementById('notaItems').textContent = nota.item + ' produk';
-  document.getElementById('notaPay').textContent = nota.metode;
-  document.getElementById('notaTotal').textContent = rupiah(total);
-  document.getElementById('notaModal').style.display = 'grid';
+  const notaNo = document.getElementById('notaNo');
+  if (notaNo) notaNo.textContent = nota.no;
+  const notaItems = document.getElementById('notaItems');
+  if (notaItems) notaItems.textContent = nota.item + ' produk';
+  const notaPay = document.getElementById('notaPay');
+  if (notaPay) notaPay.textContent = nota.metode;
+  const notaTotal = document.getElementById('notaTotal');
+  if (notaTotal) notaTotal.textContent = rupiah(total);
+  const notaModal = document.getElementById('notaModal');
+  if (notaModal) notaModal.style.display = 'grid';
 }

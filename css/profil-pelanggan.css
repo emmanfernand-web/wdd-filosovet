@@ -1,9 +1,7 @@
 /* ============================================================
    FILOSOVET — css/profil-pelanggan.css
-   Layout & Responsive Profil Pelanggan (Fixed Desktop Width)
    ============================================================ */
 
-/* 1. Layout Utama Profil (Desktop — Diperlebar & Proporsional) */
 .profile-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -32,7 +30,6 @@
   gap: 0.4rem;
 }
 
-/* 2. Styling Navigasi Link Sidebar */
 .side-link {
   display: flex;
   align-items: center;
@@ -41,11 +38,12 @@
   border-radius: 12px;
   font-size: 0.92rem;
   font-weight: 600;
-  color: var(--text, #0f172a);
+  color: var(--text);
   background: transparent;
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition: var(--transition);
   cursor: pointer;
+  font-family: inherit;
 }
 
 .side-link-icon {
@@ -55,21 +53,21 @@
   width: 32px;
   height: 32px;
   border-radius: 8px;
-  background: var(--primary-light, #ccfbf1);
-  color: var(--primary, #0f766e);
+  background: var(--primary-light);
+  color: var(--primary-dark);
   flex-shrink: 0;
-  transition: all 0.25s ease;
+  transition: var(--transition);
 }
 
 .side-link:hover {
-  background: var(--primary-light, #ccfbf1);
-  color: var(--primary-dark, #0b5a54);
+  background: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .side-link.active {
-  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
+  box-shadow: 0 4px 14px rgba(79, 111, 82, 0.25);
 }
 
 .side-link.active .side-link-icon {
@@ -77,11 +75,12 @@
   color: #ffffff;
 }
 
-/* 3. Panel & Tabel Responsif */
 .prof-panel {
   width: 100%;
   min-width: 0;
   box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .table-wrap {
@@ -93,6 +92,8 @@
   border-radius: 12px;
   margin-top: 0.5rem;
   box-sizing: border-box;
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .table-wrap table {
@@ -121,26 +122,24 @@
   font-size: 0.78rem;
   font-weight: 700;
   text-align: center;
+  font-family: inherit;
 }
 
 .status-selesai {
-  background-color: #dcfce7;
-  color: #15803d;
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
 }
 
 .status-menunggu {
-  background-color: #fef3c7;
-  color: #b45309;
+  background-color: var(--accent-light);
+  color: var(--accent-dark);
 }
 
 .status-proses {
-  background-color: #e0f2fe;
-  color: #0369a1;
+  background-color: var(--primary-light);
+  color: var(--primary-dark);
 }
 
-/* ============================================================
-   4. RESPONSIF MOBILE VIEW (HP & TABLET <= 900px)
-   ============================================================ */
 @media (max-width: 900px) {
   .profile-layout {
     grid-template-columns: 1fr !important;
@@ -182,7 +181,7 @@
   }
 
   .table-wrap {
-    border: 1px solid var(--border, #e2e8f0);
+    border: 1px solid var(--border);
   }
 
   .table-wrap th,
@@ -190,43 +189,4 @@
     font-size: 0.82rem !important;
     padding: 0.65rem 0.7rem !important;
   }
-}
-
-/* ============================================================
-   5. SUPPORT DARK MODE PROFIL
-   ============================================================ */
-html.dark-mode .profile-sidebar,
-html.dark-mode .prof-panel {
-  background-color: var(--surface, #172036) !important;
-  border-color: var(--border, #283553) !important;
-  color: var(--text, #f8fafc) !important;
-}
-
-html.dark-mode .side-link {
-  color: #cbd5e1 !important;
-}
-
-html.dark-mode .side-link:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #ffffff !important;
-}
-
-html.dark-mode .side-link.active {
-  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54)) !important;
-  color: #ffffff !important;
-}
-
-html.dark-mode .status-selesai {
-  background-color: rgba(22, 101, 52, 0.3) !important;
-  color: #4ade80 !important;
-}
-
-html.dark-mode .status-menunggu {
-  background-color: rgba(180, 83, 9, 0.3) !important;
-  color: #fbbf24 !important;
-}
-
-html.dark-mode .status-proses {
-  background-color: rgba(3, 105, 161, 0.3) !important;
-  color: #38bdf8 !important;
 }
