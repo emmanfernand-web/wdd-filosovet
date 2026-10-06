@@ -3,8 +3,8 @@
    ============================================================ */
 
 .site-footer {
-  background: #0f172a;
-  color: #cbd5e1;
+  background: var(--primary-dark, #4F6F52);
+  color: #FAF6F0 !important;
   margin-top: 100px;
 }
 
@@ -15,31 +15,45 @@
   padding: 72px 0 40px;
 }
 
+.site-footer p {
+  color: #FAF6F0 !important;
+  font-size: 0.92rem;
+  line-height: 1.6;
+  opacity: 0.95;
+}
+
 .site-footer h4 {
-  color: #fff;
+  color: #FFFFFF !important;
   margin-bottom: 1.2rem;
-  font-size: 1.05rem;
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
 }
 
 .site-footer a {
-  color: #94a3b8;
+  color: #FAF6F0 !important;
   display: block;
-  margin-bottom: 0.6rem;
-  font-size: 0.92rem;
+  margin-bottom: 0.65rem;
+  font-size: 0.94rem;
+  font-weight: 500;
+  opacity: 0.92;
   transition: var(--transition, all 0.25s ease);
 }
 
 .site-footer a:hover {
-  color: #5eead4;
+  color: #FFFFFF !important;
+  opacity: 1;
   transform: translateX(4px);
+  text-decoration: underline;
 }
 
 .footer-bottom {
-  border-top: 1px solid #1e293b;
+  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
   padding: 1.5rem 0;
   text-align: center;
-  font-size: 0.85rem;
-  color: #64748b;
+  font-size: 0.88rem;
+  color: #FAF6F0 !important;
+  opacity: 0.95;
 }
 
 /* Footer Brand */
@@ -81,14 +95,12 @@
     margin-top: 40px;
   }
 
-  /* Mengurangi padding vertikal dan menyusun grid lebih padat */
   .footer-grid {
-    grid-template-columns: 1fr 1fr; /* Membagi menu menjadi 2 kolom menyamping */
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem 1rem;
     padding: 32px 0 24px;
   }
 
-  /* Kolom Branding & Deskripsi Utama dibuat selebar 2 kolom penuh */
   .footer-grid > div:first-child {
     grid-column: span 2;
   }
@@ -104,22 +116,22 @@
   }
 
   .site-footer p {
-    font-size: 0.82rem;
-    line-height: 1.45;
+    font-size: 0.85rem;
+    line-height: 1.5;
   }
 
   .site-footer h4 {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
     margin-bottom: 0.65rem;
   }
 
   .site-footer a {
-    font-size: 0.84rem;
-    margin-bottom: 0.4rem;
+    font-size: 0.88rem;
+    margin-bottom: 0.45rem;
   }
 
   .footer-bottom {
     padding: 1rem 0;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
   }
 }

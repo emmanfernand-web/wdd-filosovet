@@ -26,6 +26,7 @@
 .filter-card-header h3 {
   font-size: 1.1rem;
   margin: 0;
+  color: var(--text);
 }
 
 .close-filter-btn {
@@ -34,13 +35,15 @@
   border: 0;
   font-size: 1.6rem;
   line-height: 1;
-  color: var(--muted, #64748b);
+  color: var(--muted);
   cursor: pointer;
 }
 
 .filter-card {
   position: sticky;
   top: 100px;
+  background: var(--surface);
+  border: 1px solid var(--border);
 }
 
 .filter-group {
@@ -54,11 +57,14 @@
   padding: 0.35rem 0;
   cursor: pointer;
   font-size: 0.92rem;
+  color: var(--text);
+  font-family: inherit;
 }
 
 .filter-check input {
   width: auto;
-  accent-color: var(--primary, #0f766e);
+  accent-color: var(--primary);
+  cursor: pointer;
 }
 
 /* 2. Top Control: Search Bar Utama di Atas Grid */
@@ -80,16 +86,18 @@
   width: 100%;
   padding: 0.8rem 1rem 0.8rem 2.7rem;
   border-radius: 999px;
-  border: 1.5px solid var(--border, #e2e8f0);
-  background: var(--surface, #ffffff);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
   font-size: 0.95rem;
-  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
-  transition: all 0.25s ease;
+  font-family: inherit;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
 }
 
 .main-search-box input:focus {
-  border-color: var(--primary, #0f766e);
-  box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.12);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(107, 143, 113, 0.18);
 }
 
 .main-search-box .search-icon {
@@ -97,7 +105,7 @@
   left: 1rem;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--muted, #64748b);
+  color: var(--muted);
   pointer-events: none;
 }
 
@@ -110,26 +118,29 @@
   font-size: 0.9rem;
 }
 
-/* 3. Product Grid (Desktop) */
+/* 3. Product Grid (Desktop & Uniform Card Heights) */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1.4rem;
+  align-items: stretch;
 }
 
 .product-card {
-  background: var(--surface, #ffffff);
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: var(--radius, 16px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: var(--transition, all 0.25s ease);
+  height: 100%;
+  transition: var(--transition);
 }
 
 .product-card:hover {
-  box-shadow: var(--shadow, 0 12px 30px -6px rgba(15, 23, 42, 0.08));
+  box-shadow: var(--shadow);
   transform: translateY(-4px);
+  border-color: rgba(107, 143, 113, 0.35);
 }
 
 .product-thumb {
@@ -137,9 +148,10 @@
   display: grid;
   place-items: center;
   font-size: 3.2rem;
-  background: linear-gradient(135deg, #ecfeff, #f0fdfa);
+  background: var(--surface-alt);
   overflow: hidden;
   position: relative;
+  flex-shrink: 0;
 }
 
 .product-thumb img,
@@ -167,7 +179,7 @@
 .product-cat {
   font-size: 0.72rem;
   font-weight: 700;
-  color: var(--primary, #0f766e);
+  color: var(--primary-dark);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -176,27 +188,38 @@
   font-weight: 700;
   font-size: 0.95rem;
   line-height: 1.35;
-  color: var(--text, #0f172a);
+  color: var(--text);
+  min-height: 2.7em;
 }
 
 .product-price {
   font-weight: 800;
-  color: var(--primary-dark, #0b5a54);
+  color: var(--primary-dark);
   font-size: 1.1rem;
 }
 
 .product-stock {
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--muted, #64748b);
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .product-stock.low {
-  color: var(--danger, #dc2626);
+  color: var(--accent-dark);
 }
 
+.product-stock.out-of-stock {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* Ensure button is aligned to the bottom of every card */
 .product-card .btn {
-  margin-top: 0.6rem;
+  margin-top: auto !important;
+  width: 100%;
 }
 
 /* ============================================================
@@ -249,10 +272,12 @@
   .product-grid {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 10px !important;
+    align-items: stretch !important;
   }
 
   .product-card {
     border-radius: 14px;
+    height: 100% !important;
   }
 
   .product-thumb {
@@ -268,7 +293,6 @@
     font-size: 0.65rem !important;
   }
 
-  /* FIX JUDUL TERPOTONG: Menggunakan min-height 2.7em agar 2 baris judul muat sempurna */
   .product-name {
     font-size: 0.85rem !important;
     line-height: 1.35 !important;
@@ -292,6 +316,6 @@
     padding: 0.5rem 0.6rem !important;
     font-size: 0.8rem !important;
     border-radius: 10px !important;
-    margin-top: 0.4rem !important;
+    margin-top: auto !important;
   }
 }

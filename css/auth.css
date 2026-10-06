@@ -1,0 +1,143 @@
+/* ============================================================
+   FILOSOVET — css/auth.css (Autentikasi / Login & Register)
+   ============================================================ */
+
+.auth-container {
+  max-width: 480px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.auth-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 2.2rem;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+/* Auth Tabs Segmented Bar */
+.tabs.auth-tabs,
+.auth-tabs,
+.card .tabs {
+  display: flex !important;
+  gap: 6px !important;
+  background: var(--primary-light, #E2EBDD) !important;
+  padding: 6px !important;
+  border-radius: 999px !important;
+  margin-bottom: 1.8rem !important;
+  border: 1px solid var(--border) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.tabs.auth-tabs .tab,
+.auth-tabs .tab,
+.card .tabs .tab {
+  flex: 1 !important;
+  text-align: center !important;
+  padding: 0.75rem 1rem !important;
+  border-radius: 999px !important;
+  border: 0 !important;
+  background: transparent !important;
+  font-weight: 700 !important;
+  font-size: 0.95rem !important;
+  color: var(--muted) !important;
+  font-family: inherit !important;
+  cursor: pointer !important;
+  transition: var(--transition) !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.tabs.auth-tabs .tab:hover,
+.auth-tabs .tab:hover,
+.card .tabs .tab:hover {
+  color: var(--primary-dark) !important;
+  background: var(--surface) !important;
+}
+
+.tabs.auth-tabs .tab.active,
+.auth-tabs .tab.active,
+.card .tabs .tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(79, 111, 82, 0.28) !important;
+}
+
+/* Form Grouping & Controls */
+.auth-card label,
+.card label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.4rem;
+}
+
+.auth-card input[type="text"],
+.auth-card input[type="email"],
+.auth-card input[type="password"],
+.auth-card input[type="tel"] {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.auth-card input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(107, 143, 113, 0.18);
+}
+
+.auth-link {
+  color: var(--primary-dark);
+  font-weight: 600;
+  transition: var(--transition);
+}
+
+.auth-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Dark Mode Overrides for Auth Tabs */
+html.dark-mode .tabs.auth-tabs,
+html.dark-mode .auth-tabs,
+html.dark-mode .card .tabs {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .tabs.auth-tabs .tab,
+html.dark-mode .auth-tabs .tab,
+html.dark-mode .card .tabs .tab {
+  color: var(--muted) !important;
+  background: transparent !important;
+  border: none !important;
+}
+
+html.dark-mode .tabs.auth-tabs .tab:hover,
+html.dark-mode .auth-tabs .tab:hover,
+html.dark-mode .card .tabs .tab:hover {
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+html.dark-mode .tabs.auth-tabs .tab.active,
+html.dark-mode .auth-tabs .tab.active,
+html.dark-mode .card .tabs .tab.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
+}
+
+html.dark-mode .auth-link {
+  color: var(--primary) !important;
+}

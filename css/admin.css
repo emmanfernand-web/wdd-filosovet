@@ -11,8 +11,8 @@
 }
 
 .admin-sidebar {
-  background: #0f172a;
-  color: #cbd5e1;
+  background: var(--primary-dark);
+  color: var(--primary-light);
   padding: 1.6rem 1.1rem;
   position: sticky;
   top: 0;
@@ -22,7 +22,7 @@
   box-sizing: border-box;
 }
 
-/* Brand Logo Sidebar (Gaya Tampil Asli Tanpa Potongan Lingkaran) */
+/* Brand Logo Sidebar */
 .admin-sidebar .brand {
   display: flex !important;
   align-items: center !important;
@@ -32,14 +32,13 @@
   gap: 0 !important;
 }
 
-/* LOGO FIX: Menghilangkan potongan lingkaran & menjaga rasio gambar asli */
 .admin-sidebar .brand .logo {
   height: 42px !important;
   width: auto !important;
   max-height: 42px !important;
   max-width: 100% !important;
-  border-radius: 0 !important; /* Hilangkan bentuk bulat */
-  object-fit: contain !important; /* Jaga proporsi gambar tanpa terpotong */
+  border-radius: 0 !important;
+  object-fit: contain !important;
   box-shadow: none !important;
   flex-shrink: 0 !important;
   display: block !important;
@@ -57,29 +56,30 @@
   gap: 0.8rem;
   padding: 0.7rem 1rem;
   border-radius: 12px;
-  color: #94a3b8;
+  color: var(--primary-light);
   font-size: 0.92rem;
   font-weight: 600;
   text-decoration: none;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: var(--transition);
+  font-family: inherit;
 }
 
 .admin-menu a:hover {
-  background: rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.12);
   color: #ffffff;
   transform: translateX(3px);
 }
 
 .admin-menu a.active {
-  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
+  background: var(--primary);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.3);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
 /* ---------- 2. Main Content & Topbar ---------- */
 .admin-main {
   padding: 1.8rem 2.2rem;
-  background: var(--bg, #f8fafc);
+  background: var(--bg);
   min-width: 0;
   box-sizing: border-box;
 }
@@ -91,7 +91,7 @@
   gap: 1.2rem;
   margin-bottom: 1.8rem;
   width: 100%;
-  padding-right: 0.5rem; /* Jarak aman tepi kanan */
+  padding-right: 0.5rem;
   box-sizing: border-box;
   flex-wrap: wrap;
   background: transparent !important;
@@ -104,11 +104,10 @@
 .admin-topbar h1 {
   font-size: 1.5rem;
   font-weight: 800;
-  color: var(--text, #0f172a);
+  color: var(--text);
   margin-bottom: 0.2rem;
 }
 
-/* Admin User Area */
 .admin-user {
   display: flex;
   align-items: center;
@@ -123,23 +122,23 @@
 }
 
 .admin-user .user-name {
-  color: var(--text, #0f172a);
+  color: var(--text);
 }
 
 .avatar {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  background: var(--primary, #0f766e);
+  background: var(--primary);
   color: #ffffff;
   display: grid;
   place-items: center;
   font-weight: 800;
   font-size: 0.95rem;
   flex-shrink: 0;
+  font-family: inherit;
 }
 
-/* Saklar Toggle Mode Malam */
 .admin-user .theme-toggle-btn {
   display: flex;
   align-items: center;
@@ -156,10 +155,10 @@
 
 /* ---------- 3. Alert Banner & Stat Grid ---------- */
 .alert-banner {
-  background: var(--danger-bg, #fee2e2);
-  border: 1px solid #fecaca;
-  color: #991b1b;
-  border-radius: var(--radius, 16px);
+  background: var(--danger-bg);
+  border: 1px solid var(--border);
+  color: var(--danger);
+  border-radius: var(--radius);
   padding: 1rem 1.3rem;
   display: flex;
   gap: 0.8rem;
@@ -180,22 +179,22 @@
 }
 
 .stat-card {
-  background: #ffffff;
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: var(--radius, 16px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 1.3rem 1.4rem;
-  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
 }
 
 .stat-card:hover {
   transform: translateY(-3px);
-  box-shadow: var(--shadow, 0 12px 30px -6px rgba(15, 23, 42, 0.08));
+  box-shadow: var(--shadow);
 }
 
 .stat-card .stat-label {
   font-size: 0.82rem;
-  color: var(--muted, #64748b);
+  color: var(--muted);
   font-weight: 600;
 }
 
@@ -203,7 +202,7 @@
   font-size: 1.75rem;
   font-weight: 800;
   margin: 0.2rem 0;
-  color: var(--text, #0f172a);
+  color: var(--text);
 }
 
 .stat-card .stat-delta {
@@ -211,8 +210,8 @@
   font-weight: 700;
 }
 
-.stat-delta.up { color: #15803d; }
-.stat-delta.down { color: var(--danger, #dc2626); }
+.stat-delta.up { color: var(--primary-dark); }
+.stat-delta.down { color: var(--danger); }
 
 /* ---------- 4. Panels & Bar Chart ---------- */
 .panel-grid {
@@ -222,12 +221,12 @@
 }
 
 .panel {
-  background: #ffffff;
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: var(--radius, 16px);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
-  box-shadow: var(--shadow-sm, 0 4px 12px rgba(15, 23, 42, 0.04));
+  box-shadow: var(--shadow-sm);
 }
 
 .panel-head {
@@ -240,7 +239,7 @@
 .panel-head h3 {
   font-size: 1.05rem;
   font-weight: 700;
-  color: var(--text, #0f172a);
+  color: var(--text);
 }
 
 .bar-chart {
@@ -253,7 +252,7 @@
 
 .bar {
   flex: 1;
-  background: linear-gradient(180deg, #14b8a6, var(--primary, #0f766e));
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
   border-radius: 6px 6px 0 0;
   position: relative;
   min-height: 6px;
@@ -266,7 +265,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 0.72rem;
-  color: var(--muted, #64748b);
+  color: var(--muted);
   font-weight: 600;
 }
 
@@ -285,84 +284,15 @@
   font-size: 0.74rem;
   font-weight: 700;
   display: inline-block;
+  font-family: inherit;
 }
 
-.status-selesai { background: #dcfce7; color: #166534; }
-.status-proses { background: #fef3c7; color: #92400e; }
-.status-menunggu { background: #dbeafe; color: #1d4ed8; }
-.status-batal { background: var(--danger-bg, #fee2e2); color: var(--danger, #dc2626); }
+.status-selesai { background: var(--primary-light); color: var(--primary-dark); }
+.status-proses { background: var(--accent-light); color: var(--accent-dark); }
+.status-menunggu { background: var(--primary-light); color: var(--primary-dark); }
+.status-batal { background: var(--danger-bg); color: var(--danger); }
 
-/* ---------- 5. Profile Sidebar Navigation ---------- */
-.profile-sidebar {
-  background: #ffffff;
-  border: 1px solid var(--border, #e2e8f0);
-  border-radius: var(--radius, 16px);
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
-  padding: 1.5rem;
-}
-
-.profile-nav {
-  margin-top: 0.5rem;
-}
-
-.side-link {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  padding: 0.7rem 1rem;
-  border-radius: 12px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text, #0f172a);
-  background: transparent;
-  border: 1.5px solid transparent;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  cursor: pointer;
-}
-
-.side-link-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: var(--primary-light, #ccfbf1);
-  color: var(--primary, #0f766e);
-  flex-shrink: 0;
-  transition: all 0.2s ease;
-}
-
-.side-link:hover {
-  background: var(--primary-light, #ccfbf1);
-  border-color: rgba(15, 118, 110, 0.25);
-  color: var(--primary-dark, #0b5a54);
-  transform: translateX(3px);
-}
-
-.side-link:hover .side-link-icon {
-  background: var(--primary, #0f766e);
-  color: #ffffff;
-}
-
-.side-link.active {
-  background: linear-gradient(135deg, var(--primary, #0f766e), var(--primary-dark, #0b5a54));
-  border-color: transparent;
-  color: #ffffff;
-  box-shadow: 0 4px 14px rgba(15, 118, 110, 0.25);
-}
-
-.side-link.active .side-link-icon {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-}
-
-.side-link.active:hover {
-  transform: translateX(0);
-}
-
-/* ---------- 6. Responsive Breakpoints ---------- */
+/* ---------- 5. Responsive Breakpoints ---------- */
 @media (max-width: 1024px) {
   .stat-grid {
     grid-template-columns: repeat(2, 1fr);
