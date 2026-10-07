@@ -454,3 +454,168 @@ html.dark-mode .footer-bottom {
   color: #FAF6F0 !important;
   opacity: 0.9 !important;
 }
+
+/* ============================================================
+   FILOSOVET — High-Contrast Dark Mode (KHUSUS ADMIN DASHBOARD)
+   ============================================================ */
+
+/* 1. Variable Override Khusus Dalam Area Admin */
+html.dark-mode .admin-layout {
+  --bg: #141A15 !important;           /* Background hijau-cokelat gelap */
+  --surface: #1E2620 !important;      /* Surface panel background */
+  --surface-alt: #263129 !important;  /* Secondary background untuk item/hover */
+  --border: #354237 !important;       /* Border kontras */
+  --text: #F8F6F0 !important;         /* Teks krem terang kontras tinggi */
+  --muted: #B2BDB1 !important;        /* Teks muted yang mudah dibaca */
+  --primary: #A3C99C !important;      /* Hijau sage terang untuk dark mode */
+  --primary-dark: #7CA175 !important;
+  --primary-light: rgba(163, 201, 156, 0.18) !important;
+  --accent: #F0C093 !important;       /* Warna aksen amber/emas terang */
+  --danger: #FF8A80 !important;       /* Merah terang soft */
+  --danger-bg: rgba(255, 138, 128, 0.15) !important;
+  background-color: var(--bg) !important;
+}
+
+/* 2. Main Area & Sidebar Admin */
+html.dark-mode .admin-main {
+  background-color: var(--bg) !important;
+  color: var(--text) !important;
+}
+
+html.dark-mode .admin-sidebar {
+  background-color: #18201A !important;
+  border-right: 1px solid var(--border) !important;
+}
+
+html.dark-mode .admin-menu a {
+  color: var(--muted) !important;
+}
+
+html.dark-mode .admin-menu a:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
+
+html.dark-mode .admin-menu a.active {
+  background: linear-gradient(135deg, var(--primary-dark), #52734D) !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 3. Topbar & User Profile */
+html.dark-mode .admin-topbar h1 {
+  color: #FFFFFF !important;
+}
+
+html.dark-mode .admin-topbar .muted {
+  color: var(--muted) !important;
+}
+
+html.dark-mode .admin-user .user-name {
+  color: var(--text) !important;
+}
+
+/* 4. Badges & Status Chips di Admin */
+html.dark-mode .admin-layout .status-chip,
+html.dark-mode .admin-layout .badge {
+  font-weight: 700 !important;
+}
+
+html.dark-mode .admin-layout .status-menunggu,
+html.dark-mode .admin-layout .status-proses {
+  background: rgba(240, 192, 147, 0.18) !important;
+  color: #FFE0C2 !important; /* Terang & mudah dibaca */
+  border: 1px solid rgba(240, 192, 147, 0.4) !important;
+}
+
+html.dark-mode .admin-layout .status-selesai {
+  background: var(--primary-light) !important;
+  color: #C2ECC0 !important;
+  border: 1px solid rgba(163, 201, 156, 0.35) !important;
+}
+
+html.dark-mode .admin-layout .status-batal {
+  background: var(--danger-bg) !important;
+  color: #FFCDD2 !important;
+  border: 1px solid rgba(255, 138, 128, 0.4) !important;
+}
+
+/* 5. Tombol & Link di Dalam Admin */
+html.dark-mode .admin-layout .btn-outline {
+  background: var(--surface-alt) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--text) !important;
+}
+
+html.dark-mode .admin-layout .btn-outline:hover {
+  background: var(--primary-dark) !important;
+  border-color: var(--primary) !important;
+  color: #FFFFFF !important;
+}
+
+html.dark-mode .admin-layout td .btn,
+html.dark-mode .admin-layout td button {
+  background: var(--surface-alt) !important;
+  border: 1px solid var(--border) !important;
+  color: var(--primary) !important;
+  font-weight: 600 !important;
+}
+
+html.dark-mode .admin-layout td .btn:hover,
+html.dark-mode .admin-layout td button:hover {
+  background: var(--primary-dark) !important;
+  color: #FFFFFF !important;
+}
+
+/* 6. Kartu, Panel & Item Stok Menipis */
+html.dark-mode .admin-layout .stat-card,
+html.dark-mode .admin-layout .panel {
+  background-color: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .admin-layout .stat-card .stat-label {
+  color: var(--muted) !important;
+}
+
+html.dark-mode .admin-layout .stat-card .stat-value {
+  color: #FFFFFF !important;
+}
+
+html.dark-mode .admin-layout #lowStockList > div {
+  background-color: var(--surface-alt) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 12px !important;
+  padding: 0.85rem 1rem !important;
+}
+
+html.dark-mode .admin-layout #lowStockList strong,
+html.dark-mode .admin-layout #lowStockList span {
+  color: var(--text) !important;
+}
+
+html.dark-mode .admin-layout .panel-head a {
+  color: var(--primary) !important;
+}
+
+/* 7. Tabel Admin */
+html.dark-mode .admin-layout th {
+  background: #18201A !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  border-bottom: 2px solid var(--border) !important;
+}
+
+html.dark-mode .admin-layout td {
+  color: #E6E1D8 !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .admin-layout tr:hover td {
+  background: rgba(255, 255, 255, 0.03) !important;
+}
+
+html.dark-mode .admin-layout .bar-chart .bar {
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark)) !important;
+}

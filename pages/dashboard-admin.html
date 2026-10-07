@@ -12,7 +12,7 @@
   }
 </script>
 
-  <!-- CSS Utama (Menggunakan ../ untuk keluar dari folder pages/) -->
+  <!-- CSS Utama -->
   <link rel="stylesheet" href="../css/style.css">
   <link rel="stylesheet" href="../css/shop.css">
   <link rel="stylesheet" href="../css/admin.css">
@@ -21,7 +21,7 @@
   <link rel="stylesheet" href="../css/components/header.css">
   <link rel="stylesheet" href="../css/components/footer.css">
   
-  <!-- CSS Mode Malam (Selalu Paling Bawah) -->
+  <!-- CSS Mode Malam -->
   <link rel="stylesheet" href="../css/dark.css">
 </head>
 <body>
@@ -33,12 +33,12 @@
       <img src="../assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo">
     </a>
     <nav class="admin-menu">
-      <a href="#" class="active">📊 Dashboard</a>
-      <a href="#" onclick="toast('Halaman Booking (demo)')">📅 Booking</a>
-      <a href="#" onclick="toast('Halaman Stok Obat (demo)')">💊 Stok &amp; Farmasi</a>
-      <a href="#" onclick="toast('Halaman Produk (demo)')">📦 Produk</a>
-      <a href="#" onclick="toast('Halaman Transaksi (demo)')">🧾 Transaksi</a>
-      <a href="#" onclick="toast('Halaman Laporan (demo)')">📈 Laporan</a>
+      <a href="#" class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</a>
+      <a href="#" class="nav-item" data-tab="booking" onclick="switchTab('booking')">📅 Booking</a>
+      <a href="#" class="nav-item" data-tab="stok" onclick="switchTab('stok')">💊 Stok &amp; Farmasi</a>
+      <a href="#" class="nav-item" data-tab="produk" onclick="switchTab('produk')">📦 Produk</a>
+      <a href="#" class="nav-item" data-tab="transaksi" onclick="switchTab('transaksi')">🧾 Transaksi</a>
+      <a href="#" class="nav-item" data-tab="laporan" onclick="switchTab('laporan')">📈 Laporan</a>
     </nav>
   </aside>
 
@@ -46,7 +46,7 @@
   <main class="admin-main">
     <div class="admin-topbar">
       <div class="topbar-title">
-        <h1>Dashboard Operasional</h1>
+        <h1 id="pageTitle">Dashboard Operasional</h1>
         <p class="muted" style="font-size:.88rem" id="todayLabel"></p>
       </div>
       <div class="admin-user">
@@ -58,38 +58,79 @@
     <!-- BANNER PERINGATAN STOK -->
     <div class="alert-banner" id="stockAlert"></div>
 
-    <!-- STATISTIK UTAMA -->
-    <div class="stat-grid">
-      <div class="stat-card">
-        <div class="stat-label">Booking Hari Ini</div>
-        <div class="stat-value" id="stBooking">0</div>
-        <div class="stat-delta up">+12% vs kemarin</div>
+    <!-- TAB 1: DASHBOARD -->
+    <section id="tab-dashboard" class="tab-content active">
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-label">Booking Hari Ini</div>
+          <div class="stat-value" id="stBooking">0</div>
+          <div class="stat-delta up">+12% vs kemarin</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pendapatan Hari Ini</div>
+          <div class="stat-value" id="stRevenue">Rp 0</div>
+          <div class="stat-delta up">+8% vs kemarin</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Okupansi Pet Hotel</div>
+          <div class="stat-value" id="stHotel">0%</div>
+          <div class="stat-delta up">+5% minggu ini</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Stok Menipis</div>
+          <div class="stat-value" id="stLow" style="color:var(--danger)">0</div>
+          <div class="stat-delta down">Butuh restock</div>
+        </div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">Pendapatan Hari Ini</div>
-        <div class="stat-value" id="stRevenue">Rp 0</div>
-        <div class="stat-delta up">+8% vs kemarin</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Okupansi Pet Hotel</div>
-        <div class="stat-value" id="stHotel">0%</div>
-        <div class="stat-delta up">+5% minggu ini</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">Stok Menipis</div>
-        <div class="stat-value" id="stLow" style="color:var(--danger)">0</div>
-        <div class="stat-delta down">Butuh restock</div>
-      </div>
-    </div>
 
-    <div class="panel-grid">
-      <!-- TABEL BOOKING TERBARU -->
+      <div class="panel-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Booking Terbaru</h3>
+            <button class="btn btn-outline btn-sm" onclick="exportData('Booking Terbaru')">Export</button>
+          </div>
+          <div class="table-wrap" style="border:0">
+            <table>
+              <thead>
+                <tr>
+                  <th>Pelanggan</th>
+                  <th>Layanan</th>
+                  <th>Jadwal</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="adminBookingBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div>
+          <div class="panel chart-wrap mb-4">
+            <div class="panel-head">
+              <h3>Pendapatan 7 Hari</h3>
+            </div>
+            <div class="bar-chart" id="barChart"></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">
+              <h3>Peringatan Stok</h3>
+              <a href="#" onclick="switchTab('stok')" style="font-size:.85rem;color:var(--primary);font-weight:600">+ Order Distributor</a>
+            </div>
+            <div id="lowStockList" style="display:grid;gap:.7rem"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: BOOKING -->
+    <section id="tab-booking" class="tab-content" style="display:none;">
       <div class="panel">
         <div class="panel-head">
-          <h3>Booking Terbaru</h3>
-          <button class="btn btn-outline btn-sm" onclick="toast('Export laporan (demo)')">Export</button>
+          <h3>Kelola Seluruh Reservasi & Janji Temu</h3>
+          <button class="btn btn-primary btn-sm" onclick="toast('Membuka form booking manual')">+ Tambah Booking Manual</button>
         </div>
-        <div class="table-wrap" style="border:0">
+        <div class="table-wrap">
           <table>
             <thead>
               <tr>
@@ -97,36 +138,119 @@
                 <th>Layanan</th>
                 <th>Jadwal</th>
                 <th>Status</th>
-                <th></th>
+                <th>Tindakan Status</th>
               </tr>
             </thead>
-            <tbody id="adminBookingBody"></tbody>
+            <tbody id="fullBookingTable"></tbody>
           </table>
         </div>
       </div>
+    </section>
 
-      <!-- GRAFIK PENDAPATAN & PERINGATAN STOK -->
-      <div>
-        <div class="panel chart-wrap mb-4">
-          <div class="panel-head">
-            <h3>Pendapatan 7 Hari</h3>
-          </div>
-          <div class="bar-chart" id="barChart"></div>
+    <!-- TAB 3: STOK & FARMASI -->
+    <section id="tab-stok" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Manajemen Stok Obat & Farmasi</h3>
+          <button class="btn btn-primary btn-sm" onclick="restockAll()">Order Restock Masal</button>
         </div>
-        <div class="panel">
-          <div class="panel-head">
-            <h3>Peringatan Stok</h3>
-            <a href="#" onclick="toast('Buat order ke distributor (demo)')" style="font-size:.85rem;color:var(--primary);font-weight:600">+ Order Distributor</a>
-          </div>
-          <div id="lowStockList" style="display:grid;gap:.7rem"></div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Nama Produk / Obat</th>
+                <th>Kategori</th>
+                <th>Stok Saat Ini</th>
+                <th>Batas Min.</th>
+                <th>Status</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="stokTableBody"></tbody>
+          </table>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- TAB 4: PRODUK -->
+    <section id="tab-produk" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Katalog Produk Toko</h3>
+          <button class="btn btn-primary btn-sm" onclick="toast('Fitur Tambah Produk Baru Siap')">+ Produk Baru</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Produk</th>
+                <th>Kategori</th>
+                <th>Harga</th>
+                <th>Stok</th>
+                <th>Terjual</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="produkTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 5: TRANSAKSI -->
+    <section id="tab-transaksi" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Riwayat Transaksi & Nota</h3>
+          <button class="btn btn-outline btn-sm" onclick="exportData('Transaksi')">Export Laporan</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>ID Transaksi</th>
+                <th>Pelanggan</th>
+                <th>Tipe</th>
+                <th>Total</th>
+                <th>Metode Bayar</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="transaksiTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: LAPORAN -->
+    <section id="tab-laporan" class="tab-content" style="display:none;">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Ringkasan Laporan Operasional & Keuangan</h3>
+          <button class="btn btn-primary btn-sm" onclick="exportData('Laporan Keuangan')">Download PDF/Excel</button>
+        </div>
+        <div class="stat-grid" style="margin-bottom:1.5rem">
+          <div class="stat-card">
+            <div class="stat-label">Total Omset Bulan Ini</div>
+            <div class="stat-value">Rp 84.500.000</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Total Reservasi Selesai</div>
+            <div class="stat-value">342</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Produk Terlaris</div>
+            <div class="stat-value" style="font-size:1.1rem">Dry Food Kucing Premium</div>
+          </div>
+        </div>
+      </div>
+    </section>
   </main>
 </div>
 
-<!-- SCRIPTS (Panggilan Menggunakan ../) -->
+<!-- SCRIPTS -->
 <script src="../js/main.js"></script>
+<script src="../js/cart.js"></script>
 <script src="../js/admin.js"></script>
 <script src="../js/dark-mode.js"></script>
 </body>
