@@ -211,3 +211,21 @@ function renderTransaksiTab() {
 function exportData(type) {
   if (typeof toast === 'function') toast(`Mengunduh file rekap ${type}...`);
 }
+
+// Memeriksa dan mengunci jika dibuka dari mobile/responsive view
+function checkDesktopView() {
+  const overlay = document.getElementById('desktopOnlyOverlay');
+  if (!overlay) return;
+  
+  if (window.innerWidth <= 1024) {
+    overlay.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+  } else {
+    overlay.style.display = 'none';
+    document.body.style.overflow = '';
+  }
+}
+
+// Jalankan saat load dan saat window di-resize
+window.addEventListener('resize', checkDesktopView);
+document.addEventListener('DOMContentLoaded', checkDesktopView);
