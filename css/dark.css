@@ -411,7 +411,12 @@ html.dark-mode .badge-blue {
   border: 1px solid var(--border) !important;
 }
 
-html.dark-mode .badge-amber {
+html.dark-mode .badge-amber,
+html.dark-mode .badge-warning,
+html.dark-mode .status-menunggu,
+html.dark-mode span[style*="fef3c7" i],
+html.dark-mode span[style*="fffbeb" i],
+html.dark-mode span[style*="ffedd5" i] {
   background: rgba(224, 176, 131, 0.2) !important;
   color: var(--accent) !important;
   border: 1px solid rgba(224, 176, 131, 0.35) !important;
