@@ -76,62 +76,85 @@
 }
 
 /* ============================================================
-   RESPONSIVE FOOTER (TABLET & MOBILE)
+   RESPONSIVE FOOTER (MOBILE VIEW <= 600px) — PERFECT CENTER
    ============================================================ */
-@media (max-width: 900px) {
-  .site-footer {
-    margin-top: 60px;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.8rem 1.2rem;
-    padding: 48px 0 32px;
-  }
-}
-
 @media (max-width: 600px) {
   .site-footer {
     margin-top: 40px;
   }
 
+  /* Grid 1 kolom utuh lurus ke bawah & rata tengah */
   .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1rem;
+    grid-template-columns: 1fr !important;
+    gap: 2rem;
     padding: 32px 0 24px;
+    text-align: center !important;
   }
 
+  /* RESET SPAN: Pastikan div pertama mengambil 1 kolom penuh tanpa miring */
   .footer-grid > div:first-child {
-    grid-column: span 2;
+    grid-column: span 1 !important;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
+  /* Logo Filosovet presisi di tengah tanpa frame/bulatan */
   .site-footer .brand {
-    margin-bottom: 0.5rem !important;
+    justify-content: center !important;
+    margin-bottom: 0.6rem !important;
     font-size: 1.15rem;
+    width: 100% !important;
   }
 
   .site-footer .brand .logo {
-    width: 30px !important;
-    height: 30px !important;
+    width: auto !important;
+    height: 32px !important;
+    border-radius: 0 !important; /* Menghilangkan bentuk bulat/frame */
+    object-fit: contain !important;
+    margin-right: 8px !important;
   }
 
+  /* FIX PARAGRAF DESKRIPSI: Rata tengah sempurna & tidak miring */
   .site-footer p {
     font-size: 0.85rem;
     line-height: 1.5;
+    text-align: center !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    max-width: 90% !important; /* Memberikan batas lebar ideal agar rapi */
   }
 
+  /* Judul & Tautan Menu Rata Tengah */
   .site-footer h4 {
     font-size: 0.98rem;
     margin-bottom: 0.65rem;
+    text-align: center !important;
   }
 
   .site-footer a {
     font-size: 0.88rem;
     margin-bottom: 0.45rem;
+    text-align: center !important;
+  }
+
+  /* Susunan Kontak 4 Baris Rata Tengah */
+  .site-footer div:last-child {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+
+  .site-footer div:last-child p {
+    margin-bottom: 0.4rem;
+    text-align: center !important;
   }
 
   .footer-bottom {
     padding: 1rem 0;
     font-size: 0.8rem;
+    text-align: center !important;
   }
 }
