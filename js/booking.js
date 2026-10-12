@@ -40,34 +40,123 @@ const SERVICES = {
   }
 };
 
-const state = { svc: 'grooming', dateIdx: 0, time: null, typeIdx: 0 };
+const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+const DAY_NAMES = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
 
-/* ---------- Tanggal: 14 hari ke depan ---------- */
-function renderDates() {
-  const wrap = document.getElementById('dateTabs');
-  if (!wrap) return;
-  const days = ['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
-  const months = ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  let html = '';
-  for (let i = 0; i < 14; i++) {
-    const d = new Date(); d.setDate(d.getDate() + i);
-    const label = i === 0 ? 'Hari ini' : days[d.getDay()];
-    html += `<button type="button" class="tab${i===state.dateIdx?' active':''}" data-date="${i}">
-      <small>${label}</small>${d.getDate()} ${months[d.getMonth()]}</button>`;
+const _now = new Date();
+const today = new Date(_now.getFullYear(), _now.getMonth(), _now.getDate());
+
+const state = {
+  svc: 'grooming',
+  selectedDate: new Date(today),
+  viewYear: today.getFullYear(),
+  viewMonth: today.getMonth(),
+  time: null,
+  typeIdx: 0
+};
+
+/* ---------- Kalender Booking: Bulan depan & Batas Bulan Lalu ---------- */
+function renderCalendar() {
+  const grid = document.getElementById('calDaysGrid');
+  const monthNameEl = document.getElementById('calMonthName');
+  const yearNameEl = document.getElementById('calYearName');
+  const prevBtn = document.getElementById('calPrevBtn');
+
+  if (monthNameEl) monthNameEl.textContent = MONTH_NAMES[state.viewMonth];
+  if (yearNameEl) yearNameEl.textContent = state.viewYear;
+
+  // Batasi agar tidak bisa mundur ke bulan sebelum bulan hari ini
+  const isCurrentMonthOrPast = 
+    state.viewYear < today.getFullYear() || 
+    (state.viewYear === today.getFullYear() && state.viewMonth <= today.getMonth());
+
+  if (prevBtn) {
+    prevBtn.disabled = isCurrentMonthOrPast;
+    prevBtn.classList.toggle('disabled', isCurrentMonthOrPast);
   }
-  wrap.innerHTML = html;
-  wrap.querySelectorAll('.tab').forEach(b => b.onclick = () => { 
-    state.dateIdx = +b.dataset.date; 
-    state.time = null; 
-    renderDates(); 
-    renderSlots(); 
-    updateSummary(); 
+
+  if (!grid) return;
+
+  const daysInMonth = new Date(state.viewYear, state.viewMonth + 1, 0).getDate();
+  const firstDayIndex = new Date(state.viewYear, state.viewMonth, 1).getDay(); // 0: Min, 1: Sen, ...
+
+  let html = '';
+
+  // Sel kosong sebelum tanggal 1
+  for (let i = 0; i < firstDayIndex; i++) {
+    html += '<div class="cal-day cal-day-empty" aria-hidden="true"></div>';
+  }
+
+  // Tanggal dalam bulan aktif
+  for (let d = 1; d <= daysInMonth; d++) {
+    const cellDate = new Date(state.viewYear, state.viewMonth, d);
+    const isPast = cellDate.getTime() < today.getTime();
+    const isToday = cellDate.getTime() === today.getTime();
+    const isSelected = cellDate.getTime() === state.selectedDate.getTime();
+
+    if (isPast) {
+      html += `<button type="button" class="cal-day is-disabled" disabled aria-disabled="true" data-day="${d}" title="Tanggal sudah berlalu">
+        <span class="cal-day-num">${d}</span>
+      </button>`;
+    } else {
+      html += `<button type="button" class="cal-day${isSelected ? ' active' : ''}${isToday ? ' is-today' : ''}" data-day="${d}">
+        <span class="cal-day-num">${d}</span>
+        ${isToday ? '<span class="cal-today-indicator" title="Hari ini"></span>' : ''}
+      </button>`;
+    }
+  }
+
+  grid.innerHTML = html;
+
+  // Event handler klik tanggal
+  grid.querySelectorAll('.cal-day:not([disabled])').forEach(btn => {
+    btn.onclick = () => {
+      const day = +btn.dataset.day;
+      state.selectedDate = new Date(state.viewYear, state.viewMonth, day);
+      state.time = null; // reset slot waktu
+      renderCalendar();
+      renderSlots();
+      updateSummary();
+    };
   });
 }
 
+function initCalendarNav() {
+  const prevBtn = document.getElementById('calPrevBtn');
+  const nextBtn = document.getElementById('calNextBtn');
+
+  if (prevBtn) {
+    prevBtn.onclick = () => {
+      const isAtLimit = 
+        state.viewYear < today.getFullYear() || 
+        (state.viewYear === today.getFullYear() && state.viewMonth <= today.getMonth());
+      if (isAtLimit) return;
+
+      state.viewMonth--;
+      if (state.viewMonth < 0) {
+        state.viewMonth = 11;
+        state.viewYear--;
+      }
+      renderCalendar();
+    };
+  }
+
+  if (nextBtn) {
+    nextBtn.onclick = () => {
+      state.viewMonth++;
+      if (state.viewMonth > 11) {
+        state.viewMonth = 0;
+        state.viewYear++;
+      }
+      renderCalendar();
+    };
+  }
+}
+
 /* ---------- Slot waktu (simulasi: beberapa penuh) ---------- */
-function seededFull(svc, dateIdx, slot) {
-  const seed = (dateIdx * 7 + slot.split(':').reduce((a, b) => a + +b, 0) + svc.length) % 10;
+function seededFull(svc, date, slot) {
+  const diffDays = Math.round((date.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  const seed = (Math.abs(diffDays) * 7 + slot.split(':').reduce((a, b) => a + +b, 0) + svc.length) % 10;
   return seed < 3;
 }
 
@@ -79,8 +168,9 @@ function renderSlots() {
   if (!grid) return;
 
   grid.innerHTML = cfg.slots.map(t => {
-    const full = seededFull(state.svc, state.dateIdx, t);
-    return `<button type="button" class="tab" data-time="${t}" ${full ? 'disabled' : ''}>${t}</button>`;
+    const full = seededFull(state.svc, state.selectedDate, t);
+    const isActive = state.time === t;
+    return `<button type="button" class="tab${isActive ? ' active' : ''}" data-time="${t}" ${full ? 'disabled' : ''}>${t}</button>`;
   }).join('');
   
   grid.querySelectorAll('.tab:not([disabled])').forEach(b => b.onclick = () => {
@@ -131,13 +221,12 @@ function updateSummary() {
   const type = cfg.types[state.typeIdx] || cfg.types[0];
   const hotelDurasiEl = document.getElementById('hotelDurasi');
   const durasi = cfg.perDay ? Math.max(1, +(hotelDurasiEl ? hotelDurasiEl.value : 1) || 1) : 1;
-  const d = new Date(); d.setDate(d.getDate() + state.dateIdx);
-  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
-  const months = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const d = state.selectedDate;
+  const isToday = d.getTime() === today.getTime();
 
   const dateLabel = document.getElementById('selectedDateLabel');
   if (dateLabel) {
-    dateLabel.textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+    dateLabel.textContent = `${DAY_NAMES[d.getDay()]}, ${d.getDate()} ${MONTH_NAMES[d.getMonth()]} ${d.getFullYear()}`;
   }
 
   const sumService = document.getElementById('sumService');
@@ -147,7 +236,7 @@ function updateSummary() {
   if (sumType) sumType.textContent = type.name;
 
   const sumDate = document.getElementById('sumDate');
-  if (sumDate) sumDate.textContent = state.dateIdx === 0 ? 'Hari ini' : `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
+  if (sumDate) sumDate.textContent = isToday ? 'Hari ini' : `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()}`;
 
   const sumTime = document.getElementById('sumTime');
   if (sumTime) sumTime.textContent = state.time || '—';
@@ -200,11 +289,16 @@ function initBookingEvents() {
       const hotelDurasi = document.getElementById('hotelDurasi');
       const durasi = cfg.perDay ? Math.max(1, +(hotelDurasi ? hotelDurasi.value : 1) || 1) : 1;
       const code = 'FV-' + Date.now().toString(36).toUpperCase().slice(-6);
-      const d = new Date(); d.setDate(d.getDate() + state.dateIdx);
+      
+      const d = state.selectedDate;
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const dd = String(d.getDate()).padStart(2, '0');
+      const tanggalStr = `${yyyy}-${mm}-${dd}`;
 
       const booking = {
         code, layanan: cfg.label, icon: cfg.icon, tipe: type.name,
-        tanggal: d.toISOString().slice(0, 10), waktu: state.time,
+        tanggal: tanggalStr, waktu: state.time,
         hewan: petName, spesie: document.getElementById('petSpecies')?.value || 'Kucing',
         biaya: type.price * durasi, status: 'Menunggu Konfirmasi',
         catatan: document.getElementById('petNotes')?.value.trim() || ''
@@ -217,7 +311,7 @@ function initBookingEvents() {
       if (codeEl) codeEl.value = code;
       const modalTextEl = document.getElementById('modalText');
       if (modalTextEl) {
-        modalTextEl.textContent = `${cfg.label} ${type.name} untuk ${petName} pada ${state.time} telah terdaftar. Notifikasi telah dikirim ke admin.`;
+        modalTextEl.textContent = `${cfg.label} ${type.name} untuk ${petName} pada ${state.time} (${dd} ${MONTH_NAMES[d.getMonth()]} ${yyyy}) telah terdaftar. Notifikasi telah dikirim ke admin.`;
       }
       const modal = document.getElementById('bookingModal');
       if (modal) modal.style.display = 'grid';
@@ -234,7 +328,8 @@ function initBooking() {
     state.svc = 'grooming';
   }
 
-  renderDates();
+  renderCalendar();
+  initCalendarNav();
   renderService();
   initBookingEvents();
 }

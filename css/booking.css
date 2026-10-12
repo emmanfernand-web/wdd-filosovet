@@ -94,7 +94,19 @@
   width: 100%;
 }
 
-/* ---------- 4. Step 2: Pilih Tanggal (Calendar Chip Scrollable Bar) ---------- */
+/* ---------- 4. Step 2: Pilih Tanggal (Interactive Calendar Grid) ---------- */
+.calendar-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.calendar-card-header h3 {
+  margin-bottom: 0 !important;
+}
+
 #selectedDateLabel {
   font-family: inherit;
   font-size: 0.82rem;
@@ -103,61 +115,245 @@
   padding: 0.35rem 0.85rem;
 }
 
+.booking-calendar {
+  background: var(--surface-alt);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.25rem 1.4rem;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.cal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.cal-title-wrap {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.cal-month-name {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+
+.cal-year-num {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--primary-dark);
+}
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cal-nav-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: var(--transition);
+  padding: 0;
+}
+
+.cal-nav-btn:hover:not(:disabled) {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+}
+
+.cal-nav-btn:disabled,
+.cal-nav-btn.disabled {
+  opacity: 0.35 !important;
+  cursor: not-allowed !important;
+  border-color: var(--border) !important;
+  background: var(--surface-alt) !important;
+  color: var(--muted) !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  text-align: center;
+  margin-bottom: 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cal-weekdays span {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 4px 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cal-weekdays span:first-child {
+  color: var(--danger); /* Minggu (Sunday) */
+}
+
+.cal-days-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.cal-day {
+  width: 100%;
+  min-width: 0;
+  aspect-ratio: 1 / 1;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  background: var(--surface);
+  color: var(--text);
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: var(--transition);
+  font-family: inherit;
+  user-select: none;
+  padding: 0;
+  box-sizing: border-box;
+  touch-action: manipulation;
+}
+
+.cal-day-num {
+  line-height: 1;
+}
+
+.cal-day:hover:not(:disabled) {
+  background: var(--primary-light);
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  transform: translateY(-1px);
+}
+
+.cal-day.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #ffffff !important;
+  font-weight: 800 !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 14px rgba(79, 111, 82, 0.32);
+  transform: translateY(-1px);
+}
+
+.cal-day.is-today:not(.active) {
+  border-color: var(--primary);
+  color: var(--primary-dark);
+  font-weight: 800;
+  background: var(--surface);
+}
+
+.cal-today-indicator {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background-color: var(--primary);
+  position: absolute;
+  bottom: 5px;
+}
+
+.cal-day.active .cal-today-indicator {
+  background-color: #ffffff;
+}
+
+.cal-day:disabled,
+.cal-day.is-disabled {
+  opacity: 0.32 !important;
+  cursor: not-allowed !important;
+  background: transparent !important;
+  color: var(--muted) !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  transform: none !important;
+}
+
+.cal-day-empty,
+.cal-day-outside {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.cal-legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed var(--border);
+  font-size: 0.78rem;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+
+.cal-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.legend-dot.today-dot {
+  border: 1.5px solid var(--primary);
+  background: transparent;
+}
+
+.legend-dot.active-dot {
+  background: var(--primary);
+}
+
+.legend-dot.disabled-dot {
+  background: var(--muted);
+  opacity: 0.5;
+}
+
+/* Fallback dateTabs bila masih ada elemen legacy */
 #dateTabs.tabs {
   display: flex;
   gap: 8px;
   overflow-x: auto;
   white-space: nowrap;
   padding-bottom: 8px;
-  width: 100%;
-  max-width: 100%;
-  box-sizing: border-box;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: thin;
-}
-
-#dateTabs .tab {
-  flex: 0 0 auto;
-  padding: 0.65rem 1.1rem;
-  border-radius: 12px;
-  border: 1.5px solid var(--border);
-  background: var(--surface);
-  font-family: inherit;
-  font-weight: 700;
-  font-size: 0.95rem;
-  color: var(--text);
-  cursor: pointer;
-  transition: var(--transition);
-  text-align: center;
-  line-height: 1.35;
-}
-
-#dateTabs .tab small {
-  display: block;
-  font-family: inherit;
-  font-weight: 600;
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  color: var(--muted);
-  margin-bottom: 2px;
-}
-
-#dateTabs .tab:hover {
-  border-color: var(--primary);
-  color: var(--primary-dark);
-  background: var(--primary-light);
-}
-
-#dateTabs .tab.active {
-  background: var(--primary) !important;
-  color: #ffffff !important;
-  border-color: var(--primary) !important;
-  box-shadow: 0 4px 12px rgba(107, 143, 113, 0.25);
-}
-
-#dateTabs .tab.active small {
-  color: rgba(255, 255, 255, 0.9) !important;
 }
 
 /* ---------- 5. Step 3: Pilih Slot Waktu ---------- */
@@ -283,8 +479,121 @@
   }
 }
 
-@media (max-width: 560px) {
+@media (max-width: 640px) {
+  .card {
+    padding: 1.25rem 1rem !important;
+  }
+
+  .calendar-card-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .calendar-card-header h3 {
+    font-size: 1.05rem !important;
+  }
+
+  #selectedDateLabel {
+    font-size: 0.75rem;
+    padding: 0.28rem 0.65rem;
+  }
+
+  .booking-calendar {
+    padding: 0.85rem 0.6rem !important;
+    border-radius: 14px;
+  }
+
+  .cal-header {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.65rem;
+  }
+
+  .cal-month-name {
+    font-size: 1.1rem;
+  }
+
+  .cal-year-num {
+    font-size: 0.95rem;
+  }
+
+  .cal-nav-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+  }
+
+  .cal-weekdays {
+    gap: 4px;
+    margin-bottom: 6px;
+  }
+
+  .cal-weekdays span {
+    font-size: 0.72rem;
+    padding: 2px 0;
+  }
+
+  .cal-days-grid {
+    gap: 4px;
+  }
+
+  .cal-day {
+    font-size: 0.85rem;
+    border-radius: 8px;
+  }
+
+  .cal-today-indicator {
+    width: 4px;
+    height: 4px;
+    bottom: 3px;
+  }
+
+  .cal-legend {
+    justify-content: center;
+    gap: 12px;
+    margin-top: 0.75rem;
+    padding-top: 0.65rem;
+    font-size: 0.72rem;
+  }
+
   #slotGrid.tabs {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 380px) {
+  .card {
+    padding: 1rem 0.75rem !important;
+  }
+
+  .booking-calendar {
+    padding: 0.65rem 0.4rem !important;
+  }
+
+  .cal-weekdays {
+    gap: 2px;
+  }
+
+  .cal-weekdays span {
+    font-size: 0.65rem;
+  }
+
+  .cal-days-grid {
+    gap: 2px;
+  }
+
+  .cal-day {
+    font-size: 0.78rem;
+    border-radius: 6px;
+  }
+
+  .cal-legend {
+    gap: 8px;
+    font-size: 0.65rem;
+  }
+
+  #slotGrid.tabs {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
