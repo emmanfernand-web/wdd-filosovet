@@ -619,3 +619,76 @@ html.dark-mode .admin-layout tr:hover td {
 html.dark-mode .admin-layout .bar-chart .bar {
   background: linear-gradient(180deg, var(--primary), var(--primary-dark)) !important;
 }
+
+/* ============================================================
+   8. Kalender Booking (Dark Mode)
+   ============================================================ */
+html.dark-mode .booking-calendar {
+  background: var(--surface) !important;
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .cal-header {
+  border-color: var(--border) !important;
+}
+
+html.dark-mode .cal-month-name {
+  color: var(--text) !important;
+}
+
+html.dark-mode .cal-year-num {
+  color: var(--primary) !important;
+}
+
+html.dark-mode .cal-nav-btn {
+  background: var(--surface-alt) !important;
+  border-color: var(--border) !important;
+  color: var(--text) !important;
+}
+
+html.dark-mode .cal-nav-btn:hover:not(:disabled) {
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+html.dark-mode .cal-nav-btn:disabled,
+html.dark-mode .cal-nav-btn.disabled {
+  background: transparent !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: var(--muted) !important;
+  opacity: 0.25 !important;
+}
+
+html.dark-mode .cal-day {
+  background: var(--surface-alt) !important;
+  color: var(--text) !important;
+}
+
+html.dark-mode .cal-day:hover:not(:disabled) {
+  background: var(--primary-light) !important;
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+html.dark-mode .cal-day.active {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
+  color: #ffffff !important;
+}
+
+html.dark-mode .cal-day.is-today:not(.active) {
+  border-color: var(--primary) !important;
+  color: var(--primary) !important;
+  background: var(--surface-alt) !important;
+}
+
+html.dark-mode .cal-day:disabled,
+html.dark-mode .cal-day.is-disabled {
+  background: transparent !important;
+  color: var(--muted) !important;
+  opacity: 0.25 !important;
+}
+
+html.dark-mode .cal-legend {
+  border-color: var(--border) !important;
+}
