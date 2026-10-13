@@ -65,7 +65,7 @@ function animateFlyToCart(sourceEl) {
   if (img && img.src) {
     flyer.innerHTML = `<img src="${img.src}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
   } else {
-    flyer.innerHTML = `<div style="display:grid;place-items:center;height:100%;font-size:1.3rem;background:var(--primary,#6B8F71);color:#fff">🛒</div>`;
+    flyer.innerHTML = `<div style="display:grid;place-items:center;height:100%;background:var(--primary,#6B8F71);color:#fff"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>`;
   }
 
   document.body.appendChild(flyer);
@@ -159,7 +159,19 @@ function renderCartPage() {
   if (!wrap) return;
   const items = getCartDetailed();
   if (!items.length) {
-    wrap.innerHTML = `<div class="empty" style="text-align:center;padding:2.5rem 0"><div class="big" style="font-size:3rem;margin-bottom:0.5rem">🛒</div><h3>Keranjang kosong</h3><p class="muted">Belum ada produk yang dipilih.</p><a href="toko.html" class="btn btn-primary btn-sm" style="margin-top:1rem">Mulai Belanja</a></div>`;
+    wrap.innerHTML = `
+      <div class="empty">
+        <div class="empty-icon-wrap">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="21" r="1"/>
+            <circle cx="20" cy="21" r="1"/>
+            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+          </svg>
+        </div>
+        <h3>Keranjang kosong</h3>
+        <p class="muted">Belum ada produk yang dipilih.</p>
+        <a href="toko.html" class="btn btn-primary btn-sm">Mulai Belanja</a>
+      </div>`;
   } else {
     wrap.innerHTML = items.map(p => `
       <div class="cart-item">
