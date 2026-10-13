@@ -3,7 +3,7 @@
    ============================================================ */
 const SERVICES = {
   grooming: {
-    label: 'Grooming', icon: '✂️',
+    label: 'Grooming', icon: '',
     types: [
       { name: 'Grooming Kucing', price: 120000 },
       { name: 'Grooming Anjing <10kg', price: 150000 },
@@ -15,7 +15,7 @@ const SERVICES = {
     hint: 'Durasi grooming ± 90 menit per slot.'
   },
   konsultasi: {
-    label: 'Konsultasi Dokter Hewan', icon: '🩺',
+    label: 'Konsultasi Dokter Hewan', icon: '',
     types: [
       { name: 'Konsultasi Umum', price: 150000 },
       { name: 'Medical Check-Up', price: 350000 },
@@ -27,7 +27,7 @@ const SERVICES = {
     hint: 'Bawakan kartu vaksin & riwayat kesehatan bila ada.'
   },
   hotel: {
-    label: 'Pet Hotel', icon: '🏨',
+    label: 'Pet Hotel', icon: '',
     types: [
       { name: 'Kandang Reguler', price: 150000 },
       { name: 'Kandang Premium', price: 250000 },

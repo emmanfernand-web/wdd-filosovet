@@ -68,8 +68,8 @@ function switchTab(tabName) {
 function renderStockAlerts() {
   const low = stocksData.filter(s => s.stock < s.min);
   document.getElementById('stockAlert').innerHTML = low.length
-    ? `<span class="bell">🔔</span> <span><strong>${low.length} produk</strong> di bawah batas minimum stok. Segera buat order ke distributor.</span>`
-    : `<span>✅ Semua stok dalam kondisi aman.</span>`;
+    ? `<span class="bell"></span> <span><strong>${low.length} produk</strong> di bawah batas minimum stok. Segera buat order ke distributor.</span>`
+    : `<span>Semua stok dalam kondisi aman.</span>`;
   document.getElementById('stLow').textContent = low.length;
 
   document.getElementById('lowStockList').innerHTML = low.length ? low.map(s => `
@@ -84,10 +84,10 @@ function renderStockAlerts() {
 function getBookings() {
   const custBookings = JSON.parse(localStorage.getItem('fv_bookings') || '[]');
   const sample = [
-    { cust: 'Rania P.', layanan: '✂️ Grooming Kucing', jadwal: 'Hari ini 09:00', status: 'Diproses' },
-    { cust: 'Dimas A.', layanan: '🏨 Pet Hotel — Kandang Premium', jadwal: 'Hari ini 13:00', status: 'Menunggu' },
-    { cust: 'Sinta W.', layanan: '🩺 Medical Check-Up', jadwal: 'Besok 10:30', status: 'Menunggu' },
-    { cust: 'Bayu R.', layanan: '✂️ Grooming Anjing', jadwal: 'Besok 14:30', status: 'Selesai' },
+    { cust: 'Rania P.', layanan: 'Grooming Kucing', jadwal: 'Hari ini 09:00', status: 'Diproses' },
+    { cust: 'Dimas A.', layanan: 'Pet Hotel — Kandang Premium', jadwal: 'Hari ini 13:00', status: 'Menunggu' },
+    { cust: 'Sinta W.', layanan: 'Medical Check-Up', jadwal: 'Besok 10:30', status: 'Menunggu' },
+    { cust: 'Bayu R.', layanan: 'Grooming Anjing', jadwal: 'Besok 14:30', status: 'Selesai' },
   ];
   return [...custBookings.map(b => ({
     cust: b.nama || 'Pelanggan',

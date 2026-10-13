@@ -68,11 +68,13 @@
 }
 
 .site-footer .brand .logo {
-  width: 36px !important;
-  height: 36px !important;
-  border-radius: 50% !important;
-  object-fit: cover !important;
+  height: 38px !important;
+  width: auto !important;
+  max-height: 38px !important;
+  border-radius: 0 !important;
+  object-fit: contain !important;
   margin-right: 10px !important;
+  box-shadow: none !important;
 }
 
 /* ============================================================
@@ -113,8 +115,11 @@
   }
 
   .site-footer .brand .logo {
-    width: 30px !important;
     height: 30px !important;
+    width: auto !important;
+    max-height: 30px !important;
+    border-radius: 0 !important;
+    object-fit: contain !important;
   }
 
   .site-footer p {
