@@ -1,0 +1,88 @@
+/* ============================================================
+   FILOSOVET — css/tokens.css
+   Token desain bersama: dipakai situs publik dan panel admin.
+   Tema terang = default, tema gelap = html.dark-mode.
+   ============================================================ */
+
+:root {
+  /* Sage & Beige Palette (Light Mode - Primary) */
+  --bg: #F5F0E6;              /* Warm beige background */
+  --surface: #FAF6F0;         /* Lighter cream surface */
+  --surface-alt: #EFE9DE;     /* Soft secondary background */
+  --primary: #6B8F71;         /* Sage main accent */
+  --primary-dark: #4F6F52;    /* Darker sage for active/hover states */
+  --primary-light: #E2EBDD;   /* Soft pale sage for badges & highlights */
+  --accent: #D4A373;          /* Soft warm amber/beige accent */
+  --accent-dark: #B38054;     /* Darker warm accent */
+  --accent-light: #FCE8D5;    /* Soft pale amber background */
+  --danger: #C85A54;          /* Soft warm red */
+  --danger-bg: #F9E8E7;       /* Soft red background */
+  --border: #E0D8C8;          /* Soft warm border */
+  --text: #3A332C;            /* Dark warm brown/grey text (not pitch black) */
+  --muted: #62584F;           /* Warm muted text (kontras AA di atas krem) */
+  --text-light: #FFFFFF;
+  --radius: 16px;
+  --radius-sm: 10px;          /* input, chip */
+  --radius-lg: 24px;          /* banner, modal */
+  --radius-pill: 999px;
+  --shadow: 0 12px 30px -6px rgba(58, 51, 44, 0.08);
+  --shadow-hover: 0 20px 35px -10px rgba(107, 143, 113, 0.22);
+  --shadow-sm: 0 4px 12px rgba(58, 51, 44, 0.05);
+  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --transition: all 0.18s ease;
+
+  /* Skala spasi */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 1rem;
+  --space-4: 1.5rem;
+  --space-5: 2.5rem;
+  --space-6: 4rem;
+
+  /* Tinggi kontrol */
+  --control-h: 44px;
+  --control-h-sm: 36px;
+
+  /* Focus ring */
+  --focus-ring: #3F6B6B;
+}
+
+/* Warna semantik status (selaras palet; dipakai chip, badge, banner) */
+:root {
+  --action: #4F6F52;            /* tombol primer solid */
+  --action-hover: #3F5E43;
+  --ok-bg: #E2EBDD;      --ok-fg: #3F5E43;
+  --warn-bg: #FCE8D5;    --warn-fg: #8A5A2B;
+  --bad-bg: #F9E8E7;     --bad-fg: #A23F39;
+  --info-bg: #DDEBF3;    --info-fg: #25536E;
+  --neutral-bg: #EFE9DE; --neutral-fg: #62584F;
+}
+
+/* ---------- Tema gelap ---------- */
+:root.dark-mode,
+html.dark-mode {
+  --focus-ring: #F0C48F;
+  --action: #557A5B;
+  --action-hover: #648C6B;
+  --ok-bg: rgba(143, 166, 138, 0.22);   --ok-fg: #B8CDB3;
+  --warn-bg: rgba(224, 176, 131, 0.18); --warn-fg: #E0B083;
+  --bad-bg: rgba(229, 115, 104, 0.18);  --bad-fg: #F2A29B;
+  --info-bg: rgba(120, 170, 205, 0.2);  --info-fg: #A9CCE3;
+  --neutral-bg: rgba(255, 255, 255, 0.08); --neutral-fg: #A3ACA2;
+  --bg: #1C221D;              /* Warm dark green-brown background */
+  --surface: #273028;         /* Warm dark surface for cards */
+  --surface-alt: #202721;     /* Secondary dark section background */
+  --border: #3A453B;          /* Soft warm dark border */
+  --text: #F5F0E6;            /* Warm beige light text */
+  --muted: #A3ACA2;           /* Soft sage-grey muted text */
+  --primary: #8FA68A;         /* Lighter sage for high dark contrast */
+  --primary-dark: #6B8F71;
+  --primary-light: rgba(143, 166, 138, 0.22);
+  --accent: #E0B083;
+  --accent-dark: #C49266;
+  --danger: #E57368;
+  --danger-bg: rgba(229, 115, 104, 0.18);
+  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
+  --shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
+}

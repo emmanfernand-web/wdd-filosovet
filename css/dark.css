@@ -1,24 +1,7 @@
 /* ============================================================
    FILOSOVET — dark.css (Warm Dark Mode: Sage & Brown Palette)
    ============================================================ */
-:root.dark-mode,
-html.dark-mode {
-  --bg: #1C221D;              /* Warm dark green-brown background */
-  --surface: #273028;         /* Warm dark surface for cards */
-  --surface-alt: #202721;     /* Secondary dark section background */
-  --border: #3A453B;          /* Soft warm dark border */
-  --text: #F5F0E6;            /* Warm beige light text */
-  --muted: #A3ACA2;           /* Soft sage-grey muted text */
-  --primary: #8FA68A;         /* Lighter sage for high dark contrast */
-  --primary-dark: #6B8F71;
-  --primary-light: rgba(143, 166, 138, 0.22);
-  --accent: #E0B083;
-  --accent-dark: #C49266;
-  --danger: #E57368;
-  --danger-bg: rgba(229, 115, 104, 0.18);
-  --shadow-sm: 0 4px 14px rgba(0, 0, 0, 0.4);
-  --shadow: 0 14px 36px rgba(0, 0, 0, 0.5);
-}
+/* Variabel tema gelap ada di css/tokens.css */
 
 /* Background Utama & Section */
 html.dark-mode,
@@ -361,190 +344,24 @@ html.dark-mode .footer-contact svg { color: #B8CDB3; }
 html.dark-mode .footer-col a:hover { color: #B8CDB3; }
 
 /* ============================================================
-   FILOSOVET — High-Contrast Dark Mode (KHUSUS ADMIN DASHBOARD)
+   Halaman publik di Dark Mode (Layanan, Booking, Keranjang, Profil, Login)
    ============================================================ */
 
-/* 1. Variable Override Khusus Dalam Area Admin */
-html.dark-mode .admin-layout {
-  --bg: #141A15 !important;           /* Background hijau-cokelat gelap */
-  --surface: #1E2620 !important;      /* Surface panel background */
-  --surface-alt: #263129 !important;  /* Secondary background untuk item/hover */
-  --border: #354237 !important;       /* Border kontras */
-  --text: #F8F6F0 !important;         /* Teks krem terang kontras tinggi */
-  --muted: #B2BDB1 !important;        /* Teks muted yang mudah dibaca */
-  --primary: #A3C99C !important;      /* Hijau sage terang untuk dark mode */
-  --primary-dark: #7CA175 !important;
-  --primary-light: rgba(163, 201, 156, 0.18) !important;
-  --accent: #F0C093 !important;       /* Warna aksen amber/emas terang */
-  --danger: #FF8A80 !important;       /* Merah terang soft */
-  --danger-bg: rgba(255, 138, 128, 0.15) !important;
-  background-color: var(--bg) !important;
-}
-
-/* 2. Main Area & Sidebar Admin */
-html.dark-mode .admin-main {
-  background-color: var(--bg) !important;
-  color: var(--text) !important;
-}
-
-html.dark-mode .admin-sidebar {
-  background-color: #18201A !important;
-  border-right: 1px solid var(--border) !important;
-}
-
-html.dark-mode .admin-menu a {
-  color: var(--muted) !important;
-}
-
-html.dark-mode .admin-menu a:hover {
-  background: rgba(255, 255, 255, 0.08) !important;
-  color: #FFFFFF !important;
-}
-
-html.dark-mode .admin-menu a.active {
-  background: linear-gradient(135deg, var(--primary-dark), #52734D) !important;
-  color: #FFFFFF !important;
-  font-weight: 700 !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4) !important;
-}
-
-/* 3. Topbar & User Profile */
-html.dark-mode .admin-topbar h1 {
-  color: #FFFFFF !important;
-}
-
-html.dark-mode .admin-topbar .muted {
-  color: var(--muted) !important;
-}
-
-html.dark-mode .admin-user .user-name {
-  color: var(--text) !important;
-}
-
-/* 4. Badges & Status Chips di Admin */
-html.dark-mode .admin-layout .status-chip,
-html.dark-mode .admin-layout .badge {
-  font-weight: 700 !important;
-}
-
-html.dark-mode .admin-layout .status-menunggu,
-html.dark-mode .admin-layout .status-proses {
-  background: rgba(240, 192, 147, 0.18) !important;
-  color: #FFE0C2 !important; /* Terang & mudah dibaca */
-  border: 1px solid rgba(240, 192, 147, 0.4) !important;
-}
-
-html.dark-mode .admin-layout .status-selesai {
-  background: var(--primary-light) !important;
-  color: #C2ECC0 !important;
-  border: 1px solid rgba(163, 201, 156, 0.35) !important;
-}
-
-html.dark-mode .admin-layout .status-batal {
-  background: var(--danger-bg) !important;
-  color: #FFCDD2 !important;
-  border: 1px solid rgba(255, 138, 128, 0.4) !important;
-}
-
-/* 5. Tombol & Link di Dalam Admin */
-html.dark-mode .admin-layout .btn-outline {
-  background: var(--surface-alt) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--text) !important;
-}
-
-html.dark-mode .admin-layout .btn-outline:hover {
-  background: var(--primary-dark) !important;
-  border-color: var(--primary) !important;
-  color: #FFFFFF !important;
-}
-
-html.dark-mode .admin-layout td .btn,
-html.dark-mode .admin-layout td button {
-  background: var(--surface-alt) !important;
-  border: 1px solid var(--border) !important;
-  color: var(--primary) !important;
-  font-weight: 600 !important;
-}
-
-html.dark-mode .admin-layout td .btn:hover,
-html.dark-mode .admin-layout td button:hover {
-  background: var(--primary-dark) !important;
-  color: #FFFFFF !important;
-}
-
-/* 6. Kartu, Panel & Item Stok Menipis */
-html.dark-mode .admin-layout .stat-card,
-html.dark-mode .admin-layout .panel {
-  background-color: var(--surface) !important;
-  border-color: var(--border) !important;
-}
-
-html.dark-mode .admin-layout .stat-card .stat-label {
-  color: var(--muted) !important;
-}
-
-html.dark-mode .admin-layout .stat-card .stat-value {
-  color: #FFFFFF !important;
-}
-
-html.dark-mode .admin-layout #lowStockList > div {
-  background-color: var(--surface-alt) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: 12px !important;
-  padding: 0.85rem 1rem !important;
-}
-
-html.dark-mode .admin-layout #lowStockList strong,
-html.dark-mode .admin-layout #lowStockList span {
-  color: var(--text) !important;
-}
-
-html.dark-mode .admin-layout .panel-head a {
-  color: var(--primary) !important;
-}
-
-/* 7. Tabel Admin */
-html.dark-mode .admin-layout th {
-  background: #18201A !important;
-  color: #FFFFFF !important;
-  font-weight: 700 !important;
-  border-bottom: 2px solid var(--border) !important;
-}
-
-html.dark-mode .admin-layout td {
-  color: #E6E1D8 !important;
-  border-color: var(--border) !important;
-}
-
-html.dark-mode .admin-layout tr:hover td {
-  background: rgba(255, 255, 255, 0.03) !important;
-}
-
-html.dark-mode .admin-layout .bar-chart .bar {
-  background: linear-gradient(180deg, var(--primary), var(--primary-dark)) !important;
-}
-
-/* ============================================================
-   8. Kalender Booking (Dark Mode)
-   ============================================================ */
-
-/* Halaman Layanan di Dark Mode */
+/* Layanan */
 html.dark-mode #layananTabs .tab.active { background: #557A5B !important; color: #fff !important; }
 html.dark-mode .tab-panel .price-foot .product-price,
 html.dark-mode .tab-panel .price-meta { color: #B8CDB3; }
 html.dark-mode .help-card { background: var(--surface) !important; }
 
-/* Booking di Dark Mode */
+/* Booking */
 html.dark-mode .bk .bk-seg .tab.active,
 html.dark-mode .bk .bk-cal-day.active,
 html.dark-mode .bk .bk-slot.active,
 html.dark-mode .bk .bk-badge.done,
 html.dark-mode .bk .lg-active { background: #557A5B; border-color: #557A5B; }
 html.dark-mode .bk .bk-seg .tab { color: var(--text) !important; background: transparent !important; border: 0 !important; }
-html.dark-mode .bk .bk-seg .tab.active { background: #557A5B !important; }
-html.dark-mode .bk .bk-seg .tab.active { color: #fff !important; }
-html.dark-mode .bk .bk-type.active { background: rgba(143,166,138,0.18); border-color: #8FA68A; box-shadow: inset 0 0 0 1px #8FA68A; }
+html.dark-mode .bk .bk-seg .tab.active { background: #557A5B !important; color: #fff !important; }
+html.dark-mode .bk .bk-type.active { background: rgba(143, 166, 138, 0.18); border-color: #8FA68A; box-shadow: inset 0 0 0 1px #8FA68A; }
 html.dark-mode .bk .bk-type-price, html.dark-mode .bk .bk-sum-total strong, html.dark-mode .bk .bk-sum-toggle strong { color: #B8CDB3; }
 html.dark-mode .bk .bk-cal-day.active, html.dark-mode .bk .bk-slot.active * { color: #fff !important; }
 html.dark-mode .bk .bk-cal-day.is-today:not(.active) { color: #E0B083; }
@@ -553,34 +370,34 @@ html.dark-mode .bk .bk-summary { background: var(--surface); border-color: var(-
 html.dark-mode .bk .bk-missing { color: #E0B083; }
 html.dark-mode .bk .bk-missing.ok { color: #B8CDB3; }
 html.dark-mode .bk-modal-box input[readonly] { color: #B8CDB3 !important; }
+html.dark-mode .bk .bk-banner { background: rgba(224, 176, 131, 0.16); color: #F2DCC3; border-color: rgba(224, 176, 131, 0.5); }
 
-/* Keranjang di Dark Mode */
+/* Keranjang */
 html.dark-mode .promo-applied strong, html.dark-mode #rowDiskon span:first-child, html.dark-mode #rowDiskon strong { color: #B8CDB3 !important; }
 html.dark-mode .qty-btn:hover:not(:disabled) { background: #557A5B; }
-html.dark-mode .bk .bk-banner { background: rgba(224,176,131,0.16); color: #F2DCC3; border-color: rgba(224,176,131,0.5); }
 
-/* Profil di Dark Mode */
+/* Profil */
 html.dark-mode .prof .prof-avatar { color: #B8CDB3; }
 html.dark-mode .side-link.active { background: #557A5B !important; color: #fff !important; }
 html.dark-mode .prof .cat-chip.active { background: #557A5B; border-color: #557A5B; color: #fff; }
 html.dark-mode .prof .cat-chip { background: var(--surface); color: var(--text); border-color: var(--border); }
-html.dark-mode .status-konfirmasi { background: rgba(120,170,205,0.2); color: #A9CCE3; }
-html.dark-mode .status-menunggu { background: rgba(224,176,131,0.18); color: #E0B083; }
+html.dark-mode .status-konfirmasi { background: rgba(120, 170, 205, 0.2); color: #A9CCE3; }
+html.dark-mode .status-menunggu { background: rgba(224, 176, 131, 0.18); color: #E0B083; }
 html.dark-mode .status-batal { color: #F2A29B; }
 html.dark-mode .status-selesai { color: #B8CDB3; }
-html.dark-mode .prof .prof-note { background: rgba(224,176,131,0.16); color: #F2DCC3; }
-html.dark-mode .prof .pet-avatar.is-cat { background: rgba(224,176,131,0.18); color: #E0B083; }
+html.dark-mode .prof .prof-note { background: rgba(224, 176, 131, 0.16); color: #F2DCC3; }
+html.dark-mode .prof .pet-avatar.is-cat { background: rgba(224, 176, 131, 0.18); color: #E0B083; }
 html.dark-mode .prof .med-date strong, html.dark-mode .nota-link, html.dark-mode .nd-sum .total dd { color: #B8CDB3; }
 html.dark-mode .rtable tr { background: var(--surface); }
 
-/* Masuk & Daftar di Dark Mode */
-html.dark-mode .auth .auth-tabs { background: rgba(255,255,255,0.08); }
+/* Masuk & Daftar */
+html.dark-mode .auth .auth-tabs { background: rgba(255, 255, 255, 0.08); }
 html.dark-mode .auth .auth-tabs .tab { background: transparent !important; color: var(--text) !important; border: 0 !important; }
 html.dark-mode .auth .auth-tabs .tab.active { background: #557A5B !important; color: #fff !important; }
-html.dark-mode .auth .auth-tabs .tab:hover:not(.active) { background: rgba(255,255,255,0.12) !important; }
+html.dark-mode .auth .auth-tabs .tab:hover:not(.active) { background: rgba(255, 255, 255, 0.12) !important; }
 html.dark-mode .auth .auth-done-icon { color: #B8CDB3; }
 html.dark-mode .auth .auth-aside { background: linear-gradient(150deg, #232C25 0%, #2F3C31 60%, #3F5142 100%); }
 html.dark-mode .auth .auth-aside h1, html.dark-mode .auth .auth-aside strong, html.dark-mode .auth .aside-tag { color: #fff; }
-html.dark-mode .auth .auth-aside p { color: rgba(255,255,255,0.88); }
+html.dark-mode .auth .auth-aside p { color: rgba(255, 255, 255, 0.88); }
 html.dark-mode .auth .link-btn, html.dark-mode .auth .auth-staff a, html.dark-mode .auth .pass-hint.ok { color: #B8CDB3; }
 html.dark-mode .auth .auth-card { background: transparent !important; border: 0 !important; box-shadow: none !important; }
