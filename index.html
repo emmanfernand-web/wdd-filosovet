@@ -26,291 +26,355 @@
 </head>
 <body>
 
-  <!-- HEADER (INLINE) -->
-  <header class="site-header">
-    <div class="container nav-wrap">
-      <a href="index.html" class="brand" title="Kembali ke Beranda">
-        <img src="assets/images/logo_filosovet.png" alt="Filosovet" class="logo">
-      </a>
+  <!-- HEADER: dimuat dari components/header.html -->
+<div id="header-placeholder"></div>
 
-      <nav class="main-nav">
-        <a href="index.html" data-page="index.html">Beranda</a>
-        <a href="pages/daftar-layanan.html" data-page="daftar-layanan.html">Layanan</a>
-        <a href="pages/booking.html" data-page="booking.html">Booking</a>
-        <a href="pages/toko.html" data-page="toko.html">Toko</a>
-        <a href="pages/profil-pelanggan.html" data-page="profil-pelanggan.html">Profil</a>
-      </nav>
-
-      <div class="nav-actions">
-        <a href="pages/keranjang.html" class="cart-link" title="Keranjang">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span class="cart-count" style="display:none">0</span>
-        </a>
-        <a href="pages/auth.html" class="btn-login">Masuk</a>
-        <button class="hamburger" aria-label="Menu">
-          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <!-- CONTAINER SCROLL SNAP UTAMA -->
+  <!-- KONTEN BERANDA -->
   <main class="snap-container">
 
-<!-- SECTION 1: HERO (Modern Split Bionic Layout) -->
-<section class="fullscreen-section hero-section" id="hero">
-  <div class="hero-overlay"></div>
-  
-  <div class="container hero-content">
-    <div class="hero-inner-modern">
-      
-      <!-- SISI KIRI: Headline Utama & CTAs -->
-      <div class="hero-left-content">
-        <div class="status-badge-glow mb-3">
-          <span class="badge-dot"></span>
-          <span>Layanan Darurat &amp; Klinik Buka 24 Jam</span>
-        </div>
-
-        <h1 class="hero-title-modern">
-          Perawatan Medis <br>
-          <span class="gradient-text">&amp; Spa Terbaik</span> <br>
-          Untuk Anabul Anda
-        </h1>
-
-        <p class="hero-desc-modern">
-          Klinik hewan terpadu dengan standar medis modern, dokter hewan berpengalaman, dan fasilitas grooming spa bebas stres.
-        </p>
-
-        <!-- CTAs -->
-        <div class="hero-actions-modern">
-          <a href="pages/booking.html" class="btn btn-accent btn-glow">
-            <span>Booking Konsultasi</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-          </a>
-          <a href="pages/daftar-layanan.html" class="btn btn-glass">
-            Eksplorasi Layanan
-          </a>
-        </div>
-      </div>
-
-      <!-- SISI KANAN: Modern Glass Console & Quick Stats -->
-      <div class="hero-right-console">
-        <div class="hero-glass-card-modern">
-          <div class="console-header">
-            <span class="sec-tag hero-tag">Klinik &amp; Petshop Filosovet</span>
-            <div class="live-pulse" title="Sistem Aktif"></div>
+    <!-- 1. HERO: pilih kebutuhan -> panel & foto menyesuaikan -->
+    <section class="home-hero" id="hero" aria-labelledby="heroTitle">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="hero-pills">
+            <span class="pill pill-status js-open-pill"><span class="pill-dot" aria-hidden="true"></span><strong class="js-open-text">Buka sekarang</strong><span class="js-open-note">sampai 21.00</span></span>
+            <a class="pill pill-emergency js-emergency" href="tel:+6281200000000">Darurat 24 jam</a>
           </div>
 
-          <p class="console-text">
-            Solusi kesehatan &amp; kenyamanan hewan kesayangan Anda kini lebih cepat &amp; praktis dengan booking otomatis.
-          </p>
+          <h1 id="heroTitle">Perawatan medis &amp; grooming <em>penuh kasih</em> untuk anabul Anda</h1>
+          <p class="hero-lead">Klinik hewan dan petshop terpadu: dokter berpengalaman, grooming bebas stres, dan booking online yang praktis.</p>
 
-          <!-- Floating Stats Grid -->
-          <div class="stats-pills-grid">
-            <div class="stat-pill-item">
-              <strong>1.500+</strong>
-              <span>Anabul Ditolong</span>
+          <p class="picker-label" id="pickerLabel">Apa yang anabul Anda butuhkan?</p>
+          <div class="picker" role="tablist" aria-labelledby="pickerLabel" data-tabs data-sync="heroImages">
+            <button type="button" class="picker-tab" role="tab" id="tab-konsultasi" data-key="konsultasi" aria-controls="panel-konsultasi" aria-selected="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg>
+              <span>Periksa &amp; Vaksin</span>
+            </button>
+            <button type="button" class="picker-tab" role="tab" id="tab-grooming" data-key="grooming" aria-controls="panel-grooming" aria-selected="false" tabindex="-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7s6 6.3 6 10.8a6 6 0 0 1-12 0c0-4.5 6-10.8 6-10.8z"/></svg>
+              <span>Grooming</span>
+            </button>
+            <button type="button" class="picker-tab" role="tab" id="tab-hotel" data-key="hotel" aria-controls="panel-hotel" aria-selected="false" tabindex="-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/></svg>
+              <span>Pet Hotel</span>
+            </button>
+            <button type="button" class="picker-tab" role="tab" id="tab-toko" data-key="toko" aria-controls="panel-toko" aria-selected="false" tabindex="-1">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+              <span>Toko &amp; Obat</span>
+            </button>
+          </div>
+
+          <div class="picker-panels">
+            <div class="picker-panel" role="tabpanel" id="panel-konsultasi" aria-labelledby="tab-konsultasi">
+              <p>Konsultasi, vaksinasi, dan medical check-up dengan dokter hewan bersertifikasi.</p>
+              <ul class="picker-meta"><li>Mulai <strong>Rp 100.000</strong></li><li>Pilih jadwal sendiri</li></ul>
+              <div class="hero-actions">
+                <a href="pages/booking.html?layanan=konsultasi" class="btn btn-primary">Booking Konsultasi</a>
+                <a href="pages/daftar-layanan.html" class="btn btn-outline">Lihat detail</a>
+              </div>
             </div>
-            <div class="stat-pill-item">
-              <strong>4.9 ★</strong>
-              <span>Rating Klien</span>
+            <div class="picker-panel" role="tabpanel" id="panel-grooming" aria-labelledby="tab-grooming" hidden>
+              <p>Mandi anti-jamur, potong kuku, styling bulu, dan pembersihan telinga oleh groomer terlatih.</p>
+              <ul class="picker-meta"><li>Mulai <strong>Rp 120.000</strong></li><li>± 90 menit per sesi</li></ul>
+              <div class="hero-actions">
+                <a href="pages/booking.html?layanan=grooming" class="btn btn-primary">Booking Grooming</a>
+                <a href="pages/daftar-layanan.html?tab=grooming" class="btn btn-outline">Lihat detail</a>
+              </div>
             </div>
-            <div class="stat-pill-item">
-              <strong>24/7</strong>
-              <span>Layanan Darurat</span>
+            <div class="picker-panel" role="tabpanel" id="panel-hotel" aria-labelledby="tab-hotel" hidden>
+              <p>Penitipan dengan kandang bersih ber-AC, ruang bermain, dan pemantauan harian.</p>
+              <ul class="picker-meta"><li>Mulai <strong>Rp 150.000</strong> / hari</li><li>Wajib bukti vaksin</li></ul>
+              <div class="hero-actions">
+                <a href="pages/booking.html?layanan=hotel" class="btn btn-primary">Booking Pet Hotel</a>
+                <a href="pages/daftar-layanan.html?tab=hotel" class="btn btn-outline">Lihat detail</a>
+              </div>
+            </div>
+            <div class="picker-panel" role="tabpanel" id="panel-toko" aria-labelledby="tab-toko" hidden>
+              <p>Pakan premium, obat resmi, suplemen, skincare, dan aksesori untuk kucing dan anjing.</p>
+              <ul class="picker-meta"><li>Mulai <strong>Rp 22.000</strong></li><li>Kirim atau ambil di toko</li></ul>
+              <div class="hero-actions">
+                <a href="pages/toko.html" class="btn btn-primary">Belanja di Toko</a>
+              </div>
             </div>
           </div>
         </div>
+
+        <div class="hero-visual">
+          <figure class="hero-photo" id="heroImages">
+            <img src="assets/images/clinic.jpeg" alt="Dokter hewan memeriksa anjing di ruang klinik" data-key="konsultasi" class="active">
+            <img src="assets/images/grooming.jpeg" alt="Groomer memandikan anjing golden retriever" data-key="grooming">
+            <img src="assets/images/pet_hotel.jpeg" alt="Deretan kandang pet hotel yang bersih" data-key="hotel">
+            <img src="assets/images/pet_store.jpeg" alt="Rak produk makanan dan obat hewan di toko" data-key="toko">
+          </figure>
+          <div class="hero-float" aria-label="Rating pelanggan">
+            <strong>4.9 ★</strong>
+            <span>1.500+ anabul sudah kami tangani</span>
+          </div>
+        </div>
       </div>
+    </section>
 
-    </div>
-  </div>
-
-  <!-- Scroll Down Indicator -->
-  <div class="scroll-hint" aria-label="Scroll ke bawah">
-    <span class="scroll-hint-label">SCROLL</span>
-    <div class="scroll-hint-arrow">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
-    </div>
-  </div>
-</section>
-
-    <!-- SECTION 2: LAYANAN UNGGULAN (100vh) -->
-    <section class="fullscreen-section" id="services">
-      <div class="container my-auto">
+    <!-- 2. LAYANAN (bento) -->
+    <section class="home-section" id="services">
+      <div class="container">
         <div class="sec-head">
           <span class="sec-tag">Layanan Kami</span>
-          <h2>Solusi Lengkap untuk Hewan Kesayangan</h2>
-          <p class="muted">Pilih layanan medis dan perawatan terbaik yang dirancang khusus oleh dokter hewan berpengalaman.</p>
+          <h2>Semua kebutuhan anabul, satu tempat</h2>
+          <p class="muted">Pilih layanan untuk melihat detail dan harga.</p>
         </div>
-        <div class="grid grid-4">
-          <a href="pages/daftar-layanan.html" class="card service-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/clinic.jpeg" alt="Klinik &amp; Medis" class="card-img">
+        <div class="bento">
+          <a href="pages/daftar-layanan.html" class="bento-card bento-lg">
+            <img src="assets/images/clinic.jpeg" alt="Dokter hewan di ruang periksa klinik">
+            <div class="bento-body">
+              <span class="bento-price">Mulai Rp 100.000</span>
+              <h3>Klinik &amp; Medis</h3>
+              <p>Konsultasi dokter, vaksinasi, operasi, dan pemeriksaan kesehatan berkala.</p>
+              <span class="bento-more">Lihat layanan <span aria-hidden="true">→</span></span>
             </div>
-            <h3>Klinik &amp; Medis</h3>
-            <p class="muted">Konsultasi dokter, vaksinasi, operasi, dan pemeriksaan kesehatan berkala.</p>
-            <span class="card-link">Selengkapnya →</span>
           </a>
-
-          <a href="pages/daftar-layanan.html" class="card service-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/grooming.jpeg" alt="Grooming Spa" class="card-img">
+          <a href="pages/daftar-layanan.html?tab=grooming" class="bento-card">
+            <img src="assets/images/grooming.jpeg" alt="Anjing sedang dimandikan di salon grooming">
+            <div class="bento-body">
+              <span class="bento-price">Mulai Rp 120.000</span>
+              <h3>Grooming Spa</h3>
+              <p>Mandi anti-jamur, potong kuku, styling bulu.</p>
+              <span class="bento-more">Lihat layanan <span aria-hidden="true">→</span></span>
             </div>
-            <h3>Grooming Spa</h3>
-            <p class="muted">Mandi mandi jamur, potong kuku, styling bulu, dan pembersihan telinga.</p>
-            <span class="card-link">Selengkapnya →</span>
           </a>
-
-          <a href="pages/daftar-layanan.html" class="card service-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/pet_hotel.jpeg" alt="Pet Hotel" class="card-img">
+          <a href="pages/daftar-layanan.html?tab=hotel" class="bento-card">
+            <img src="assets/images/pet_hotel.jpeg" alt="Kandang pet hotel yang bersih">
+            <div class="bento-body">
+              <span class="bento-price">Mulai Rp 150.000 / hari</span>
+              <h3>Pet Hotel</h3>
+              <p>Penitipan nyaman dengan pemantauan harian.</p>
+              <span class="bento-more">Lihat layanan <span aria-hidden="true">→</span></span>
             </div>
-            <h3>Pet Hotel</h3>
-            <p class="muted">Penitipan hewan dengan fasilitas AC, ruang bermain luas, dan pemantauan harian.</p>
-            <span class="card-link">Selengkapnya →</span>
           </a>
-
-          <a href="pages/toko.html" class="card service-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/pet_store.jpeg" alt="Farmasi &amp; Toko" class="card-img">
+          <a href="pages/toko.html" class="bento-card bento-wide">
+            <img src="assets/images/pet_store.jpeg" alt="Rak produk di toko dan farmasi hewan">
+            <div class="bento-body">
+              <span class="bento-price">Mulai Rp 22.000</span>
+              <h3>Farmasi &amp; Toko</h3>
+              <p>Obat resmi, pakan premium, suplemen, dan aksesori.</p>
+              <span class="bento-more">Ke toko <span aria-hidden="true">→</span></span>
             </div>
-            <h3>Farmasi &amp; Toko</h3>
-            <p class="muted">Obat-obatan resmi, pakan premium, suplemen, serta aksesori terlengkap.</p>
-            <span class="card-link">Selengkapnya →</span>
           </a>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 3: MENGAPA FILOSOVET (100vh) -->
-    <section class="fullscreen-section bg-alt keunggulan-section" id="why-us">
-      <div class="container my-auto">
+    <!-- 3. CARA BOOKING -->
+    <section class="home-section bg-alt" id="how">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-tag">Cara Booking</span>
+          <h2>Tiga langkah, tanpa antre</h2>
+        </div>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num" aria-hidden="true">1</span>
+            <h3>Pilih layanan</h3>
+            <p class="muted">Konsultasi, grooming, atau pet hotel. Harga terlihat sebelum Anda memesan.</p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">2</span>
+            <h3>Tentukan jadwal</h3>
+            <p class="muted">Pilih tanggal dan jam yang masih tersedia, lalu isi data hewan.</p>
+          </li>
+          <li class="step">
+            <span class="step-num" aria-hidden="true">3</span>
+            <h3>Datang &amp; dilayani</h3>
+            <p class="muted">Tunjukkan kode booking di klinik. Kami siap menyambut anabul Anda.</p>
+          </li>
+        </ol>
+        <div class="text-center steps-cta">
+          <a href="pages/booking.html" class="btn btn-primary">Mulai Booking</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. KEUNGGULAN (tab) -->
+    <section class="home-section" id="why-us">
+      <div class="container">
         <div class="sec-head">
           <span class="sec-tag">Keunggulan</span>
-          <h2>Mengapa Mempercayakan Anabul ke Filosovet?</h2>
+          <h2>Mengapa mempercayakan anabul ke Filosovet?</h2>
+        </div>
+        <div class="why-grid">
+          <div class="why-tabs" role="tablist" aria-label="Keunggulan Filosovet" aria-orientation="vertical" data-tabs data-sync="whyImages">
+            <button type="button" class="why-tab" role="tab" id="why-tab-dokter" data-key="dokter" aria-controls="why-panel-dokter" aria-selected="true">
+              <strong>Dokter berpengalaman</strong>
+              <span>Standar medis tinggi untuk setiap pasien</span>
+            </button>
+            <button type="button" class="why-tab" role="tab" id="why-tab-fasilitas" data-key="fasilitas" aria-controls="why-panel-fasilitas" aria-selected="false" tabindex="-1">
+              <strong>Fasilitas modern</strong>
+              <span>Peralatan diagnosis dan ruang yang higienis</span>
+            </button>
+            <button type="button" class="why-tab" role="tab" id="why-tab-stres" data-key="stres" aria-controls="why-panel-stres" aria-selected="false" tabindex="-1">
+              <strong>Pendekatan bebas stres</strong>
+              <span>Penanganan lembut agar anabul tidak takut</span>
+            </button>
+          </div>
+          <div class="why-detail">
+            <figure class="why-photo" id="whyImages">
+              <img src="assets/images/great_doctor.jpeg" alt="Tim dokter hewan menangani anjing" data-key="dokter" class="active">
+              <img src="assets/images/modern_facility.jpeg" alt="Fasilitas klinik dan petshop yang modern" data-key="fasilitas">
+              <img src="assets/images/pet_handling.jpeg" alt="Dokter menenangkan kucing saat pemeriksaan" data-key="stres">
+            </figure>
+            <div class="why-panels">
+              <div role="tabpanel" id="why-panel-dokter" aria-labelledby="why-tab-dokter">
+                <p>Tim dokter hewan bersertifikasi menangani setiap pasien, dari pemeriksaan rutin sampai tindakan lanjutan, dengan penjelasan yang jelas untuk pemilik.</p>
+              </div>
+              <div role="tabpanel" id="why-panel-fasilitas" aria-labelledby="why-tab-fasilitas" hidden>
+                <p>Peralatan medis untuk diagnosis akurat serta ruang perawatan yang bersih dan nyaman bagi hewan maupun pemiliknya.</p>
+              </div>
+              <div role="tabpanel" id="why-panel-stres" aria-labelledby="why-tab-stres" hidden>
+                <p>Metode <em>fear-free handling</em>: sentuhan lembut, ruang tenang, dan waktu adaptasi agar anabul merasa aman.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <dl class="stats">
+          <div><dt>Anabul ditolong</dt><dd>1.500+</dd></div>
+          <div><dt>Rating pelanggan</dt><dd>4.9 ★</dd></div>
+          <div><dt>Dokter hewan</dt><dd>3</dd></div>
+          <div><dt>Melayani sejak</dt><dd>2023</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- 5. TIM DOKTER -->
+    <section class="home-section bg-alt" id="team">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-tag">Tim Dokter</span>
+          <h2>Kenali dokter yang menangani anabul Anda</h2>
         </div>
         <div class="grid grid-3">
-          <div class="card feature-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/great_doctor.jpeg" alt="Dokter Berpengalaman" class="card-img">
-            </div>
-            <h3>Dokter Berpengalaman</h3>
-            <p class="muted">Tim dokter hewan bersertifikasi yang menangani setiap pasien dengan standar medis tinggi.</p>
-          </div>
+          <article class="card no-hover doctor-card">
+            <div class="doctor-photo"><span aria-hidden="true">A</span><img src="assets/images/doctors/andini.jpg" alt="Foto drh. Andini" loading="lazy" onerror="this.remove()"></div>
+            <h3>drh. Andini</h3>
+            <p class="doctor-role">Dokter Umum &amp; Vaksinasi</p>
+            <p class="muted">Pemeriksaan rutin, vaksinasi, dan konsultasi kesehatan harian.</p>
+            <a href="pages/booking.html?layanan=konsultasi" class="btn btn-outline btn-sm">Booking konsultasi</a>
+          </article>
+          <article class="card no-hover doctor-card">
+            <div class="doctor-photo"><span aria-hidden="true">P</span><img src="assets/images/doctors/prasetyo.jpg" alt="Foto drh. Prasetyo" loading="lazy" onerror="this.remove()"></div>
+            <h3>drh. Prasetyo</h3>
+            <p class="doctor-role">Bedah &amp; Penyakit Dalam</p>
+            <p class="muted">Tindakan bedah ringan hingga penanganan penyakit dalam.</p>
+            <a href="pages/booking.html?layanan=konsultasi" class="btn btn-outline btn-sm">Booking konsultasi</a>
+          </article>
+          <article class="card no-hover doctor-card">
+            <div class="doctor-photo"><span aria-hidden="true">L</span><img src="assets/images/doctors/larasati.jpg" alt="Foto drh. Larasati" loading="lazy" onerror="this.remove()"></div>
+            <h3>drh. Larasati</h3>
+            <p class="doctor-role">Dermatologi &amp; Gigi</p>
+            <p class="muted">Masalah kulit, bulu, dan perawatan kesehatan gigi.</p>
+            <a href="pages/booking.html?layanan=konsultasi" class="btn btn-outline btn-sm">Booking konsultasi</a>
+          </article>
+        </div>
+      </div>
+    </section>
 
-          <div class="card feature-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/modern_facility.jpeg" alt="Fasilitas Modern" class="card-img">
-            </div>
-            <h3>Fasilitas Modern</h3>
-            <p class="muted">Peralatan medis canggih untuk diagnosis akurat serta ruang perawatan yang higienis dan nyaman.</p>
+    <!-- 6. TESTIMONI -->
+    <section class="home-section" id="testimonials">
+      <div class="container">
+        <div class="sec-head">
+          <span class="sec-tag">Testimoni</span>
+          <h2>Cerita dari pemilik anabul</h2>
+        </div>
+        <div class="testi" data-tabs>
+          <div class="testi-panels">
+            <figure class="testi-quote" role="tabpanel" id="testi-panel-1" aria-labelledby="testi-tab-1">
+              <div class="stars" role="img" aria-label="Rating 5 dari 5">★★★★★</div>
+              <blockquote>“Dokternya sabar dan menjelaskan semuanya dengan jelas. Kucing saya tidak stres sama sekali.”</blockquote>
+            </figure>
+            <figure class="testi-quote" role="tabpanel" id="testi-panel-2" aria-labelledby="testi-tab-2" hidden>
+              <div class="stars" role="img" aria-label="Rating 5 dari 5">★★★★★</div>
+              <blockquote>“Booking online gampang, datang tinggal dilayani. Hasil grooming anjing saya rapi dan wangi.”</blockquote>
+            </figure>
+            <figure class="testi-quote" role="tabpanel" id="testi-panel-3" aria-labelledby="testi-tab-3" hidden>
+              <div class="stars" role="img" aria-label="Rating 5 dari 5">★★★★★</div>
+              <blockquote>“Dititipkan tiga hari dan dapat kabar harian. Pulang-pulang anabul tetap ceria.”</blockquote>
+            </figure>
           </div>
-
-          <div class="card feature-card">
-            <div class="card-img-wrap">
-              <img src="assets/images/pet_handling.jpeg" alt="Pendekatan Bebas Stres" class="card-img">
-            </div>
-            <h3>Pendekatan Bebas Stres</h3>
-            <p class="muted">Metode penanganan hewan yang lembut (<em>fear-free handle</em>) agar anabul tidak merasa takut.</p>
+          <div class="testi-people" role="tablist" aria-label="Pilih testimoni">
+            <button type="button" class="testi-tab" role="tab" id="testi-tab-1" data-key="1" aria-controls="testi-panel-1" aria-selected="true"><span class="testi-avatar" aria-hidden="true">D</span><span><strong>Dewi A.</strong><small>Pemilik Momo</small></span></button>
+            <button type="button" class="testi-tab" role="tab" id="testi-tab-2" data-key="2" aria-controls="testi-panel-2" aria-selected="false" tabindex="-1"><span class="testi-avatar" aria-hidden="true">B</span><span><strong>Budi S.</strong><small>Pemilik Bubu</small></span></button>
+            <button type="button" class="testi-tab" role="tab" id="testi-tab-3" data-key="3" aria-controls="testi-panel-3" aria-selected="false" tabindex="-1"><span class="testi-avatar" aria-hidden="true">R</span><span><strong>Rina K.</strong><small>Pemilik Oyen</small></span></button>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- SECTION 4: CTA BANNER & FOOTER (100vh) -->
-    <section class="fullscreen-section footer-section" id="contact">
-      <div class="container my-auto">
-        <div class="cta-banner">
-          <h2>Siap Memberikan yang Terbaik untuk Anabul?</h2>
-          <p style="margin-bottom: 2rem; opacity: 0.9;">Jadwalkan kunjungan klinik atau booking grooming dalam hitungan detik.</p>
-          <a href="pages/booking.html?layanan=konsultasi" class="btn btn-accent btn-lg">Booking Konsultasi Sekarang</a>
+    <!-- 7. LOKASI & FAQ -->
+    <section class="home-section bg-alt" id="location">
+      <div class="container">
+        <div class="info-grid">
+          <div>
+            <span class="sec-tag">Lokasi</span>
+            <h2 class="info-title">Kunjungi klinik kami</h2>
+            <div class="card no-hover location-card">
+              <span class="pill pill-status js-open-pill"><span class="pill-dot" aria-hidden="true"></span><strong class="js-open-text">Buka sekarang</strong><span class="js-open-note">sampai 21.00</span></span>
+              <ul class="location-list">
+                <li><strong>Alamat</strong><span>Jl. Petshop Raya No. 88, Jakarta</span></li>
+                <li><strong>Klinik reguler</strong><span>Setiap hari, 08.00–21.00</span></li>
+                <li><strong>Layanan darurat</strong><span>24 jam, hubungi nomor darurat</span></li>
+                <li><strong>Telepon</strong><span>(021) 555-0123</span></li>
+              </ul>
+              <div class="hero-actions">
+                <a class="btn btn-primary btn-sm" href="https://www.google.com/maps/search/?api=1&amp;query=Jl.+Petshop+Raya+No.+88" target="_blank" rel="noopener">Petunjuk arah</a>
+                <a class="btn btn-outline btn-sm js-emergency" href="tel:+6281200000000">Telepon darurat</a>
+              </div>
+            </div>
+          </div>
+          <div id="faq">
+            <span class="sec-tag">FAQ</span>
+            <h2 class="info-title">Pertanyaan umum</h2>
+            <div class="faq-list">
+              <details class="faq-item" open>
+                <summary>Apakah harus booking dulu?</summary>
+                <p class="muted">Disarankan agar tidak menunggu. Kasus darurat tetap dilayani langsung, 24 jam.</p>
+              </details>
+              <details class="faq-item">
+                <summary>Berapa lama grooming berlangsung?</summary>
+                <p class="muted">Sekitar 90 menit per sesi, tergantung jenis hewan dan paket yang dipilih.</p>
+              </details>
+              <details class="faq-item">
+                <summary>Apa yang perlu dibawa saat vaksinasi?</summary>
+                <p class="muted">Bawa kartu vaksin dan riwayat kesehatan bila ada. Hewan sebaiknya dalam kondisi sehat saat datang.</p>
+              </details>
+              <details class="faq-item">
+                <summary>Bagaimana cara membatalkan atau menjadwal ulang?</summary>
+                <p class="muted">Buka Profil › Riwayat Booking, lalu pilih Jadwal ulang atau Batalkan.</p>
+              </details>
+            </div>
+          </div>
         </div>
       </div>
-      <!-- FOOTER (INLINE) -->
-      <footer class="site-footer" style="width: 100%;">
-        <div class="container footer-grid">
-          <div>
-            <div class="brand" style="color:#fff;margin-bottom:.8rem">
-              <img src="assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo">
-              Filosovet
-            </div>
-            <p style="font-size:.9rem;max-width:300px">Petshop &amp; Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
-          </div>
-          <div>
-            <h4>Layanan</h4>
-            <a href="pages/daftar-layanan.html">Klinik &amp; Dokter Hewan</a>
-            <a href="pages/daftar-layanan.html">Grooming</a>
-            <a href="pages/daftar-layanan.html">Pet Hotel</a>
-            <a href="pages/toko.html">Toko &amp; Farmasi</a>
-          </div>
-          <div>
-            <h4>Bantuan</h4>
-            <a href="pages/booking.html">Cara Booking</a>
-            <a href="pages/keranjang.html">Keranjang</a>
-            <a href="pages/profil-pelanggan.html">Akun Saya</a>
-          </div>
-          <div>
-            <h4>Kontak</h4>
-            <a href="#">Jl. Petshop Raya No. 88</a>
-            <a href="#">(021) 555-0123</a>
-            <a href="#">halo@filosovet.id</a>
-            <a href="#">Buka setiap hari 08.00–21.00</a>
-          </div>
+    </section>
+
+    <!-- 8. CTA & FOOTER -->
+    <section class="home-section home-end" id="contact">
+      <div class="container">
+        <div class="cta-banner">
+          <h2>Siap memberikan yang terbaik untuk anabul?</h2>
+          <p>Jadwalkan kunjungan klinik atau booking grooming dalam hitungan detik.</p>
+          <a href="pages/booking.html?layanan=konsultasi" class="btn btn-accent">Booking Konsultasi Sekarang</a>
         </div>
-        <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
-      </footer>
+      </div>
+<!-- FOOTER: dimuat dari components/footer.html -->
+<div id="footer-placeholder"></div>
     </section>
 
   </main>
 
+
   <!-- SCRIPTS -->
   <script src="js/cart.js"></script>
   <script src="js/main.js"></script>
+  <script src="js/home.js"></script>
   <script src="js/dark-mode.js"></script>
 
-  <script>
-    // Init nav links tanpa fetch (header sudah inline)
-    (function() {
-      const cartLink = document.querySelector('.cart-link');
-      const loginBtn = document.querySelector('.btn-login');
-      // Set active nav link
-      const currentPage = location.pathname.split('/').pop() || 'index.html';
-      document.querySelectorAll('.main-nav a').forEach(a => {
-        const page = a.getAttribute('data-page');
-        if (page === currentPage || (currentPage === '' && page === 'index.html')) {
-          a.classList.add('active');
-        }
-      });
-      // Update cart badge
-      try {
-        const cart = JSON.parse(localStorage.getItem('fv_cart') || '[]');
-        const n = cart.reduce((s, i) => s + i.qty, 0);
-        document.querySelectorAll('.cart-count').forEach(el => {
-          el.textContent = n;
-          el.style.display = n > 0 ? 'grid' : 'none';
-        });
-      } catch(e) {}
-      // Footer year
-      document.querySelectorAll('.js-year').forEach(el => el.textContent = new Date().getFullYear());
-      // Header scroll effect
-      const header = document.querySelector('.site-header');
-      window.addEventListener('scroll', () => {
-        const snap = document.querySelector('.snap-container');
-        const scrollY = snap ? snap.scrollTop : window.scrollY;
-        if (scrollY > 30) header.classList.add('scrolled');
-        else header.classList.remove('scrolled');
-      });
-      // Hamburger menu
-      const burger = document.querySelector('.hamburger');
-      const nav = document.querySelector('.main-nav');
-      if (burger && nav) {
-        burger.onclick = e => { e.stopPropagation(); nav.classList.toggle('open'); };
-        document.addEventListener('click', e => {
-          if (!nav.contains(e.target) && !burger.contains(e.target)) nav.classList.remove('open');
-        });
-      }
-    })();
-  </script>
 </body>
 </html>

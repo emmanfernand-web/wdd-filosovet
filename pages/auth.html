@@ -29,121 +29,125 @@
 <!-- PLACEHOLDER NAVBAR -->
 <div id="header-placeholder"></div>
 
-<!-- HERO SUB PAGE -->
-<section class="page-hero" style="padding-top: 140px;">
-  <div class="container">
-    <h1>Akun Filosovet</h1>
-    <div class="breadcrumb"><a href="../index.html">Beranda</a> / Masuk / Daftar</div>
-  </div>
-</section>
-
 <!-- MAIN CONTENT FORM -->
-<section class="section">
-  <div class="container" style="max-width:480px">
-    <div class="card">
-      <div class="tabs auth-tabs" style="margin-bottom:1.8rem">
-        <button class="tab active" id="tabLogin" style="flex:1">Masuk</button>
-        <button class="tab" id="tabRegister" style="flex:1">Daftar Akun</button>
+<section class="section auth">
+  <div class="container auth-wrap">
+   <div class="auth-shell">
+
+    <!-- KEUNTUNGAN AKUN -->
+    <aside class="auth-aside" aria-label="Keuntungan akun Filosovet">
+      <span class="aside-tag">Akun Filosovet</span>
+      <h1>Satu akun untuk semua kebutuhan anabul</h1>
+      <ul class="auth-perks">
+        <li>
+          <span class="perk-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+          <div><strong>Booking lebih cepat</strong><p>Data hewan tersimpan, tinggal pilih jadwal.</p></div>
+        </li>
+        <li>
+          <span class="perk-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+          <div><strong>Riwayat &amp; rekam medis</strong><p>Pantau booking, vaksinasi, dan nota belanja.</p></div>
+        </li>
+        <li>
+          <span class="perk-icon" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></span>
+          <div><strong>Belanja &amp; promo</strong><p>Checkout cepat dan akses kode promo anggota.</p></div>
+        </li>
+      </ul>
+    </aside>
+
+    <div class="auth-main">
+      <div class="card auth-card no-hover">
+
+        <!-- SUDAH MASUK -->
+        <div id="authLoggedIn" hidden>
+          <div class="auth-done-icon" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <h2 class="auth-title">Anda sudah masuk</h2>
+          <p class="muted" id="authLoggedAs"></p>
+          <a href="profil-pelanggan.html" class="btn btn-primary btn-block">Buka Profil</a>
+          <button type="button" class="btn btn-outline btn-block" id="authLogout">Keluar Akun</button>
+        </div>
+
+        <div id="authForms">
+          <div class="auth-tabs" role="tablist" aria-label="Masuk atau daftar">
+            <button type="button" class="tab active" id="tabLogin" role="tab" aria-selected="true" aria-controls="formLogin">Masuk</button>
+            <button type="button" class="tab" id="tabRegister" role="tab" aria-selected="false" aria-controls="formRegister" tabindex="-1">Daftar Akun</button>
+          </div>
+
+          <!-- FORM LOGIN -->
+          <form id="formLogin" role="tabpanel" aria-labelledby="tabLogin" novalidate>
+            <div class="form-group">
+              <label for="loginEmail">Email</label>
+              <input type="email" id="loginEmail" placeholder="nama@email.com" autocomplete="email" required aria-describedby="err-loginEmail">
+              <small class="field-error" id="err-loginEmail" role="alert"></small>
+            </div>
+            <div class="form-group">
+              <label for="loginPass">Kata sandi</label>
+              <div class="pass-wrap">
+                <input type="password" id="loginPass" placeholder="Masukkan kata sandi" autocomplete="current-password" required aria-describedby="err-loginPass">
+                <button type="button" class="pass-toggle" data-target="loginPass" aria-label="Tampilkan kata sandi" aria-pressed="false"></button>
+              </div>
+              <small class="field-error" id="err-loginPass" role="alert"></small>
+            </div>
+            <div class="auth-row">
+              <label class="check-label"><input type="checkbox" id="loginRemember" checked> Ingat saya</label>
+              <button type="button" class="link-btn" id="forgotPass">Lupa kata sandi?</button>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Masuk</button>
+            <p class="auth-switch">Belum punya akun? <button type="button" class="link-btn" data-go="register">Daftar sekarang</button></p>
+          </form>
+
+          <!-- FORM REGISTER -->
+          <form id="formRegister" role="tabpanel" aria-labelledby="tabRegister" novalidate hidden>
+            <div class="form-group">
+              <label for="regName">Nama lengkap</label>
+              <input type="text" id="regName" placeholder="Nama Anda" autocomplete="name" required aria-describedby="err-regName">
+              <small class="field-error" id="err-regName" role="alert"></small>
+            </div>
+            <div class="form-group">
+              <label for="regPhone">Nomor HP / WhatsApp</label>
+              <input type="tel" id="regPhone" placeholder="08xxxxxxxxxx" autocomplete="tel" required aria-describedby="err-regPhone">
+              <small class="field-error" id="err-regPhone" role="alert"></small>
+            </div>
+            <div class="form-group">
+              <label for="regEmail">Email</label>
+              <input type="email" id="regEmail" placeholder="nama@email.com" autocomplete="email" required aria-describedby="err-regEmail">
+              <small class="field-error" id="err-regEmail" role="alert"></small>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="regPass">Kata sandi</label>
+                <div class="pass-wrap">
+                  <input type="password" id="regPass" placeholder="Min. 8 karakter" autocomplete="new-password" required aria-describedby="err-regPass passHint">
+                  <button type="button" class="pass-toggle" data-target="regPass" aria-label="Tampilkan kata sandi" aria-pressed="false"></button>
+                </div>
+                <small class="pass-hint" id="passHint">Minimal 8 karakter.</small>
+                <small class="field-error" id="err-regPass" role="alert"></small>
+              </div>
+              <div class="form-group">
+                <label for="regPass2">Ulangi kata sandi</label>
+                <div class="pass-wrap">
+                  <input type="password" id="regPass2" placeholder="Ulangi" autocomplete="new-password" required aria-describedby="err-regPass2">
+                  <button type="button" class="pass-toggle" data-target="regPass2" aria-label="Tampilkan kata sandi" aria-pressed="false"></button>
+                </div>
+                <small class="field-error" id="err-regPass2" role="alert"></small>
+              </div>
+            </div>
+            <label class="check-label terms"><input type="checkbox" id="regAgree" required aria-describedby="err-regAgree"> Saya menyetujui Syarat &amp; Ketentuan Filosovet</label>
+            <small class="field-error" id="err-regAgree" role="alert"></small>
+            <button type="submit" class="btn btn-primary btn-block">Buat Akun</button>
+            <p class="auth-switch">Sudah punya akun? <button type="button" class="link-btn" data-go="login">Masuk</button></p>
+          </form>
+        </div>
       </div>
-
-      <!-- FORM LOGIN -->
-      <form id="formLogin">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="loginEmail" placeholder="nama@email.com" required>
-        </div>
-        <div class="form-group">
-          <label>Kata Sandi</label>
-          <input type="password" id="loginPass" placeholder="••••••••" required>
-        </div>
-        <button type="submit" class="btn btn-primary btn-block mb-3">Masuk</button>
-        <p class="text-center muted" style="font-size:.85rem"><a href="#" style="color:var(--primary)">Lupa kata sandi?</a></p>
-      </form>
-
-      <!-- FORM REGISTER -->
-      <form id="formRegister" style="display:none">
-        <div class="form-group">
-          <label>Nama Lengkap</label>
-          <input type="text" id="regName" placeholder="Nama Anda" required>
-        </div>
-        <div class="form-group">
-          <label>Nomor HP / WhatsApp</label>
-          <input type="tel" id="regPhone" placeholder="08xxxxxxxxxx" required>
-        </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="email" id="regEmail" placeholder="nama@email.com" required>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Kata Sandi</label>
-            <input type="password" id="regPass" placeholder="Min. 8 karakter" required>
-          </div>
-          <div class="form-group">
-            <label>Ulangi Kata Sandi</label>
-            <input type="password" id="regPass2" placeholder="Ulangi" required>
-          </div>
-        </div>
-        <label class="filter-check mb-3" style="font-size:.88rem">
-          <input type="checkbox" id="regAgree" required> Saya menyetujui Syarat & Ketentuan Filosovet
-        </label>
-        <button type="submit" class="btn btn-primary btn-block">Buat Akun</button>
-      </form>
+      <p class="auth-staff">Untuk staf: <a href="dashboard-admin.html">Masuk Dashboard Admin →</a></p>
     </div>
-    <p class="text-center muted mt-3" style="margin-top:1.2rem;font-size:.88rem">
-      Untuk staf: <a href="dashboard-admin.html" style="color:var(--primary);font-weight:600">Masuk Dashboard Admin →</a>
-    </p>
+   </div>
   </div>
 </section>
-
-<!-- PLACEHOLDER FOOTER -->
-<div id="footer-placeholder"></div>
 
 <!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
 <script src="../js/main.js"></script>
 <script src="../js/dark-mode.js"></script>
 
-<script>
-// Switcher Tab Login & Register
-const tLogin = document.getElementById('tabLogin'), tRegister = document.getElementById('tabRegister');
-const fLogin = document.getElementById('formLogin'), fRegister = document.getElementById('formRegister');
-
-tLogin.onclick = () => { 
-  tLogin.classList.add('active'); 
-  tRegister.classList.remove('active'); 
-  fLogin.style.display='block'; 
-  fRegister.style.display='none'; 
-};
-
-tRegister.onclick = () => { 
-  tRegister.classList.add('active'); 
-  tLogin.classList.remove('active'); 
-  fRegister.style.display='block'; 
-  fLogin.style.display='none'; 
-};
-
-// Handler Submit Login
-fLogin.addEventListener('submit', e => {
-  e.preventDefault();
-  const email = document.getElementById('loginEmail').value;
-  localStorage.setItem('fv_user', JSON.stringify({ name: email.split('@')[0], email }));
-  toast('Berhasil masuk! Mengalihkan...');
-  // Pengalihan ke profil-pelanggan.html yang berada di folder yang sama (pages/)
-  setTimeout(() => location.href = 'profil-pelanggan.html', 900);
-});
-
-// Handler Submit Register
-fRegister.addEventListener('submit', e => {
-  e.preventDefault();
-  const p1 = document.getElementById('regPass').value, p2 = document.getElementById('regPass2').value;
-  if (p1.length < 8) return toast('Kata sandi minimal 8 karakter', 'error');
-  if (p1 !== p2) return toast('Kata sandi tidak sama', 'error');
-  const name = document.getElementById('regName').value;
-  localStorage.setItem('fv_user', JSON.stringify({ name, email: document.getElementById('regEmail').value }));
-  toast('Akun berhasil dibuat! Mengalihkan...');
-  // Pengalihan ke profil-pelanggan.html yang berada di folder yang sama (pages/)
-  setTimeout(() => location.href = 'profil-pelanggan.html', 900);
-});
-</script>
+<script src="../js/auth.js"></script>
 </body>
 </html>

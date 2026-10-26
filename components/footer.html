@@ -1,32 +1,28 @@
+<!-- Dimuat lewat fetch() oleh js/main.js. Tag <body> menjaga Live Server menyisipkan script di akhir, bukan di tengah komponen. -->
+<body>
 <footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <div class="brand" style="color:#fff;margin-bottom:.8rem">
-        <img src="assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo"> 
-        Filosovet
+  <div class="container footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo" aria-label="Filosovet, kembali ke Beranda"><img src="assets/images/logo_filosovet.png" alt="Filosovet" class="logo"></a>
+        <p class="footer-tagline">Merawat kesehatan dan kebahagiaan anabul Anda sejak 2023.</p>
       </div>
-      <p style="font-size:.9rem;max-width:300px">Petshop &amp; Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
+      <nav class="footer-col" aria-label="Layanan">
+        <h4>Layanan</h4>
+        <a href="pages/daftar-layanan.html">Klinik &amp; Dokter Hewan</a>
+        <a href="pages/daftar-layanan.html?tab=grooming">Grooming</a>
+        <a href="pages/daftar-layanan.html?tab=hotel">Pet Hotel</a>
+        <a href="pages/toko.html">Farmasi &amp; Toko</a>
+      </nav>
+      <div class="footer-col footer-contact">
+        <h4>Kontak</h4>
+        <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg><span>Jl. Petshop Raya No. 88, Jakarta</span></p>
+        <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg><a href="tel:+62215550123">(021) 555-0123</a></p>
+        <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"/><polyline points="22 6 12 13 2 6"/></svg><a href="mailto:halo@filosovet.id">halo@filosovet.id</a></p>
+        <p><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Klinik 08.00–21.00 · Darurat 24 jam</span></p>
+      </div>
     </div>
-    <div>
-      <h4>Layanan</h4>
-      <a href="daftar-layanan.html">Klinik &amp; Dokter Hewan</a>
-      <a href="daftar-layanan.html">Grooming</a>
-      <a href="daftar-layanan.html">Pet Hotel</a>
-      <a href="toko.html">Toko &amp; Farmasi</a>
-    </div>
-    <div>
-      <h4>Bantuan</h4>
-      <a href="booking.html">Cara Booking</a>
-      <a href="keranjang.html">Keranjang</a>
-      <a href="profil-pelanggan.html">Akun Saya</a>
-    </div>
-    <div>
-      <h4>Kontak</h4>
-      <a href="#">Jl. Petshop Raya No. 88</a>
-      <a href="#">(021) 555-0123</a>
-      <a href="#">halo@filosovet.id</a>
-      <a href="#">Buka setiap hari 08.00–21.00</a>
-    </div>
+    <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
   </div>
-  <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
 </footer>
+</body>

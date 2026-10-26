@@ -1,143 +1,70 @@
 /* ============================================================
-   FILOSOVET — css/auth.css (Autentikasi / Login & Register)
+   FILOSOVET — css/auth.css (Masuk & Daftar)
    ============================================================ */
 
-.auth-container {
-  max-width: 480px;
-  margin: 0 auto;
-  width: 100%;
-}
+/* Layar penuh terbagi dua: panel hijau di kiri, form langsung di atas krem di kanan */
+.auth { padding: 0; background: var(--bg); }
+.auth .auth-wrap { width: 100%; max-width: none; margin: 0; padding: 0; }
+.auth .auth-shell { display: grid; grid-template-columns: 1fr 1fr; min-height: 100vh; }
 
-.auth-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 2.2rem;
-  box-shadow: var(--shadow-sm);
-  transition: var(--transition);
+.auth .auth-aside {
+  position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: center; gap: 1.6rem;
+  padding: 120px clamp(2rem, 6vw, 5.5rem) 3rem; color: #fff;
+  background: linear-gradient(150deg, #3F5E43 0%, #4F7154 60%, #6B8F71 100%);
 }
+.auth .auth-aside::before, .auth .auth-aside::after { content: ''; position: absolute; border-radius: 50%; background: rgba(255, 255, 255, 0.07); pointer-events: none; }
+.auth .auth-aside::before { width: 340px; height: 340px; right: -110px; top: -110px; }
+.auth .auth-aside::after { width: 240px; height: 240px; left: -80px; bottom: -90px; background: rgba(255, 255, 255, 0.05); }
+.auth .auth-aside > * { position: relative; z-index: 1; max-width: 460px; }
+.auth .aside-tag { display: none; }
+.auth .auth-aside h1 { font-family: var(--font-serif); font-size: 2.2rem; line-height: 1.2; color: #fff; }
+.auth .auth-perks { display: grid; gap: 1.1rem; }
+.auth .auth-perks li { display: flex; gap: 14px; align-items: flex-start; }
+.auth .perk-icon { display: grid; place-items: center; flex-shrink: 0; width: 40px; height: 40px; border-radius: 12px; background: rgba(255, 255, 255, 0.16); color: #fff; }
+.auth .auth-perks strong { display: block; font-size: 0.98rem; color: #fff; margin-bottom: 0.1rem; }
+.auth .auth-perks p { font-size: 0.88rem; color: rgba(255, 255, 255, 0.9); }
 
-/* Auth Tabs Segmented Bar */
-.tabs.auth-tabs,
-.auth-tabs,
-.card .tabs {
-  display: flex !important;
-  gap: 6px !important;
-  background: var(--primary-light, #E2EBDD) !important;
-  padding: 6px !important;
-  border-radius: 999px !important;
-  margin-bottom: 1.8rem !important;
-  border: 1px solid var(--border) !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-}
+/* Form tanpa kartu */
+.auth .auth-main { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding: clamp(150px, 19vh, 190px) clamp(1.5rem, 5vw, 4rem) 3rem; }
+.auth .auth-card { width: 100%; max-width: 420px; padding: 0; border: 0; border-radius: 0; box-shadow: none; background: transparent; }
+.auth .auth-card[hidden], .auth [hidden] { display: none !important; }
+.auth .auth-title { font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: 0.4rem; }
+.auth #authLoggedIn { display: grid; gap: 0.8rem; text-align: center; }
+.auth .auth-done-icon { width: 56px; height: 56px; margin: 0 auto 0.4rem; display: grid; place-items: center; border-radius: 50%; background: var(--primary-light); color: var(--primary-dark); }
 
-.tabs.auth-tabs .tab,
-.auth-tabs .tab,
-.card .tabs .tab {
-  flex: 1 !important;
-  text-align: center !important;
-  padding: 0.75rem 1rem !important;
-  border-radius: 999px !important;
-  border: 0 !important;
-  background: transparent !important;
-  font-weight: 700 !important;
-  font-size: 0.95rem !important;
-  color: var(--muted) !important;
-  font-family: inherit !important;
-  cursor: pointer !important;
-  transition: var(--transition) !important;
-  box-shadow: none !important;
-  outline: none !important;
-}
+/* Tab segmented */
+.auth .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 5px; margin-bottom: 1.6rem; background: var(--primary-light); border-radius: var(--radius-pill); }
+.auth .auth-tabs .tab { min-height: var(--control-h); border: 0; border-radius: var(--radius-pill); background: transparent; font-weight: 700; font-size: 0.95rem; color: var(--text); cursor: pointer; transition: var(--transition); }
+.auth .auth-tabs .tab:hover { background: var(--surface); }
+.auth .auth-tabs .tab.active { background: var(--primary-dark); color: #fff; }
 
-.tabs.auth-tabs .tab:hover,
-.auth-tabs .tab:hover,
-.card .tabs .tab:hover {
-  color: var(--primary-dark) !important;
-  background: var(--surface) !important;
-}
+/* Form */
+.auth .form-group { margin-bottom: 1.1rem; }
+.auth .pass-wrap { position: relative; }
+.auth .pass-wrap input { padding-right: 3rem; }
+.auth .pass-toggle { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 40px; height: 40px; display: grid; place-items: center; border: 0; background: none; color: var(--muted); border-radius: 50%; cursor: pointer; }
+.auth .pass-toggle:hover { color: var(--text); background: var(--primary-light); }
+.auth .pass-hint { display: block; margin-top: 0.3rem; font-size: 0.8rem; color: var(--muted); }
+.auth .pass-hint.ok { color: var(--primary-dark); }
+.auth .field-error { display: block; margin-top: 0.3rem; font-size: 0.82rem; color: var(--danger); }
+.auth .field-error:empty { display: none; }
+.auth input.is-invalid { border-color: var(--danger); }
 
-.tabs.auth-tabs .tab.active,
-.auth-tabs .tab.active,
-.card .tabs .tab.active {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(79, 111, 82, 0.28) !important;
-}
+.auth .auth-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 1.2rem; }
+.auth .check-label { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 0.88rem; font-weight: 500; cursor: pointer; }
+.auth .check-label input { width: 18px; height: 18px; accent-color: var(--primary-dark); }
+.auth .check-label.terms { margin-bottom: 0.4rem; }
+.auth #formRegister .btn { margin-top: 1rem; }
+.auth .link-btn { background: none; border: 0; padding: 0; min-height: 32px; font-weight: 700; font-size: 0.88rem; color: var(--primary-dark); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.auth .link-btn:hover { color: var(--text); }
+.auth .auth-switch { margin-top: 1.1rem; text-align: center; font-size: 0.9rem; color: var(--muted); }
+.auth .auth-staff { margin-top: 2rem; width: 100%; max-width: 420px; text-align: center; font-size: 0.88rem; color: var(--muted); }
+.auth .auth-staff a { font-weight: 700; color: var(--primary-dark); }
 
-/* Form Grouping & Controls */
-.auth-card label,
-.card label {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 0.4rem;
-}
-
-.auth-card input[type="text"],
-.auth-card input[type="email"],
-.auth-card input[type="password"],
-.auth-card input[type="tel"] {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text);
-  font-family: inherit;
-  font-size: 0.95rem;
-  transition: var(--transition);
-}
-
-.auth-card input:focus {
-  outline: none;
-  border-color: var(--primary);
-  box-shadow: 0 0 0 4px rgba(107, 143, 113, 0.18);
-}
-
-.auth-link {
-  color: var(--primary-dark);
-  font-weight: 600;
-  transition: var(--transition);
-}
-
-.auth-link:hover {
-  color: var(--primary);
-  text-decoration: underline;
-}
-
-/* Dark Mode Overrides for Auth Tabs */
-html.dark-mode .tabs.auth-tabs,
-html.dark-mode .auth-tabs,
-html.dark-mode .card .tabs {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border-color: var(--border) !important;
-}
-
-html.dark-mode .tabs.auth-tabs .tab,
-html.dark-mode .auth-tabs .tab,
-html.dark-mode .card .tabs .tab {
-  color: var(--muted) !important;
-  background: transparent !important;
-  border: none !important;
-}
-
-html.dark-mode .tabs.auth-tabs .tab:hover,
-html.dark-mode .auth-tabs .tab:hover,
-html.dark-mode .card .tabs .tab:hover {
-  color: #ffffff !important;
-  background: rgba(255, 255, 255, 0.12) !important;
-}
-
-html.dark-mode .tabs.auth-tabs .tab.active,
-html.dark-mode .auth-tabs .tab.active,
-html.dark-mode .card .tabs .tab.active {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-  color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3) !important;
-}
-
-html.dark-mode .auth-link {
-  color: var(--primary) !important;
+@media (max-width: 900px) {
+  .auth .auth-shell { grid-template-columns: 1fr; min-height: 0; }
+  .auth .auth-aside { padding: 104px 1.5rem 1.8rem; gap: 0.8rem; }
+  .auth .auth-aside h1 { font-size: 1.5rem; }
+  .auth .auth-perks { display: none; }
+  .auth .auth-main { padding: 1.8rem 1.25rem 2.5rem; }
 }
