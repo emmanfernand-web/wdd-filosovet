@@ -21,79 +21,8 @@ const PRODUCTS = [
 ];
 const CAT_LABEL = { makanan: 'Makanan', obat: 'Obat & Vitamin', skincare: 'Skincare', aksesoris: 'Aksesoris', almed: 'Alat Medis' };
 
-/* ---------- Animasi Terbang ke Keranjang ---------- */
-function animateFlyToCart(sourceEl) {
-  if (!sourceEl) return;
-  
-  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    return;
-  }
-
-  const targetEl = document.querySelector('.cart-link');
-  if (!targetEl) return;
-
-  const cardEl = sourceEl.closest('.product-card') || sourceEl;
-  const thumbEl = cardEl.querySelector('.product-thumb img') || cardEl.querySelector('.product-thumb') || sourceEl;
-
-  const srcRect = (thumbEl || sourceEl).getBoundingClientRect();
-  const targetRect = targetEl.getBoundingClientRect();
-
-  const flyer = document.createElement('div');
-  flyer.className = 'cart-flyer';
-  flyer.style.cssText = `
-    position: fixed;
-    z-index: 99999;
-    left: ${srcRect.left + srcRect.width / 2 - 24}px;
-    top: ${srcRect.top + srcRect.height / 2 - 24}px;
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
-    pointer-events: none;
-    transition: left 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
-                top 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
-                width 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
-                height 700ms cubic-bezier(0.2, 0.8, 0.25, 1),
-                opacity 700ms ease,
-                transform 700ms ease;
-    border: 2px solid var(--primary, #6B8F71);
-    background: var(--surface, #FAF6F0);
-  `;
-
-  const img = thumbEl.tagName === 'IMG' ? thumbEl : (thumbEl.querySelector ? thumbEl.querySelector('img') : null);
-  if (img && img.src) {
-    flyer.innerHTML = `<img src="${img.src}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
-  } else {
-    flyer.innerHTML = `<div style="display:grid;place-items:center;height:100%;background:var(--primary,#6B8F71);color:#fff"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></div>`;
-  }
-
-  document.body.appendChild(flyer);
-
-  requestAnimationFrame(() => {
-    flyer.style.left = `${targetRect.left + targetRect.width / 2 - 12}px`;
-    flyer.style.top = `${targetRect.top + targetRect.height / 2 - 12}px`;
-    flyer.style.width = '24px';
-    flyer.style.height = '24px';
-    flyer.style.opacity = '0.3';
-    flyer.style.transform = 'scale(0.3) rotate(360deg)';
-  });
-
-  setTimeout(() => {
-    flyer.remove();
-    if (targetEl.animate) {
-      targetEl.animate([
-        { transform: 'scale(1)' },
-        { transform: 'scale(1.35) rotate(-8deg)' },
-        { transform: 'scale(0.95)' },
-        { transform: 'scale(1)' }
-      ], { duration: 350, easing: 'ease-out' });
-    }
-  }, 700);
-}
-
 /* ---------- Keranjang (localStorage) ---------- */
-function addToCart(id, qty = 1, triggerEl = null) {
+function addToCart(id, qty = 1) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p || p.stock <= 0) {
     toast('Maaf, barang ini sedang habis', 'error');
@@ -111,11 +40,8 @@ function addToCart(id, qty = 1, triggerEl = null) {
     cart.push({ id, qty: Math.min(qty, p.stock) });
   }
 
-  const sourceEl = triggerEl || (window.event ? window.event.target : null);
-  animateFlyToCart(sourceEl);
-
   saveCart(cart);
-  toast(`${p.name} ditambahkan ke keranjang`);
+  toast('Ditambahkan ke keranjang');
 }
 
 function setQty(id, qty) {
@@ -137,21 +63,48 @@ function getCartDetailed() {
 }
 
 /* ---------- Halaman Keranjang ---------- */
+const PROMOS = { FILO10: 0.10 };
+const SHIPPING_FEE = 15000;
+const ICON_TRASH = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>';
+const ICON_BOX = '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><line x1="12" y1="13" x2="12" y2="21"/></svg>';
 let promo = 0;
+let promoCode = '';
+let notaOpener = null;
+
 function initKeranjang() {
   renderCartPage();
+  const input = document.getElementById('promoInput');
+  const msg = document.getElementById('promoMsg');
   const applyPromoBtn = document.getElementById('applyPromo');
-  if (applyPromoBtn) {
-    applyPromoBtn.onclick = () => {
-      const v = document.getElementById('promoInput')?.value.trim().toUpperCase() || '';
-      if (v === 'FILO10') { promo = 0.10; toast('Kode promo FILO10 dipakai — diskon 10%'); }
-      else { promo = 0; toast('Kode promo tidak valid', 'error'); }
-      renderCartPage();
-    };
-  }
+  const applyCode = () => {
+    const v = (input?.value || '').trim().toUpperCase();
+    if (PROMOS[v]) {
+      promo = PROMOS[v]; promoCode = v;
+      if (msg) { msg.textContent = ''; msg.classList.remove('error'); }
+      if (input) input.value = '';
+      toast(`Kode promo ${v} dipakai`);
+    } else {
+      if (msg) { msg.textContent = v ? 'Kode promo tidak valid.' : 'Masukkan kode promo terlebih dahulu.'; msg.classList.add('error'); }
+    }
+    renderCartPage();
+  };
+  if (applyPromoBtn) applyPromoBtn.onclick = applyCode;
+  if (input) input.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyCode(); } });
+  const removeBtn = document.getElementById('removePromo');
+  if (removeBtn) removeBtn.onclick = () => { promo = 0; promoCode = ''; renderCartPage(); };
+
   document.querySelectorAll('input[name=ship]').forEach(r => r.addEventListener('change', renderCartPage));
   const btnCheckout = document.getElementById('btnCheckout');
   if (btnCheckout) btnCheckout.onclick = checkout;
+  document.addEventListener('keydown', trapNotaKeys);
+}
+
+function cartTotals(items) {
+  const subtotal = items.reduce((s, p) => s + p.price * p.qty, 0);
+  const ambil = document.querySelector('input[name=ship]:checked')?.value === 'ambil';
+  const ongkir = ambil || subtotal === 0 ? 0 : SHIPPING_FEE;
+  const diskon = Math.round(subtotal * promo);
+  return { subtotal, ambil, ongkir, diskon, total: subtotal - diskon + ongkir };
 }
 
 function renderCartPage() {
@@ -168,49 +121,47 @@ function renderCartPage() {
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
           </svg>
         </div>
-        <h3>Keranjang kosong</h3>
-        <p class="muted">Belum ada produk yang dipilih.</p>
-        <a href="toko.html" class="btn btn-primary btn-sm">Mulai Belanja</a>
+        <h3>Keranjang masih kosong</h3>
+        <p class="muted">Belum ada produk yang dipilih. Yuk lihat pakan, obat, dan aksesori untuk anabul Anda.</p>
+        <a href="toko.html" class="btn btn-primary">Mulai Belanja</a>
       </div>`;
   } else {
     wrap.innerHTML = items.map(p => `
       <div class="cart-item">
-        <div class="cart-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="cart-img">` : (p.icon || '📦')}</div>
+        <div class="cart-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="cart-img">` : ICON_BOX}</div>
         <div class="cart-info">
           <div class="cart-name">${p.name}</div>
           <div class="cart-unit-price">${rupiah(p.price)} / item</div>
-          <div class="qty-control">
-            <button type="button" class="qty-btn" onclick="setQty(${p.id}, ${p.qty - 1})" aria-label="Kurangi kuantitas">−</button>
-            <span class="qty-num">${p.qty}</span>
-            <button type="button" class="qty-btn" onclick="setQty(${p.id}, ${p.qty + 1})" aria-label="Tambah kuantitas">+</button>
+          <div class="qty-control" role="group" aria-label="Jumlah ${p.name}">
+            <button type="button" class="qty-btn" onclick="setQty(${p.id}, ${p.qty - 1})" aria-label="Kurangi jumlah ${p.name}">−</button>
+            <span class="qty-num" aria-live="polite">${p.qty}</span>
+            <button type="button" class="qty-btn" onclick="setQty(${p.id}, ${p.qty + 1})" aria-label="Tambah jumlah ${p.name}" ${p.qty >= p.stock ? 'disabled' : ''}>+</button>
           </div>
         </div>
         <div class="cart-right">
           <div class="line-total">${rupiah(p.price * p.qty)}</div>
-          <button type="button" class="remove-btn" onclick="setQty(${p.id}, 0)">🗑 Hapus</button>
+          <button type="button" class="remove-btn" onclick="setQty(${p.id}, 0)" aria-label="Hapus ${p.name} dari keranjang">${ICON_TRASH} Hapus</button>
         </div>
       </div>`).join('');
   }
 
-  const subtotal = items.reduce((s, p) => s + p.price * p.qty, 0);
-  const ambil = document.querySelector('input[name=ship]:checked')?.value === 'ambil';
-  const ongkir = ambil || subtotal === 0 ? 0 : 15000;
-  const diskon = Math.round(subtotal * promo);
+  const t = cartTotals(items);
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('sumSubtotal', rupiah(t.subtotal));
+  set('sumOngkir', t.subtotal === 0 ? '—' : (t.ongkir === 0 ? 'Gratis' : rupiah(t.ongkir)));
+  set('sumTotal', rupiah(t.total));
 
-  const sumSub = document.getElementById('sumSubtotal');
-  if (sumSub) sumSub.textContent = rupiah(subtotal);
-
+  // Diskon hanya tampil setelah kode promo valid dipakai
   const rowDiskon = document.getElementById('rowDiskon');
-  if (rowDiskon) rowDiskon.style.display = diskon > 0 ? 'flex' : 'none';
-
-  const sumDiskon = document.getElementById('sumDiskon');
-  if (sumDiskon) sumDiskon.textContent = '-' + rupiah(diskon);
-
-  const sumOngkir = document.getElementById('sumOngkir');
-  if (sumOngkir) sumOngkir.textContent = ongkir === 0 ? 'GRATIS' : rupiah(ongkir);
-
-  const sumTotal = document.getElementById('sumTotal');
-  if (sumTotal) sumTotal.textContent = rupiah(subtotal - diskon + ongkir);
+  const applied = document.getElementById('promoApplied');
+  const hasPromo = promo > 0 && items.length > 0;
+  if (rowDiskon) rowDiskon.hidden = !hasPromo;
+  if (applied) applied.hidden = !hasPromo;
+  if (hasPromo) {
+    set('diskonLabel', `Diskon ${promoCode} (${Math.round(promo * 100)}%)`);
+    set('sumDiskon', '-' + rupiah(t.diskon));
+    set('promoCodeName', promoCode);
+  }
 
   const btnCheckout = document.getElementById('btnCheckout');
   if (btnCheckout) btnCheckout.disabled = items.length === 0;
@@ -219,38 +170,68 @@ function renderCartPage() {
 function checkout() {
   const items = getCartDetailed();
   if (!items.length) return;
-  const subtotal = items.reduce((s, p) => s + p.price * p.qty, 0);
-  const ambil = document.querySelector('input[name=ship]:checked')?.value === 'ambil';
-  const ongkir = ambil ? 0 : 15000;
-  const total = subtotal - Math.round(subtotal * promo) + ongkir;
+  const t = cartTotals(items);
 
   const payMethodEl = document.getElementById('payMethod');
   const nota = {
     no: 'INV-' + Date.now().toString(36).toUpperCase(),
     tanggal: new Date().toISOString(),
     item: items.reduce((s, p) => s + p.qty, 0),
-    total, metode: payMethodEl ? payMethodEl.value : 'Transfer Bank',
-    produk: items.map(p => `${p.name} x${p.qty}`)
+    total: t.total, metode: payMethodEl ? payMethodEl.value : 'Transfer Bank',
+    produk: items.map(p => `${p.name} x${p.qty}`),
+    // Rincian untuk halaman Riwayat Transaksi
+    rincian: items.map(p => ({ name: p.name, qty: p.qty, price: p.price })),
+    subtotal: t.subtotal, diskon: t.diskon, kodePromo: t.diskon ? promoCode : '',
+    ongkir: t.ongkir, pengiriman: t.ambil ? 'Ambil di toko' : 'Dikirim ke alamat'
   };
-  const hist = JSON.parse(localStorage.getItem('fv_orders') || '[]');
+  let hist = [];
+  try { hist = JSON.parse(localStorage.getItem('fv_orders') || '[]'); } catch { }
   hist.unshift(nota);
   localStorage.setItem('fv_orders', JSON.stringify(hist));
 
   saveCart([]);
-  const notaNo = document.getElementById('notaNo');
-  if (notaNo) notaNo.textContent = nota.no;
-  const notaItems = document.getElementById('notaItems');
-  if (notaItems) notaItems.textContent = nota.item + ' produk';
-  const notaPay = document.getElementById('notaPay');
-  if (notaPay) notaPay.textContent = nota.metode;
-  const notaTotal = document.getElementById('notaTotal');
-  if (notaTotal) notaTotal.textContent = rupiah(total);
-  const notaModal = document.getElementById('notaModal');
-  if (notaModal) {
-    notaModal.classList.add('is-open');
-    // Close on overlay click (outside sheet)
-    notaModal.onclick = (e) => { if (e.target === notaModal) notaModal.classList.remove('is-open'); };
-  }
-  const btnClose = document.getElementById('btnNotaClose');
-  if (btnClose) btnClose.onclick = () => notaModal && notaModal.classList.remove('is-open');
+  promo = 0; promoCode = '';
+  renderCartPage();
+
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('notaNo', nota.no);
+  set('notaItems', nota.item + ' produk');
+  set('notaPay', nota.metode);
+  set('notaTotal', rupiah(nota.total));
+  const view = document.getElementById('btnNotaView');
+  if (view) view.href = 'profil-pelanggan.html?nota=' + encodeURIComponent(nota.no) + '#panelTransaksi';
+  openNota();
+}
+
+/* ---------- Modal pembayaran: Esc menutup, fokus terkunci ---------- */
+function openNota() {
+  const modal = document.getElementById('notaModal');
+  if (!modal) return;
+  notaOpener = document.activeElement;
+  modal.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+  modal.onclick = e => { if (e.target === modal) closeNota(); };
+  const done = document.getElementById('btnNotaClose');
+  if (done) done.onclick = closeNota;
+  const first = document.getElementById('btnNotaView');
+  if (first) first.focus();
+}
+function closeNota() {
+  const modal = document.getElementById('notaModal');
+  if (!modal) return;
+  modal.classList.remove('is-open');
+  document.body.style.overflow = '';
+  if (notaOpener && document.contains(notaOpener)) notaOpener.focus();
+}
+function trapNotaKeys(e) {
+  const modal = document.getElementById('notaModal');
+  if (!modal || !modal.classList.contains('is-open')) return;
+  if (e.key === 'Escape') return closeNota();
+  if (e.key !== 'Tab') return;
+  const f = Array.from(modal.querySelectorAll('a[href], button:not(:disabled)'));
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1];
+  if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  else if (!modal.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
 }

@@ -28,7 +28,7 @@ html.dark-mode body {
 }
 
 html.dark-mode .section,
-html.dark-mode .fullscreen-section:not(.hero-section):not(.bg-alt):not(.footer-section) {
+html.dark-mode .snap-container .home-section:not(.bg-alt) {
   background-color: var(--bg) !important;
 }
 
@@ -88,14 +88,14 @@ html.dark-mode .sec-tag {
 }
 
 /* Subpage Page Hero di Dark Mode */
-html.dark-mode .page-hero {
-  background: linear-gradient(135deg, #1C221D 0%, #273028 60%, #3A453B 100%) !important;
+html.dark-mode .page-hero { background: var(--bg) !important; }
+html.dark-mode .page-hero .container {
+  background: linear-gradient(120deg, #232C25 0%, #2F3C31 60%, #3F5142 100%) !important;
+  border: 1px solid var(--border);
 }
 
-html.dark-mode .page-hero h1 {
-  color: #FFFFFF !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5) !important;
-}
+html.dark-mode .page-hero h1 { color: #FFFFFF !important; }
+html.dark-mode .page-hero .page-sub { color: rgba(255,255,255,0.9) !important; }
 
 html.dark-mode .breadcrumb,
 html.dark-mode .breadcrumb a {
@@ -152,69 +152,42 @@ html.dark-mode .summary-row strong {
 }
 
 /* Header Kapsul di Dark Mode (Desktop) - High Contrast Navbar Links */
-html.dark-mode .site-header .nav-wrap {
-  background: rgba(39, 48, 40, 0.95) !important;
+html.dark-mode .site-header {
+  background: rgba(32, 39, 33, 0.94) !important;
   border-color: var(--border) !important;
-  box-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.6) !important;
 }
 
-html.dark-mode .main-nav {
-  background: rgba(255, 255, 255, 0.08) !important;
+html.dark-mode .site-header.scrolled {
+  background: var(--surface) !important;
+  box-shadow: 0 8px 24px -10px rgba(0, 0, 0, 0.7) !important;
 }
 
-html.dark-mode .main-nav a {
-  color: #FAF6F0 !important;
-  font-weight: 600 !important;
-}
+html.dark-mode .user-menu-btn { color: var(--text); }
+html.dark-mode .user-menu-list a,
+html.dark-mode .user-menu-list button { color: var(--text); }
+html.dark-mode .user-menu-list .um-logout { color: var(--danger); }
+html.dark-mode .user-menu-head span { color: var(--muted); }
+html.dark-mode .fv-quick a, html.dark-mode .fv-quick a span { color: #fff; }
 
-html.dark-mode .main-nav a:hover {
-  background: rgba(255, 255, 255, 0.18) !important;
-  color: #ffffff !important;
-}
+html.dark-mode .main-nav { background: transparent !important; }
+html.dark-mode .main-nav a { color: var(--muted) !important; }
+html.dark-mode .main-nav a:hover { color: #FFFFFF !important; background: transparent !important; }
+html.dark-mode .main-nav a.active { color: #B8CDB3 !important; background: transparent !important; }
+html.dark-mode .main-nav a.active::after { background: #B8CDB3; }
 
-html.dark-mode .main-nav a.active {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-  color: #ffffff !important;
-}
-
-/* Mobile Dropdown Menu */
-@media (max-width: 900px) {
-  html.dark-mode .main-nav {
-    background: var(--surface) !important;
-    border: 1px solid var(--border) !important;
-    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.85) !important;
-  }
-
-  html.dark-mode .main-nav a {
-    color: #FAF6F0 !important;
-  }
-
-  html.dark-mode .main-nav a:hover {
-    background: rgba(255, 255, 255, 0.12) !important;
-    color: #ffffff !important;
-  }
-
-  html.dark-mode .main-nav a.active {
-    background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-    color: #ffffff !important;
-  }
+@media (max-width: 768px) {
+  html.dark-mode .main-nav { background: var(--surface) !important; border-color: var(--border) !important; }
+  html.dark-mode .main-nav a { color: var(--text) !important; border-color: var(--border) !important; }
 }
 
 /* Ikon & Tombol Keranjang Belanja di Dark Mode */
-html.dark-mode .cart-link {
-  background-color: var(--surface) !important;
-  border-color: var(--border) !important;
-  color: #FAF6F0 !important;
-}
+html.dark-mode .cart-link { color: #FAF6F0 !important; background: transparent !important; border: 0 !important; }
 
 html.dark-mode .cart-link svg {
   stroke: #FAF6F0 !important;
 }
 
-html.dark-mode .cart-link:hover {
-  border-color: var(--primary) !important;
-  background-color: var(--primary-light) !important;
-}
+html.dark-mode .cart-link:hover { background: rgba(255,255,255,0.1) !important; }
 
 html.dark-mode .cart-link:hover svg {
   stroke: var(--primary) !important;
@@ -265,61 +238,28 @@ html.dark-mode .theme-toggle-btn:hover {
   display: block !important;
 }
 
-/* Hero Section Overrides in Dark Mode */
-html.dark-mode .hero-section .hero-overlay {
-  background: 
-    radial-gradient(circle at 15% 50%, rgba(28, 34, 29, 0.9) 0%, rgba(107, 143, 113, 0.4) 50%, rgba(28, 34, 29, 0.94) 100%),
-    linear-gradient(to bottom, rgba(28, 34, 29, 0.4), rgba(28, 34, 29, 0.85)) !important;
-}
+/* Beranda di Dark Mode */
+html.dark-mode .snap-container .home-hero { background-image: radial-gradient(circle at 85% 10%, rgba(143,166,138,0.14) 0, transparent 45%); }
+html.dark-mode .snap-container .home-hero h1 em { color: #B8CDB3; }
+html.dark-mode .snap-container .pill strong { color: #B8CDB3; }
+html.dark-mode .snap-container .pill-emergency { color: #F2A29B; }
+html.dark-mode .snap-container .picker-tab[aria-selected="true"],
+html.dark-mode .snap-container .testi-avatar,
+html.dark-mode .snap-container .step-num { background: #557A5B; color: #fff; }
+html.dark-mode .snap-container .picker-tab[aria-selected="true"] { border-color: #557A5B; }
+html.dark-mode .snap-container .stats dd,
+html.dark-mode .snap-container .doctor-photo span { color: #B8CDB3; }
 
-html.dark-mode .status-badge-glow {
-  background: var(--primary-light) !important;
-  border-color: rgba(143, 166, 138, 0.4) !important;
-  color: var(--text) !important;
-}
-
-html.dark-mode .hero-desc-modern {
-  color: #E2DBD0 !important;
-}
-
-html.dark-mode .hero-glass-card-modern {
-  background: rgba(39, 48, 40, 0.78) !important;
-  border-color: var(--border) !important;
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
-}
-
-html.dark-mode .hero-glass-card-modern:hover {
-  border-color: var(--primary) !important;
-}
-
-html.dark-mode .console-text {
-  color: var(--muted) !important;
-}
-
-html.dark-mode .stat-pill-item {
-  background: rgba(255, 255, 255, 0.05) !important;
-  border-color: rgba(255, 255, 255, 0.1) !important;
-}
-
-html.dark-mode .stat-pill-item:hover {
-  background: var(--primary-light) !important;
-  border-color: var(--primary) !important;
-}
-
-html.dark-mode .stat-pill-item strong {
-  color: var(--primary) !important;
+/* Tombol utama: teks putih butuh latar lebih gelap agar kontras AA */
+html.dark-mode .btn-primary,
+html.dark-mode .btn-glow,
+html.dark-mode .btn-login {
+  background: linear-gradient(135deg, #557A5B, #44644A) !important;
+  color: #FFFFFF !important;
 }
 
 html.dark-mode .stat-pill-item span {
   color: var(--text) !important;
-}
-
-/* Keunggulan Section (bg-alt) in Dark Mode */
-html.dark-mode .fullscreen-section.bg-alt,
-html.dark-mode .keunggulan-section {
-  background-color: var(--surface-alt) !important;
-  background-image:
-    radial-gradient(circle at 1px 1px, rgba(143, 166, 138, 0.08) 1px, transparent 0) !important;
 }
 
 /* Tabel & Record Medis */
@@ -341,14 +281,6 @@ html.dark-mode td {
 
 html.dark-mode tr:hover td {
   background: rgba(255, 255, 255, 0.04) !important;
-}
-
-/* Service Card Link di Dark Mode */
-html.dark-mode .service-card .card-link {
-  color: var(--primary) !important;
-}
-html.dark-mode .service-card .card-link:hover {
-  color: var(--text) !important;
 }
 
 /* Profile Sidebar in Dark Mode */
@@ -390,17 +322,12 @@ html.dark-mode .btn-outline:hover {
   color: #ffffff !important;
 }
 
-html.dark-mode .mobile-filter-btn,
-html.dark-mode #toggleFilterBtn {
-  background: var(--surface) !important;
-  border: 1.5px solid var(--border) !important;
-  color: var(--primary) !important;
-}
-
-html.dark-mode .mobile-filter-btn svg,
-html.dark-mode #toggleFilterBtn svg {
-  stroke: var(--primary) !important;
-}
+html.dark-mode .cat-chip { background: var(--surface); border-color: var(--border); color: var(--text); }
+html.dark-mode .cat-chip.active { background: #557A5B; border-color: #557A5B; color: #fff; }
+html.dark-mode .stock-badge.ok { color: #B8CDB3; }
+html.dark-mode .stock-badge.low { background: rgba(224,176,131,0.18); color: #E0B083; }
+html.dark-mode .product-price, html.dark-mode .product-cat { color: #B8CDB3; }
+html.dark-mode .card-stepper button:hover:not(:disabled) { background: #557A5B; }
 
 /* Badges in Dark Mode */
 html.dark-mode .badge-green,
@@ -429,31 +356,9 @@ html.dark-mode .badge-red {
 }
 
 /* Footer in Dark Mode */
-html.dark-mode .site-footer {
-  background: #202721 !important;
-  color: #FAF6F0 !important;
-}
-
-html.dark-mode .site-footer h4 {
-  color: #FFFFFF !important;
-}
-
-html.dark-mode .site-footer p,
-html.dark-mode .site-footer a {
-  color: #FAF6F0 !important;
-  opacity: 0.95 !important;
-}
-
-html.dark-mode .site-footer a:hover {
-  color: #FFFFFF !important;
-  opacity: 1 !important;
-}
-
-html.dark-mode .footer-bottom {
-  border-top-color: rgba(255, 255, 255, 0.2) !important;
-  color: #FAF6F0 !important;
-  opacity: 0.9 !important;
-}
+html.dark-mode .site-footer h4, html.dark-mode .footer-bottom { color: var(--muted); }
+html.dark-mode .footer-contact svg { color: #B8CDB3; }
+html.dark-mode .footer-col a:hover { color: #B8CDB3; }
 
 /* ============================================================
    FILOSOVET — High-Contrast Dark Mode (KHUSUS ADMIN DASHBOARD)
@@ -623,72 +528,59 @@ html.dark-mode .admin-layout .bar-chart .bar {
 /* ============================================================
    8. Kalender Booking (Dark Mode)
    ============================================================ */
-html.dark-mode .booking-calendar {
-  background: var(--surface) !important;
-  border-color: var(--border) !important;
-}
 
-html.dark-mode .cal-header {
-  border-color: var(--border) !important;
-}
+/* Halaman Layanan di Dark Mode */
+html.dark-mode #layananTabs .tab.active { background: #557A5B !important; color: #fff !important; }
+html.dark-mode .tab-panel .price-foot .product-price,
+html.dark-mode .tab-panel .price-meta { color: #B8CDB3; }
+html.dark-mode .help-card { background: var(--surface) !important; }
 
-html.dark-mode .cal-month-name {
-  color: var(--text) !important;
-}
+/* Booking di Dark Mode */
+html.dark-mode .bk .bk-seg .tab.active,
+html.dark-mode .bk .bk-cal-day.active,
+html.dark-mode .bk .bk-slot.active,
+html.dark-mode .bk .bk-badge.done,
+html.dark-mode .bk .lg-active { background: #557A5B; border-color: #557A5B; }
+html.dark-mode .bk .bk-seg .tab { color: var(--text) !important; background: transparent !important; border: 0 !important; }
+html.dark-mode .bk .bk-seg .tab.active { background: #557A5B !important; }
+html.dark-mode .bk .bk-seg .tab.active { color: #fff !important; }
+html.dark-mode .bk .bk-type.active { background: rgba(143,166,138,0.18); border-color: #8FA68A; box-shadow: inset 0 0 0 1px #8FA68A; }
+html.dark-mode .bk .bk-type-price, html.dark-mode .bk .bk-sum-total strong, html.dark-mode .bk .bk-sum-toggle strong { color: #B8CDB3; }
+html.dark-mode .bk .bk-cal-day.active, html.dark-mode .bk .bk-slot.active * { color: #fff !important; }
+html.dark-mode .bk .bk-cal-day.is-today:not(.active) { color: #E0B083; }
+html.dark-mode .bk .bk-slot.is-full .bk-slot-time { color: var(--muted) !important; }
+html.dark-mode .bk .bk-summary { background: var(--surface); border-color: var(--border); }
+html.dark-mode .bk .bk-missing { color: #E0B083; }
+html.dark-mode .bk .bk-missing.ok { color: #B8CDB3; }
+html.dark-mode .bk-modal-box input[readonly] { color: #B8CDB3 !important; }
 
-html.dark-mode .cal-year-num {
-  color: var(--primary) !important;
-}
+/* Keranjang di Dark Mode */
+html.dark-mode .promo-applied strong, html.dark-mode #rowDiskon span:first-child, html.dark-mode #rowDiskon strong { color: #B8CDB3 !important; }
+html.dark-mode .qty-btn:hover:not(:disabled) { background: #557A5B; }
+html.dark-mode .bk .bk-banner { background: rgba(224,176,131,0.16); color: #F2DCC3; border-color: rgba(224,176,131,0.5); }
 
-html.dark-mode .cal-nav-btn {
-  background: var(--surface-alt) !important;
-  border-color: var(--border) !important;
-  color: var(--text) !important;
-}
+/* Profil di Dark Mode */
+html.dark-mode .prof .prof-avatar { color: #B8CDB3; }
+html.dark-mode .side-link.active { background: #557A5B !important; color: #fff !important; }
+html.dark-mode .prof .cat-chip.active { background: #557A5B; border-color: #557A5B; color: #fff; }
+html.dark-mode .prof .cat-chip { background: var(--surface); color: var(--text); border-color: var(--border); }
+html.dark-mode .status-konfirmasi { background: rgba(120,170,205,0.2); color: #A9CCE3; }
+html.dark-mode .status-menunggu { background: rgba(224,176,131,0.18); color: #E0B083; }
+html.dark-mode .status-batal { color: #F2A29B; }
+html.dark-mode .status-selesai { color: #B8CDB3; }
+html.dark-mode .prof .prof-note { background: rgba(224,176,131,0.16); color: #F2DCC3; }
+html.dark-mode .prof .pet-avatar.is-cat { background: rgba(224,176,131,0.18); color: #E0B083; }
+html.dark-mode .prof .med-date strong, html.dark-mode .nota-link, html.dark-mode .nd-sum .total dd { color: #B8CDB3; }
+html.dark-mode .rtable tr { background: var(--surface); }
 
-html.dark-mode .cal-nav-btn:hover:not(:disabled) {
-  background: var(--primary-light) !important;
-  border-color: var(--primary) !important;
-  color: var(--primary) !important;
-}
-
-html.dark-mode .cal-nav-btn:disabled,
-html.dark-mode .cal-nav-btn.disabled {
-  background: transparent !important;
-  border-color: rgba(255, 255, 255, 0.08) !important;
-  color: var(--muted) !important;
-  opacity: 0.25 !important;
-}
-
-html.dark-mode .cal-day {
-  background: var(--surface-alt) !important;
-  color: var(--text) !important;
-}
-
-html.dark-mode .cal-day:hover:not(:disabled) {
-  background: var(--primary-light) !important;
-  border-color: var(--primary) !important;
-  color: var(--primary) !important;
-}
-
-html.dark-mode .cal-day.active {
-  background: linear-gradient(135deg, var(--primary), var(--primary-dark)) !important;
-  color: #ffffff !important;
-}
-
-html.dark-mode .cal-day.is-today:not(.active) {
-  border-color: var(--primary) !important;
-  color: var(--primary) !important;
-  background: var(--surface-alt) !important;
-}
-
-html.dark-mode .cal-day:disabled,
-html.dark-mode .cal-day.is-disabled {
-  background: transparent !important;
-  color: var(--muted) !important;
-  opacity: 0.25 !important;
-}
-
-html.dark-mode .cal-legend {
-  border-color: var(--border) !important;
-}
+/* Masuk & Daftar di Dark Mode */
+html.dark-mode .auth .auth-tabs { background: rgba(255,255,255,0.08); }
+html.dark-mode .auth .auth-tabs .tab { background: transparent !important; color: var(--text) !important; border: 0 !important; }
+html.dark-mode .auth .auth-tabs .tab.active { background: #557A5B !important; color: #fff !important; }
+html.dark-mode .auth .auth-tabs .tab:hover:not(.active) { background: rgba(255,255,255,0.12) !important; }
+html.dark-mode .auth .auth-done-icon { color: #B8CDB3; }
+html.dark-mode .auth .auth-aside { background: linear-gradient(150deg, #232C25 0%, #2F3C31 60%, #3F5142 100%); }
+html.dark-mode .auth .auth-aside h1, html.dark-mode .auth .auth-aside strong, html.dark-mode .auth .aside-tag { color: #fff; }
+html.dark-mode .auth .auth-aside p { color: rgba(255,255,255,0.88); }
+html.dark-mode .auth .link-btn, html.dark-mode .auth .auth-staff a, html.dark-mode .auth .pass-hint.ok { color: #B8CDB3; }
+html.dark-mode .auth .auth-card { background: transparent !important; border: 0 !important; box-shadow: none !important; }

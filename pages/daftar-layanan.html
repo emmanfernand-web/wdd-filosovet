@@ -28,38 +28,14 @@
 </head>
 <body>
 
-<!-- HEADER (INLINE) -->
-<header class="site-header">
-  <div class="container nav-wrap">
-    <a href="../index.html" class="brand" title="Kembali ke Beranda">
-      <img src="../assets/images/logo_filosovet.png" alt="Filosovet" class="logo">
-    </a>
-
-    <nav class="main-nav">
-      <a href="../index.html" data-page="index.html">Beranda</a>
-      <a href="daftar-layanan.html" data-page="daftar-layanan.html">Layanan</a>
-      <a href="booking.html" data-page="booking.html">Booking</a>
-      <a href="toko.html" data-page="toko.html">Toko</a>
-      <a href="profil-pelanggan.html" data-page="profil-pelanggan.html">Profil</a>
-    </nav>
-
-    <div class="nav-actions">
-      <a href="keranjang.html" class="cart-link" title="Keranjang">
-        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span class="cart-count" style="display:none">0</span>
-      </a>
-      <a href="auth.html" class="btn-login">Masuk</a>
-      <button class="hamburger" aria-label="Menu">
-        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
-      </button>
-    </div>
-  </div>
-</header>
+<!-- HEADER: dimuat dari components/header.html -->
+<div id="header-placeholder"></div>
 
 <!-- HERO SUB PAGE -->
-<section class="page-hero" style="padding-top: 140px;">
+<section class="page-hero">
   <div class="container">
     <h1>Daftar Layanan Filosovet</h1>
+    <p class="page-sub">Klinik, grooming, pet hotel, dan toko dalam satu tempat.</p>
     <div class="breadcrumb"><a href="../index.html">Beranda</a> / Layanan</div>
   </div>
 </section>
@@ -67,152 +43,236 @@
 <!-- MAIN CONTENT -->
 <section class="section">
   <div class="container">
-    <!-- NAVIGATION TABS -->
-    <div class="tabs" id="layananTabs">
-      <button class="tab active" data-tab="medis">Klinik &amp; Dokter Hewan</button>
-      <button class="tab" data-tab="grooming">Grooming</button>
-      <button class="tab" data-tab="hotel">Pet Hotel</button>
+    <div class="tabs" id="layananTabs" role="tablist" aria-label="Kategori layanan">
+      <button type="button" class="tab active" role="tab" id="t-medis" data-tab="medis" aria-controls="tab-medis" aria-selected="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span>Klinik &amp; Dokter</span>
+      </button>
+      <button type="button" class="tab" role="tab" id="t-grooming" data-tab="grooming" aria-controls="tab-grooming" aria-selected="false" tabindex="-1">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.7s6 6.3 6 10.8a6 6 0 0 1-12 0c0-4.5 6-10.8 6-10.8z"/></svg><span>Grooming</span>
+      </button>
+      <button type="button" class="tab" role="tab" id="t-hotel" data-tab="hotel" aria-controls="tab-hotel" aria-selected="false" tabindex="-1">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1z"/><path d="M9 21v-6h6v6"/></svg><span>Pet Hotel</span>
+      </button>
+      <button type="button" class="tab" role="tab" id="t-toko" data-tab="toko" aria-controls="tab-toko" aria-selected="false" tabindex="-1">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg><span>Farmasi &amp; Toko</span>
+      </button>
     </div>
 
-    <!-- 1. KLINIK & MEDIS -->
-    <div id="tab-medis" class="tab-panel">
-      <div class="card mb-4 no-hover">
-        <div class="grid grid-2" style="align-items:center;gap:2.5rem">
-          <div>
-            <h2 class="mb-3">Klinik &amp; Dokter Hewan</h2>
-            <p class="muted mb-3">Tim dokter hewan berpengalaman siap memberikan pelayanan medis menyeluruh, dari pemeriksaan rutin hingga tindakan lanjutan dengan penunjang diagnostik modern.</p>
-            <ul class="mb-4" style="display:grid;gap:.6rem">
-              <li>Pemeriksaan umum &amp; medical check-up</li>
-              <li>Vaksinasi &amp; sterilisasi</li>
-              <li>USG, X-Ray, dan pemeriksaan laboratorium</li>
-              <li>Tindakan medis ringan hingga lanjutan</li>
-              <li>Surat rujukan digital bila diperlukan</li>
-            </ul>
-            <a href="booking.html?layanan=konsultasi" class="btn btn-primary">Booking Konsultasi</a>
-          </div>
-          <div class="service-banner-img">
-            <img src="../assets/images/clinic.jpeg" alt="Klinik &amp; Dokter Hewan">
-          </div>
+    <!-- 1. KLINIK -->
+    <div id="tab-medis" class="tab-panel" role="tabpanel" aria-labelledby="t-medis">
+      <div class="svc-intro">
+        <div class="svc-text">
+          <h2>Klinik &amp; Dokter Hewan</h2>
+          <p class="muted">Tim dokter hewan berpengalaman siap memberikan pelayanan medis menyeluruh, dari pemeriksaan rutin hingga tindakan lanjutan dengan penunjang diagnostik modern.</p>
+          <ul class="checklist"><li>Pemeriksaan umum &amp; medical check-up</li><li>Vaksinasi &amp; sterilisasi</li><li>USG, X-Ray, dan pemeriksaan laboratorium</li><li>Tindakan medis ringan hingga lanjutan</li><li>Surat rujukan digital bila diperlukan</li></ul>
+          <a href="booking.html?layanan=konsultasi" class="btn btn-primary">Booking Konsultasi</a>
         </div>
+        <figure class="service-banner-img"><img src="../assets/images/clinic.jpeg" alt="Dokter hewan memeriksa kucing di ruang klinik"></figure>
       </div>
-      <div class="grid grid-3">
-        <div class="card no-hover"><h3 class="mb-2">Konsultasi Umum</h3><p class="muted" style="font-size:.9rem">Pemeriksaan kesehatan menyeluruh dengan dokter hewan, termasuk resep obat bila diperlukan.</p><div class="product-price" style="margin-top:.8rem">Rp 150.000</div></div>
-        <div class="card no-hover"><h3 class="mb-2">Medical Check-Up</h3><p class="muted" style="font-size:.9rem">Paket pemeriksaan berkala: fisik, darah, dan profil kesehatan lengkap.</p><div class="product-price" style="margin-top:.8rem">Rp 350.000</div></div>
-        <div class="card no-hover"><h3 class="mb-2">Vaksinasi</h3><p class="muted" style="font-size:.9rem">Vaksin rutin anjing &amp; kucing dengan kartu vaksin digital.</p><div class="product-price" style="margin-top:.8rem">Rp 180.000</div></div>
+      <h3 class="price-title">Pilih layanan &amp; harga</h3>
+      <div class="price-grid">
+        <article class="card no-hover price-card">
+          <h3>Konsultasi Umum</h3>
+          <p class="muted">Pemeriksaan kesehatan menyeluruh dengan dokter hewan, termasuk resep obat bila diperlukan.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 150.000</div>
+            <a href="booking.html?layanan=konsultasi&amp;tipe=konsultasi-umum" class="btn btn-primary btn-sm" aria-label="Booking Konsultasi Umum">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Medical Check-Up</h3>
+          <p class="muted">Paket pemeriksaan berkala: fisik, darah, dan profil kesehatan lengkap.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 350.000</div>
+            <a href="booking.html?layanan=konsultasi&amp;tipe=medical-check-up" class="btn btn-primary btn-sm" aria-label="Booking Medical Check-Up">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Vaksinasi</h3>
+          <p class="muted">Vaksin rutin anjing &amp; kucing dengan kartu vaksin digital.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 180.000</div>
+            <a href="booking.html?layanan=konsultasi&amp;tipe=vaksinasi" class="btn btn-primary btn-sm" aria-label="Booking Vaksinasi">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Kontrol / Tindak Lanjut</h3>
+          <p class="muted">Pemeriksaan ulang setelah perawatan atau pengobatan sebelumnya.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 100.000</div>
+            <a href="booking.html?layanan=konsultasi&amp;tipe=kontrol" class="btn btn-primary btn-sm" aria-label="Booking Kontrol / Tindak Lanjut">Booking</a>
+          </div>
+        </article>
       </div>
     </div>
 
     <!-- 2. GROOMING -->
-    <div id="tab-grooming" class="tab-panel" style="display:none">
-      <div class="card mb-4 no-hover">
-        <div class="grid grid-2" style="align-items:center;gap:2.5rem">
-          <div>
-            <h2 class="mb-3">Grooming Sehat &amp; Anti-Jamur</h2>
-            <p class="muted mb-3">Setiap sesi grooming dimulai dengan pemeriksaan kesehatan awal oleh paramedis. Kami menyediakan grooming sehat dan grooming jamur dengan produk yang aman.</p>
-            <ul class="mb-4" style="display:grid;gap:.6rem">
-              <li>Cek kesehatan sebelum grooming</li>
-              <li>Grooming sehat (mandi, potong kuku, telinga)</li>
-              <li>Grooming jamur dengan shampoo terapeutik</li>
-              <li>Dapat digabung dengan vaksinasi</li>
-            </ul>
-            <a href="booking.html?layanan=grooming" class="btn btn-primary">Booking Grooming</a>
-          </div>
-          <div class="service-banner-img">
-            <img src="../assets/images/grooming.jpeg" alt="Grooming Sehat &amp; Anti-Jamur">
-          </div>
+    <div id="tab-grooming" class="tab-panel" role="tabpanel" aria-labelledby="t-grooming" hidden>
+      <div class="svc-intro">
+        <div class="svc-text">
+          <h2>Grooming Sehat &amp; Anti-Jamur</h2>
+          <p class="muted">Setiap sesi grooming dimulai dengan pemeriksaan kesehatan awal oleh paramedis. Kami menyediakan grooming sehat dan grooming jamur dengan produk yang aman.</p>
+          <ul class="checklist"><li>Cek kesehatan sebelum grooming</li><li>Grooming sehat (mandi, potong kuku, telinga)</li><li>Grooming jamur dengan shampoo terapeutik</li><li>Dapat digabung dengan vaksinasi</li></ul>
+          <a href="booking.html?layanan=grooming" class="btn btn-primary">Booking Grooming</a>
         </div>
+        <figure class="service-banner-img"><img src="../assets/images/grooming.jpeg" alt="Anjing sedang dimandikan di salon grooming"></figure>
       </div>
-      <div class="grid grid-3">
-        <div class="card no-hover"><h3 class="mb-2">Grooming Kucing</h3><p class="muted" style="font-size:.9rem">Mandi, blow-dry, sisir, potong kuku, bersih telinga.</p><div class="product-price" style="margin-top:.8rem">Rp 120.000</div></div>
-        <div class="card no-hover"><h3 class="mb-2">Grooming Anjing &lt;10kg</h3><p class="muted" style="font-size:.9rem">Lengkap dengan pemeriksaan kulit dan kutu dasar.</p><div class="product-price" style="margin-top:.8rem">Rp 150.000</div></div>
-        <div class="card no-hover"><h3 class="mb-2">Grooming Jamur</h3><p class="muted" style="font-size:.9rem">Treatment khusus anti-jamur + konsultasi perawatan lanjutan.</p><div class="product-price" style="margin-top:.8rem">Rp 220.000</div></div>
+      <h3 class="price-title">Pilih layanan &amp; harga</h3>
+      <div class="price-grid">
+        <article class="card no-hover price-card">
+          <h3>Grooming Kucing</h3>
+          <p class="muted">Mandi, blow-dry, sisir, potong kuku, bersih telinga.</p>
+          <p class="price-meta">± 90 menit</p>
+          <div class="price-foot">
+            <div class="product-price">Rp 120.000</div>
+            <a href="booking.html?layanan=grooming&amp;tipe=kucing" class="btn btn-primary btn-sm" aria-label="Booking Grooming Kucing">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Grooming Anjing &lt;10kg</h3>
+          <p class="muted">Lengkap dengan pemeriksaan kulit dan kutu dasar.</p>
+          <p class="price-meta">± 90 menit</p>
+          <div class="price-foot">
+            <div class="product-price">Rp 150.000</div>
+            <a href="booking.html?layanan=grooming&amp;tipe=anjing-kecil" class="btn btn-primary btn-sm" aria-label="Booking Grooming Anjing &lt;10kg">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Grooming Anjing &gt;10kg</h3>
+          <p class="muted">Perawatan lengkap untuk anjing ukuran sedang hingga besar.</p>
+          <p class="price-meta">± 90 menit</p>
+          <div class="price-foot">
+            <div class="product-price">Rp 200.000</div>
+            <a href="booking.html?layanan=grooming&amp;tipe=anjing-besar" class="btn btn-primary btn-sm" aria-label="Booking Grooming Anjing &gt;10kg">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Grooming Jamur</h3>
+          <p class="muted">Treatment khusus anti-jamur + konsultasi perawatan lanjutan.</p>
+          <p class="price-meta">± 90 menit</p>
+          <div class="price-foot">
+            <div class="product-price">Rp 220.000</div>
+            <a href="booking.html?layanan=grooming&amp;tipe=jamur" class="btn btn-primary btn-sm" aria-label="Booking Grooming Jamur">Booking</a>
+          </div>
+        </article>
       </div>
     </div>
 
     <!-- 3. PET HOTEL -->
-    <div id="tab-hotel" class="tab-panel" style="display:none">
-      <div class="card mb-4 no-hover">
-        <div class="grid grid-2" style="align-items:center;gap:2.5rem">
-          <div>
-            <h2 class="mb-3">Pet Hotel</h2>
-            <p class="muted mb-3">Penitipan hewan dengan fasilitas kandang bersih dan pengawasan paramedis 24 jam. Kondisi hewan diperbarui berkala dan dapat dipantau langsung melalui akun Anda.</p>
-            <ul class="mb-4" style="display:grid;gap:.6rem">
-              <li>Syarat: bebas kutu, bebas cacing, vaksin lengkap</li>
-              <li>Update foto &amp; kondisi harian via website</li>
-              <li>Jadwal makan dan aktivitas teratur</li>
-              <li>Sistem waiting list saat kandang penuh</li>
-            </ul>
-            <a href="booking.html?layanan=hotel" class="btn btn-primary">Ajukan Penitipan</a>
-          </div>
-          <div class="service-banner-img">
-            <img src="../assets/images/pet_hotel.jpeg" alt="Pet Hotel">
-          </div>
+    <div id="tab-hotel" class="tab-panel" role="tabpanel" aria-labelledby="t-hotel" hidden>
+      <div class="svc-intro">
+        <div class="svc-text">
+          <h2>Pet Hotel</h2>
+          <p class="muted">Penitipan hewan dengan fasilitas kandang bersih dan pengawasan paramedis 24 jam. Kondisi hewan diperbarui berkala dan dapat dipantau langsung melalui akun Anda.</p>
+          <ul class="checklist"><li>Syarat: bebas kutu, bebas cacing, vaksin lengkap</li><li>Update foto &amp; kondisi harian via website</li><li>Jadwal makan dan aktivitas teratur</li><li>Sistem waiting list saat kandang penuh</li></ul>
+          <a href="booking.html?layanan=hotel" class="btn btn-primary">Ajukan Penitipan</a>
         </div>
+        <figure class="service-banner-img"><img src="../assets/images/pet_hotel.jpeg" alt="Deretan kandang pet hotel yang bersih"></figure>
       </div>
-      <div class="grid grid-3">
-        <div class="card no-hover"><h3 class="mb-2">Kandang Reguler</h3><p class="muted" style="font-size:.9rem">Kandang standar bersih dengan jadwal makan 2x sehari.</p><div class="product-price" style="margin-top:.8rem">Rp 150.000 <span class="muted" style="font-size:.8rem;font-weight:400">/hari</span></div></div>
-        <div class="card no-hover"><h3 class="mb-2">Kandang Premium</h3><p class="muted" style="font-size:.9rem">Kandang lebih luas + mainan dan laporan foto harian.</p><div class="product-price" style="margin-top:.8rem">Rp 250.000 <span class="muted" style="font-size:.8rem;font-weight:400">/hari</span></div></div>
-        <div class="card no-hover"><h3 class="mb-2">Kandang Suite</h3><p class="muted" style="font-size:.9rem">Fasilitas terbaik dengan kamera monitoring untuk pemilik.</p><div class="product-price" style="margin-top:.8rem">Rp 400.000 <span class="muted" style="font-size:.8rem;font-weight:400">/hari</span></div></div>
+      <h3 class="price-title">Pilih tipe kandang</h3>
+      <div class="price-grid price-grid-3">
+        <article class="card no-hover price-card">
+          <h3>Kandang Reguler</h3>
+          <p class="muted">Kandang standar bersih dengan jadwal makan 2x sehari.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 150.000 <small>/ hari</small></div>
+            <a href="booking.html?layanan=hotel&amp;tipe=reguler" class="btn btn-primary btn-sm" aria-label="Booking Kandang Reguler">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Kandang Premium</h3>
+          <p class="muted">Kandang lebih luas + mainan dan laporan foto harian.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 250.000 <small>/ hari</small></div>
+            <a href="booking.html?layanan=hotel&amp;tipe=premium" class="btn btn-primary btn-sm" aria-label="Booking Kandang Premium">Booking</a>
+          </div>
+        </article>
+        <article class="card no-hover price-card">
+          <h3>Kandang Suite</h3>
+          <p class="muted">Fasilitas terbaik dengan kamera monitoring untuk pemilik.</p>
+          
+          <div class="price-foot">
+            <div class="product-price">Rp 400.000 <small>/ hari</small></div>
+            <a href="booking.html?layanan=hotel&amp;tipe=suite" class="btn btn-primary btn-sm" aria-label="Booking Kandang Suite">Booking</a>
+          </div>
+        </article>
       </div>
     </div>
 
-    <!-- CTA FOOTER KONSULTASI -->
-    <div class="card text-center no-hover" style="margin-top:2.5rem;background:linear-gradient(120deg,var(--primary-light),#fff)">
-      <h3 class="mb-2">Butuh konsultasi cepat?</h3>
-      <p class="muted mb-3">Tim kami siap membantu Anda memilih layanan yang tepat.</p>
-      <a href="auth.html" class="btn btn-primary btn-sm">Hubungi Kami</a>
+    <!-- 4. FARMASI & TOKO -->
+    <div id="tab-toko" class="tab-panel" role="tabpanel" aria-labelledby="t-toko" hidden>
+      <div class="svc-intro">
+        <div class="svc-text">
+          <h2>Farmasi &amp; Toko</h2>
+          <p class="muted">Obat resmi, pakan premium, suplemen, skincare, dan aksesori untuk kucing dan anjing. Belanja online dan kirim ke rumah, atau ambil langsung di toko.</p>
+          <ul class="checklist"><li>Obat resep dokter dan obat bebas</li><li>Pakan kering dan basah dari merek terpercaya</li><li>Skincare, shampoo, dan suplemen</li><li>Pengiriman atau ambil di toko</li></ul>
+          <a href="toko.html" class="btn btn-primary">Belanja di Toko</a>
+        </div>
+        <figure class="service-banner-img"><img src="../assets/images/pet_store.jpeg" alt="Rak produk makanan dan obat hewan"></figure>
+      </div>
+      <h3 class="price-title">Kategori populer</h3>
+      <div class="price-grid">
+        <a href="toko.html?cat=makanan" class="card price-card cat-card"><img src="../assets/images/dry_food_cat.jpeg" alt="Pakan kucing kering"><h3>Makanan Hewan</h3><p class="muted">Dry food dan wet food.</p></a>
+        <a href="toko.html?cat=obat" class="card price-card cat-card"><img src="../assets/images/animal_antibiotik.jpeg" alt="Obat dan antibiotik hewan"><h3>Obat &amp; Vitamin</h3><p class="muted">Obat cacing, kutu, dan suplemen.</p></a>
+        <a href="toko.html?cat=skincare" class="card price-card cat-card"><img src="../assets/images/pet_shampoo.jpeg" alt="Shampoo hewan"><h3>Skincare</h3><p class="muted">Shampoo, conditioner, paw balm.</p></a>
+        <a href="toko.html?cat=aksesoris" class="card price-card cat-card"><img src="../assets/images/cat_collars.jpeg" alt="Kalung kucing"><h3>Aksesoris</h3><p class="muted">Kalung, mainan, kandang travel.</p></a>
+      </div>
+    </div>
+
+    <!-- BANTUAN -->
+    <div class="card no-hover help-card">
+      <div>
+        <h3>Bingung memilih layanan?</h3>
+        <p class="muted">Tim kami siap membantu Anda memilih layanan yang tepat.</p>
+      </div>
+      <div class="help-actions">
+        <a href="#" class="btn btn-primary btn-sm js-wa" target="_blank" rel="noopener">Chat WhatsApp</a>
+        <a href="#" class="btn btn-outline btn-sm js-emergency">Telepon darurat</a>
+      </div>
     </div>
   </div>
 </section>
-
-<!-- FOOTER (INLINE) -->
-<footer class="site-footer">
-  <div class="container footer-grid">
-    <div>
-      <div class="brand" style="color:#fff;margin-bottom:.8rem">
-        <img src="../assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo">
-        Filosovet
-      </div>
-      <p style="font-size:.9rem;max-width:300px">Petshop &amp; Klinik Hewan — merawat kesehatan dan kebahagiaan hewan peliharaan Anda sejak 2023.</p>
-    </div>
-    <div>
-      <h4>Layanan</h4>
-      <a href="daftar-layanan.html">Klinik &amp; Dokter Hewan</a>
-      <a href="daftar-layanan.html">Grooming</a>
-      <a href="daftar-layanan.html">Pet Hotel</a>
-      <a href="toko.html">Toko &amp; Farmasi</a>
-    </div>
-    <div>
-      <h4>Bantuan</h4>
-      <a href="booking.html">Cara Booking</a>
-      <a href="keranjang.html">Keranjang</a>
-      <a href="profil-pelanggan.html">Akun Saya</a>
-    </div>
-    <div>
-      <h4>Kontak</h4>
-      <a href="#">Jl. Petshop Raya No. 88</a>
-      <a href="#">(021) 555-0123</a>
-      <a href="#">halo@filosovet.id</a>
-      <a href="#">Buka setiap hari 08.00–21.00</a>
-    </div>
-  </div>
-  <div class="footer-bottom">© <span class="js-year"></span> Filosovet Petshop &amp; Klinik Hewan. Seluruh hak cipta dilindungi.</div>
-</footer>
+<!-- FOOTER: dimuat dari components/footer.html -->
+<div id="footer-placeholder"></div>
 
 <!-- SCRIPTS (Urutan Panggilan Presisi & Menggunakan ../) -->
 <script src="../js/main.js"></script>
 <script src="../js/dark-mode.js"></script>
 
 <script>
-  // Handlers Perpindahan Tab Layanan
-  document.querySelectorAll('#layananTabs .tab').forEach(t => {
-    t.addEventListener('click', () => {
-      document.querySelectorAll('#layananTabs .tab').forEach(x => x.classList.remove('active'));
-      t.classList.add('active');
-      document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
-      document.getElementById('tab-' + t.dataset.tab).style.display = 'block';
+  // Tab aksesibel: klik atau panah; ?tab=grooming membuka tab tertentu
+  (function () {
+    const tabs = Array.from(document.querySelectorAll('#layananTabs [role="tab"]'));
+    function select(tab, focus) {
+      tabs.forEach(t => {
+        const on = t === tab;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', on);
+        t.tabIndex = on ? 0 : -1;
+        document.getElementById('tab-' + t.dataset.tab).hidden = !on;
+      });
+      if (focus) tab.focus();
+    }
+    tabs.forEach((t, i) => {
+      t.addEventListener('click', () => select(t));
+      t.addEventListener('keydown', e => {
+        const k = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+        if (k) { e.preventDefault(); select(tabs[(i + k + tabs.length) % tabs.length], true); }
+      });
     });
-  });
+    const init = tabs.find(t => t.dataset.tab === new URLSearchParams(location.search).get('tab'));
+    if (init) select(init);
+    document.querySelectorAll('.js-wa').forEach(a => {
+      a.href = 'https://wa.me/' + FV_CONFIG.whatsapp + '?text=' + encodeURIComponent(FV_CONFIG.whatsappText);
+    });
+    document.querySelectorAll('.js-emergency').forEach(a => { a.href = 'tel:' + FV_CONFIG.emergencyPhone; });
+  })();
 </script>
 </body>
 </html>

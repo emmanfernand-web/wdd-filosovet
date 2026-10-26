@@ -1,144 +1,41 @@
 /* ============================================================
-   FILOSOVET — components/footer.css
+   FILOSOVET — components/footer.css (Footer sederhana, tanpa kartu)
    ============================================================ */
 
 .site-footer {
-  background: var(--primary-dark, #4F6F52);
-  color: #FAF6F0 !important;
-  margin-top: 100px;
+  margin-top: 0;
+  background: var(--surface-alt);
+  border-top: 1px solid var(--border);
+  color: var(--text);
 }
+.site-footer .footer-inner { padding-top: 3rem; padding-bottom: 1.2rem; }
 
-.footer-grid {
-  display: grid;
-  grid-template-columns: 1.6fr 1fr 1fr 1.3fr;
-  gap: 2rem;
-  padding: 72px 0 40px;
-}
+.footer-top { display: grid; grid-template-columns: 1.5fr 1fr 1.4fr; gap: 3rem; padding-bottom: 2rem; }
 
-.site-footer p {
-  color: #FAF6F0 !important;
-  font-size: 0.92rem;
-  line-height: 1.6;
-  opacity: 0.95;
-}
+.site-footer .footer-logo { display: inline-block; margin-bottom: 0.9rem; }
+.site-footer .footer-logo .logo { height: 44px; width: auto; display: block; }
+.site-footer .footer-tagline { font-family: var(--font-serif); font-size: 1.15rem; line-height: 1.45; max-width: 300px; color: var(--text); }
 
-.site-footer h4 {
-  color: #FFFFFF !important;
-  margin-bottom: 1.2rem;
-  font-size: 1.08rem;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-}
+.site-footer h4 { margin-bottom: 0.8rem; font-size: 0.78rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+.footer-col > a { display: block; width: fit-content; padding: 0.3rem 0; font-size: 0.95rem; color: var(--text); }
+.footer-col a:hover { color: var(--primary-dark); text-decoration: underline; text-underline-offset: 3px; }
 
-.site-footer a {
-  color: #FAF6F0 !important;
-  display: block;
-  margin-bottom: 0.65rem;
-  font-size: 0.94rem;
-  font-weight: 500;
-  opacity: 0.92;
-  transition: var(--transition, all 0.25s ease);
-}
+.footer-contact p { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 0.65rem; font-size: 0.95rem; color: var(--text); }
+.footer-contact svg { flex-shrink: 0; margin-top: 3px; color: var(--primary-dark); }
+.footer-contact a { color: var(--text); }
 
-.site-footer a:hover {
-  color: #FFFFFF !important;
-  opacity: 1;
-  transform: translateX(4px);
-  text-decoration: underline;
-}
+.footer-bottom { padding-top: 1.1rem; border-top: 1px solid var(--border); text-align: center; font-size: 0.84rem; color: var(--muted); }
 
-.footer-bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.22) !important;
-  padding: 1.5rem 0;
-  text-align: center;
-  font-size: 0.88rem;
-  color: #FAF6F0 !important;
-  opacity: 0.95;
-}
-
-/* Footer Brand */
-.site-footer .brand {
-  display: flex !important;
-  align-items: center !important;
-  height: auto !important;
-  margin-bottom: 0.8rem !important;
-  color: #ffffff !important;
-  font-weight: 800;
-  font-size: 1.25rem;
-}
-
-.site-footer .brand .logo {
-  height: 38px !important;
-  width: auto !important;
-  max-height: 38px !important;
-  border-radius: 0 !important;
-  object-fit: contain !important;
-  margin-right: 10px !important;
-  box-shadow: none !important;
-}
-
-/* ============================================================
-   RESPONSIVE FOOTER (TABLET & MOBILE LAYOUT)
-   ============================================================ */
 @media (max-width: 900px) {
-  .site-footer {
-    margin-top: 60px;
-  }
-
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.8rem 1.2rem;
-    padding: 48px 0 32px;
-  }
-}
-
-@media (max-width: 600px) {
-  .site-footer {
-    margin-top: 40px;
-  }
-
-  /* Layout 2 kolom menyamping khas kode lama */
-  .footer-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem 1rem;
-    padding: 32px 0 24px;
-  }
-
-  /* Kolom Branding & Deskripsi Utama memakan 2 kolom penuh */
-  .footer-grid > div:first-child {
-    grid-column: span 2;
-  }
-
-  .site-footer .brand {
-    margin-bottom: 0.5rem !important;
-    font-size: 1.15rem;
-  }
-
-  .site-footer .brand .logo {
-    height: 30px !important;
-    width: auto !important;
-    max-height: 30px !important;
-    border-radius: 0 !important;
-    object-fit: contain !important;
-  }
-
-  .site-footer p {
-    font-size: 0.82rem;
-    line-height: 1.45;
-  }
-
-  .site-footer h4 {
-    font-size: 0.95rem;
-    margin-bottom: 0.65rem;
-  }
-
-  .site-footer a {
-    font-size: 0.84rem;
-    margin-bottom: 0.4rem;
-  }
-
-  .footer-bottom {
-    padding: 1rem 0;
-    font-size: 0.78rem;
-  }
+  .site-footer .footer-inner { padding-top: 1.8rem; }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 1.4rem 1rem; padding-bottom: 1.2rem; }
+  .footer-brand { grid-column: 1 / -1; display: flex; align-items: center; gap: 1rem; }
+  .site-footer .footer-logo { margin-bottom: 0; flex-shrink: 0; }
+  .site-footer .footer-logo .logo { height: 38px; }
+  .site-footer .footer-tagline { font-size: 0.95rem; max-width: none; }
+  .footer-contact { grid-column: 1 / -1; }
+  .footer-contact p { margin-bottom: 0.5rem; font-size: 0.9rem; }
+  .site-footer h4 { margin-bottom: 0.4rem; }
+  .footer-col > a { padding: 0.25rem 0; font-size: 0.92rem; }
+  .footer-bottom { padding-top: 0.9rem; font-size: 0.8rem; }
 }
