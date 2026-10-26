@@ -3,331 +3,80 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Dashboard Admin | Filosovet</title>
+<title>Admin | Filosovet</title>
 <link rel="icon" type="image/png" href="../assets/images/logo_filosovet.png">
 
-<!-- Pre-script Anti Flashing Dark Mode -->
+<!-- Pre-script anti flash tema (terang/gelap mengikuti pilihan tersimpan atau preferensi sistem) -->
 <script>
   if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
     document.documentElement.classList.add('dark-mode');
   }
 </script>
 
-  <!-- CSS Utama -->
-  <link rel="stylesheet" href="../css/style.css">
-  <link rel="stylesheet" href="../css/shop.css">
-  <link rel="stylesheet" href="../css/admin.css">
-
-  <!-- CSS Komponen Terpisah -->
-  <link rel="stylesheet" href="../css/components/header.css">
-  <link rel="stylesheet" href="../css/components/footer.css">
-  
-  <!-- CSS Mode Malam -->
-  <link rel="stylesheet" href="../css/dark.css">
+<!-- Token & komponen dasar bersama situs publik (style.css memuat tokens.css) -->
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/admin.css">
 </head>
-<body>
+<body class="admin-body">
+<a class="skip-link" href="#view">Lewati ke konten utama</a>
 
-<!-- OVERLAY RESTRIKSI DESKTOP VIEW ONLY -->
-<div class="desktop-only-overlay" id="desktopOnlyOverlay">
-  <div class="desktop-warning-card">
-    <div class="warning-icon-wrapper">
-      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-        <line x1="8" y1="21" x2="16" y2="21"></line>
-        <line x1="12" y1="17" x2="12" y2="21"></line>
-      </svg>
+<div class="adm" id="adm">
+  <!-- SIDEBAR -->
+  <aside class="sb" id="sidebar" aria-label="Menu admin">
+    <div class="sb-head">
+      <a href="../index.html" class="sb-brand" title="Kembali ke situs Filosovet"><img src="../assets/images/logo_filosovet.png" alt="Filosovet" class="sb-logo"></a>
+      <button type="button" class="icon-btn sb-collapse" id="btnCollapse" aria-label="Ciutkan sidebar" aria-expanded="true"></button>
     </div>
-    <h2>Akses Terbatas</h2>
-    <p>Untuk mengakses <strong>Dashboard Admin Filosovet</strong>, Anda harus menggunakan perangkat komputer / PC (Desktop View).</p>
-    <div class="device-badge">
-      <span class="badge-dot"></span>
-      <span>Minimum Resolusi: 1024px</span>
-    </div>
+    <nav class="sb-nav" id="sbNav" aria-label="Halaman admin"></nav>
+    <div class="sb-foot"><a class="sb-item" href="../index.html" title="Lihat situs publik"><svg class="ico" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg><span class="sb-label">Lihat situs</span></a></div>
+  </aside>
+  <div class="sb-scrim" id="sbScrim"></div>
+
+  <div class="main">
+    <!-- HEADER -->
+    <header class="topbar">
+      <button type="button" class="icon-btn menu-btn" id="btnMenu" aria-label="Buka menu" aria-controls="sidebar" aria-expanded="false"></button>
+      <div class="tb-title"><h1 id="pageTitle">Dashboard</h1><p id="todayLabel"></p></div>
+
+      <div class="tb-search" role="search">
+        <span class="tb-search-ico" id="srIcon" aria-hidden="true"></span>
+        <label class="sr-only" for="gSearch">Cari pelanggan, kode booking, nomor nota, atau produk</label>
+        <input type="search" id="gSearch" placeholder="Cari pelanggan, booking, nota, produk…  ( / )" autocomplete="off" role="combobox" aria-expanded="false" aria-controls="gResults" aria-autocomplete="list">
+        <div class="sr-box" id="gResults" role="listbox" aria-label="Hasil pencarian" hidden></div>
+      </div>
+
+      <div class="tb-actions">
+        <div class="tb-notif">
+          <button type="button" class="icon-btn" id="btnNotif" aria-label="Notifikasi" aria-haspopup="true" aria-expanded="false"></button>
+          <div class="dropdown" id="notifPanel" hidden>
+            <div class="dd-head"><strong>Notifikasi</strong><button type="button" class="btn btn-ghost btn-sm" id="notifMark"></button></div>
+            <ul id="notifList" class="notif-list"></ul>
+          </div>
+        </div>
+        <div class="tb-acct">
+          <button type="button" class="acct-btn" id="btnAcct" aria-haspopup="true" aria-expanded="false" aria-label="Menu akun">
+            <span class="avatar" id="acctAvatar">A</span><span class="acct-name" id="acctName">Admin</span>
+          </button>
+          <div class="dropdown acct" id="acctPanel" hidden></div>
+        </div>
+      </div>
+    </header>
+
+    <main id="view" class="view" tabindex="-1" aria-live="polite"></main>
   </div>
 </div>
 
-<div class="admin-layout">
-  <!-- SIDEBAR (MENU UTAMA ADMIN) -->
-  <aside class="admin-sidebar">
-    <a href="../index.html" class="brand" title="Kembali ke Beranda">
-      <img src="../assets/images/logo_filosovet.png" alt="Logo Filosovet" class="logo">
-    </a>
-      <nav class="admin-menu">
-        <!-- 1. Dashboard -->
-        <a href="#" class="nav-item active" data-tab="dashboard" onclick="switchTab('dashboard')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
-            <rect x="3" y="3" width="7" height="9" rx="1"></rect>
-            <rect x="14" y="3" width="7" height="5" rx="1"></rect>
-            <rect x="14" y="12" width="7" height="9" rx="1"></rect>
-            <rect x="3" y="16" width="7" height="5" rx="1"></rect>
-          </svg>
-          <span>Dashboard</span>
-        </a>
+<div id="layerRoot"></div>
 
-        <!-- 2. Booking -->
-        <a href="#" class="nav-item" data-tab="booking" onclick="switchTab('booking')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-            <line x1="16" y1="2" x2="16" y2="6"></line>
-            <line x1="8" y1="2" x2="8" y2="6"></line>
-            <line x1="3" y1="10" x2="21" y2="10"></line>
-          </svg>
-          <span>Booking</span>
-        </a>
-
-        <!-- 3. Stok & Farmasi -->
-        <a href="#" class="nav-item" data-tab="stok" onclick="switchTab('stok')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
-            <path d="M10.5 20.5l10-10a4.95 4.95 0 1 0-7-7l-10 10a4.95 4.95 0 1 0 7 7z"></path>
-            <line x1="8.5" y1="8.5" x2="15.5" y2="15.5"></line>
-          </svg>
-          <span>Stok &amp; Farmasi</span>
-        </a>
-
-        <!-- 4. Produk -->
-        <a href="#" class="nav-item" data-tab="produk" onclick="switchTab('produk')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
-            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
-            <line x1="12" y1="22.08" x2="12" y2="12"></line>
-          </svg>
-          <span>Produk</span>
-        </a>
-
-        <!-- 5. Transaksi -->
-        <a href="#" class="nav-item" data-tab="transaksi" onclick="switchTab('transaksi')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-            <polyline points="14 2 14 8 20 8"></polyline>
-            <line x1="16" y1="13" x2="8" y2="13"></line>
-            <line x1="16" y1="17" x2="8" y2="17"></line>
-            <polyline points="10 9 9 9 8 9"></polyline>
-          </svg>
-          <span>Transaksi</span>
-        </a>
-
-        <!-- 6. Laporan -->
-        <a href="#" class="nav-item" data-tab="laporan" onclick="switchTab('laporan')">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="nav-icon">
-            <line x1="18" y1="20" x2="18" y2="10"></line>
-            <line x1="12" y1="20" x2="12" y2="4"></line>
-            <line x1="6" y1="20" x2="6" y2="14"></line>
-          </svg>
-          <span>Laporan</span>
-        </a>
-      </nav>
-  </aside>
-
-  <!-- KONTEN UTAMA DOKUMENTASI & KINERJA OPERASIONAL -->
-  <main class="admin-main">
-    <div class="admin-topbar">
-      <div class="topbar-title">
-        <h1 id="pageTitle">Dashboard Operasional</h1>
-        <p class="muted" style="font-size:.88rem" id="todayLabel"></p>
-      </div>
-      <div class="admin-user">
-        <div class="avatar">A</div>
-        <span class="user-name">Admin</span>
-      </div>
-    </div>
-
-    <!-- BANNER PERINGATAN STOK -->
-    <div class="alert-banner" id="stockAlert"></div>
-
-    <!-- TAB 1: DASHBOARD -->
-    <section id="tab-dashboard" class="tab-content active">
-      <div class="stat-grid">
-        <div class="stat-card">
-          <div class="stat-label">Booking Hari Ini</div>
-          <div class="stat-value" id="stBooking">0</div>
-          <div class="stat-delta up">+12% vs kemarin</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Pendapatan Hari Ini</div>
-          <div class="stat-value" id="stRevenue">Rp 0</div>
-          <div class="stat-delta up">+8% vs kemarin</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Okupansi Pet Hotel</div>
-          <div class="stat-value" id="stHotel">0%</div>
-          <div class="stat-delta up">+5% minggu ini</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">Stok Menipis</div>
-          <div class="stat-value" id="stLow" style="color:var(--danger)">0</div>
-          <div class="stat-delta down">Butuh restock</div>
-        </div>
-      </div>
-
-      <div class="panel-grid">
-        <div class="panel">
-          <div class="panel-head">
-            <h3>Booking Terbaru</h3>
-            <button class="btn btn-outline btn-sm" onclick="exportData('Booking Terbaru')">Export</button>
-          </div>
-          <div class="table-wrap" style="border:0">
-            <table>
-              <thead>
-                <tr>
-                  <th>Pelanggan</th>
-                  <th>Layanan</th>
-                  <th>Jadwal</th>
-                  <th>Status</th>
-                  <th>Aksi</th>
-                </tr>
-              </thead>
-              <tbody id="adminBookingBody"></tbody>
-            </table>
-          </div>
-        </div>
-
-        <div>
-          <div class="panel chart-wrap mb-4">
-            <div class="panel-head">
-              <h3>Pendapatan 7 Hari</h3>
-            </div>
-            <div class="bar-chart" id="barChart"></div>
-          </div>
-          <div class="panel">
-            <div class="panel-head">
-              <h3>Peringatan Stok</h3>
-              <a href="#" onclick="switchTab('stok')" style="font-size:.85rem;color:var(--primary);font-weight:600">+ Order Distributor</a>
-            </div>
-            <div id="lowStockList" style="display:grid;gap:.7rem"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 2: BOOKING -->
-    <section id="tab-booking" class="tab-content" style="display:none;">
-      <div class="panel">
-        <div class="panel-head">
-          <h3>Kelola Seluruh Reservasi & Janji Temu</h3>
-          <button class="btn btn-primary btn-sm" onclick="toast('Membuka form booking manual')">+ Tambah Booking Manual</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Pelanggan</th>
-                <th>Layanan</th>
-                <th>Jadwal</th>
-                <th>Status</th>
-                <th>Tindakan Status</th>
-              </tr>
-            </thead>
-            <tbody id="fullBookingTable"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 3: STOK & FARMASI -->
-    <section id="tab-stok" class="tab-content" style="display:none;">
-      <div class="panel">
-        <div class="panel-head">
-          <h3>Manajemen Stok Obat & Farmasi</h3>
-          <button class="btn btn-primary btn-sm" onclick="restockAll()">Order Restock Masal</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Nama Produk / Obat</th>
-                <th>Kategori</th>
-                <th>Stok Saat Ini</th>
-                <th>Batas Min.</th>
-                <th>Status</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="stokTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 4: PRODUK -->
-    <section id="tab-produk" class="tab-content" style="display:none;">
-      <div class="panel">
-        <div class="panel-head">
-          <h3>Katalog Produk Toko</h3>
-          <button class="btn btn-primary btn-sm" onclick="toast('Fitur Tambah Produk Baru Siap')">+ Produk Baru</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>Produk</th>
-                <th>Kategori</th>
-                <th>Harga</th>
-                <th>Stok</th>
-                <th>Terjual</th>
-                <th>Aksi</th>
-              </tr>
-            </thead>
-            <tbody id="produkTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 5: TRANSAKSI -->
-    <section id="tab-transaksi" class="tab-content" style="display:none;">
-      <div class="panel">
-        <div class="panel-head">
-          <h3>Riwayat Transaksi & Nota</h3>
-          <button class="btn btn-outline btn-sm" onclick="exportData('Transaksi')">Export Laporan</button>
-        </div>
-        <div class="table-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>ID Transaksi</th>
-                <th>Pelanggan</th>
-                <th>Tipe</th>
-                <th>Total</th>
-                <th>Metode Bayar</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="transaksiTableBody"></tbody>
-          </table>
-        </div>
-      </div>
-    </section>
-
-    <!-- TAB 6: LAPORAN -->
-    <section id="tab-laporan" class="tab-content" style="display:none;">
-      <div class="panel">
-        <div class="panel-head">
-          <h3>Ringkasan Laporan Operasional & Keuangan</h3>
-          <button class="btn btn-primary btn-sm" onclick="exportData('Laporan Keuangan')">Download PDF/Excel</button>
-        </div>
-        <div class="stat-grid" style="margin-bottom:1.5rem">
-          <div class="stat-card">
-            <div class="stat-label">Total Omset Bulan Ini</div>
-            <div class="stat-value">Rp 84.500.000</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Total Reservasi Selesai</div>
-            <div class="stat-value">342</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">Produk Terlaris</div>
-            <div class="stat-value" style="font-size:1.1rem">Dry Food Kucing Premium</div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</div>
-
-<!-- SCRIPTS -->
-<script src="../js/main.js"></script>
 <script src="../js/cart.js"></script>
-<script src="../js/admin.js"></script>
-<script src="../js/dark-mode.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/services-data.js"></script>
+<script src="../js/admin/core.js"></script>
+<script src="../js/admin/ui.js"></script>
+<script src="../js/admin/dashboard.js"></script>
+<script src="../js/admin/booking.js"></script>
+<script src="../js/admin/inventory.js"></script>
+<script src="../js/admin/finance.js"></script>
+<script src="../js/admin/shell.js"></script>
 </body>
 </html>

@@ -2,44 +2,7 @@
    FILOSOVET — booking.js (reservasi slot layanan)
    Bergantung pada main.js: rupiah(), toast(), getSavedPets()
    ============================================================ */
-const SERVICES = {
-  grooming: {
-    label: 'Grooming', icon: '',
-    types: [
-      { key: 'kucing', name: 'Grooming Kucing', price: 120000, min: 90 },
-      { key: 'anjing-kecil', name: 'Grooming Anjing <10kg', price: 150000, min: 90 },
-      { key: 'anjing-besar', name: 'Grooming Anjing >10kg', price: 200000, min: 90 },
-      { key: 'jamur', name: 'Grooming Jamur', price: 220000, min: 90 },
-    ],
-    staff: ['Paramedis bebas', 'Rani — Groomer', 'Bagas — Groomer'],
-    slots: ['09:00', '10:30', '13:00', '14:30', '16:00'],
-    hint: 'Durasi grooming ± 90 menit per slot.'
-  },
-  konsultasi: {
-    label: 'Konsultasi Dokter Hewan', icon: '',
-    types: [
-      { key: 'konsultasi-umum', name: 'Konsultasi Umum', price: 150000, min: 30 },
-      { key: 'medical-check-up', name: 'Medical Check-Up', price: 350000, min: 60 },
-      { key: 'vaksinasi', name: 'Vaksinasi', price: 180000, min: 20 },
-      { key: 'kontrol', name: 'Kontrol / Tindak Lanjut', price: 100000, min: 20 },
-    ],
-    staff: ['drh. Andini', 'drh. Prasetyo', 'drh. Larasati'],
-    slots: ['08:30', '09:30', '10:30', '11:30', '13:30', '15:00', '16:30'],
-    hint: 'Bawa kartu vaksin & riwayat kesehatan bila ada. Durasi bersifat estimasi.'
-  },
-  hotel: {
-    label: 'Pet Hotel', icon: '',
-    types: [
-      { key: 'reguler', name: 'Kandang Reguler', price: 150000 },
-      { key: 'premium', name: 'Kandang Premium', price: 250000 },
-      { key: 'suite', name: 'Kandang Suite', price: 400000 },
-    ],
-    staff: ['Paramedis Rawat Inap'],
-    slots: ['08:00', '10:00', '13:00', '15:00'], // jam check-in
-    hint: 'Wajib lampirkan bukti vaksin lengkap, bebas kutu & cacing saat check-in.',
-    perDay: true
-  }
-};
+/* Data layanan (SERVICES) dimuat dari js/services-data.js */
 
 const MONTH_NAMES = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 const DAY_NAMES = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
@@ -204,6 +167,8 @@ function renderTypes() {
 /* ---------- Validasi form hewan ---------- */
 function petErrors() {
   const errs = {};
+  if ($('ownerName').value.trim().length < 2) errs.ownerName = 'Nama pemilik minimal 2 karakter.';
+  if (!/^[0-9+\-\s]{8,16}$/.test($('ownerPhone').value.trim())) errs.ownerPhone = 'Nomor HP hanya angka, 8–16 digit.';
   const name = $('petName').value.trim();
   if (!name) errs.petName = 'Nama hewan wajib diisi.';
   else if (name.length < 2) errs.petName = 'Nama minimal 2 karakter.';
@@ -225,6 +190,8 @@ function missingItems() {
   if (!state.selectedDate) m.push('tanggal');
   if (!state.time) m.push('jam');
   const errs = petErrors();
+  if (errs.ownerName) m.push('nama pemilik');
+  if (errs.ownerPhone) m.push('nomor HP');
   if (errs.petName) m.push('nama hewan');
   if (errs.petWeight) m.push('berat yang valid');
   return m;
@@ -255,7 +222,7 @@ function updateSummary() {
   $('sumPriceBar').textContent = price;
 
   const dateDone = !!(d && state.time);
-  const petDone = !petErrors().petName && !petErrors().petWeight;
+  const petDone = !Object.keys(petErrors()).length;
   setBadge(1, true);
   setBadge(2, dateDone);
   setBadge(3, petDone);
@@ -329,10 +296,12 @@ function confirmBooking() {
   const booking = {
     code, layanan: cfg.label, icon: cfg.icon, tipe: type.name,
     tanggal: toISO(d), waktu: state.time,
+    pelanggan: $('ownerName').value.trim(), hp: $('ownerPhone').value.trim(), email: (getUser() || {}).email || '',
     hewan: petName, spesie: $('petSpecies').value || 'Kucing',
     ras: $('petBreed').value.trim(), berat: $('petWeight').value || '',
     petugas: $('svcStaff').value, durasiHari: dur,
-    biaya: type.price * dur, status: 'Menunggu Konfirmasi',
+    biaya: type.price * dur, status: 'Menunggu Konfirmasi', sumber: 'Online',
+    riwayat: [{ status: 'Menunggu Konfirmasi', at: new Date().toISOString(), by: 'Pelanggan' }],
     catatan: $('petNotes').value.trim()
   };
   let all = [];
@@ -340,7 +309,11 @@ function confirmBooking() {
   const rescheduled = !!state.rescheduleCode && all.some(b => b.code === state.rescheduleCode);
   if (rescheduled) {
     booking.code = state.rescheduleCode;
-    all = all.map(b => b.code === state.rescheduleCode ? booking : b);
+    all = all.map(b => {
+      if (b.code !== state.rescheduleCode) return b;
+      booking.riwayat = [...(b.riwayat || []), { status: 'Jadwal ulang', at: new Date().toISOString(), by: 'Pelanggan' }, ...booking.riwayat];
+      return booking;
+    });
   } else {
     all.unshift(booking);
   }
@@ -363,7 +336,7 @@ function initBookingEvents() {
   $('calPrev').onclick = () => { state.viewMonth--; if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; } renderCalendar(); };
   $('calNext').onclick = () => { state.viewMonth++; if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; } renderCalendar(); };
 
-  ['petName', 'petWeight'].forEach(id => {
+  ['ownerName', 'ownerPhone', 'petName', 'petWeight'].forEach(id => {
     $(id).addEventListener('input', () => { if ($(id).classList.contains('is-invalid')) validateField(id); updateSummary(); });
     $(id).addEventListener('blur', () => validateField(id));
   });
@@ -408,12 +381,19 @@ function initBooking() {
     }
   }
 
+  // Data pemilik: isi otomatis dari akun yang masuk
+  const u = getUser(), pr = (() => { try { return JSON.parse(localStorage.getItem('fv_profile')) || {}; } catch { return {}; } })();
+  if (u && u.name) $('ownerName').value = u.name;
+  if (pr.phone) $('ownerPhone').value = pr.phone;
+
   initSavedPets();
   initBookingEvents();
   renderService();
   if (state.rescheduleCode) {
     const old = (JSON.parse(localStorage.getItem('fv_bookings') || '[]')).find(b => b.code === state.rescheduleCode);
     if (old) {
+      if (old.pelanggan) $('ownerName').value = old.pelanggan;
+      if (old.hp) $('ownerPhone').value = old.hp;
       $('petName').value = old.hewan || '';
       if (old.spesie) $('petSpecies').value = old.spesie;
       $('petBreed').value = old.ras || '';

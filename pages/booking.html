@@ -107,7 +107,20 @@
 
       <!-- 3. DATA HEWAN -->
       <div class="card no-hover bk-card" id="stepPet">
-        <h2 class="bk-title"><span class="bk-badge" data-step="3">3</span> Data Hewan &amp; Keluhan</h2>
+        <h2 class="bk-title"><span class="bk-badge" data-step="3">3</span> Data Pemilik, Hewan &amp; Keluhan</h2>
+
+        <div class="bk-row">
+          <div class="form-group">
+            <label for="ownerName">Nama pemilik <span class="bk-req" aria-hidden="true">*</span></label>
+            <input type="text" id="ownerName" placeholder="Nama Anda" autocomplete="name" required aria-describedby="err-ownerName">
+            <small class="field-error" id="err-ownerName" role="alert"></small>
+          </div>
+          <div class="form-group">
+            <label for="ownerPhone">Nomor HP / WhatsApp <span class="bk-req" aria-hidden="true">*</span></label>
+            <input type="tel" id="ownerPhone" placeholder="08xxxxxxxxxx" autocomplete="tel" required aria-describedby="err-ownerPhone">
+            <small class="field-error" id="err-ownerPhone" role="alert"></small>
+          </div>
+        </div>
 
         <div class="form-group" id="savedPetWrap" style="display:none">
           <label for="savedPet">Pilih hewan tersimpan</label>
@@ -191,6 +204,7 @@
 
 <!-- SCRIPTS (Panggilan Presisi Berbasis ../) -->
 <script src="../js/main.js"></script>
+<script src="../js/services-data.js"></script>
 <script src="../js/booking.js"></script>
 <script src="../js/dark-mode.js"></script>
 </body>

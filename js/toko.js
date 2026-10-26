@@ -2,7 +2,6 @@
    FILOSOVET — js/toko.js (Filter, stepper keranjang, state kosong)
    Bergantung pada cart.js (PRODUCTS, addToCart, setQty) & main.js
    ============================================================ */
-const LOW_STOCK = 5;
 const ICON_IMG = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>';
 const ICON_EMPTY = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>';
 
@@ -22,7 +21,7 @@ function initShop() {
   }
 
   // Sembunyikan kategori yang belum punya produk
-  const used = new Set(PRODUCTS.map(p => p.cat));
+  const used = new Set(PRODUCTS.filter(p => p.aktif !== false).map(p => p.cat));
   document.querySelectorAll('#catFilters .filter-check').forEach(l => {
     if (!used.has(l.querySelector('input').value)) l.remove();
   });
@@ -64,6 +63,7 @@ function resetFilters() {
 
 function filteredProducts() {
   const list = PRODUCTS.filter(p => {
+    if (p.aktif === false) return false;
     const text = (p.name + ' ' + catLabel(p.cat)).toLowerCase();
     return text.includes(shop.search) && (!shop.cats.size || shop.cats.has(p.cat));
   });
@@ -77,12 +77,14 @@ function filteredProducts() {
 }
 
 function stockBadge(p) {
-  if (p.stock === 0) return '<span class="stock-badge out">Barang habis</span>';
-  if (p.stock <= LOW_STOCK) return '<span class="stock-badge low">Stok menipis</span>';
+  const st = stockStatus(p);
+  if (st === 'habis') return '<span class="stock-badge out">Barang habis</span>';
+  if (st === 'kurang') return '<span class="stock-badge low">Stok menipis</span>';
   return '<span class="stock-badge ok">Tersedia</span>';
 }
 
 function actionHtml(p) {
+  if (p.resep) return '<a class="btn btn-outline btn-sm btn-block" href="booking.html?layanan=konsultasi">Butuh resep dokter</a>';
   if (p.stock === 0) return '<button type="button" class="btn btn-primary btn-sm btn-block" disabled>Barang Habis</button>';
   const q = cartQty(p.id);
   if (q > 0) {
@@ -97,7 +99,7 @@ function actionHtml(p) {
 
 function cardHtml(p) {
   const img = p.image
-    ? `<img src="../assets/images/${p.image}" alt="${esc(p.name)}" class="product-img" loading="lazy">`
+    ? `<img src="${productImg(p)}" alt="${esc(p.name)}" class="product-img" loading="lazy">`
     : `<span class="thumb-fallback">${ICON_IMG}</span>`;
   return `
     <article class="product-card" data-id="${p.id}">

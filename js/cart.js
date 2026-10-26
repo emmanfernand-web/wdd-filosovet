@@ -1,30 +1,60 @@
 /* ============================================================
    FILOSOVET — cart.js (katalog produk & keranjang)
    ============================================================ */
-const PRODUCTS = [
-  { id: 1,  name: 'Dry Food Kucing Premium 1,5kg',  cat: 'makanan',  price: 185000, stock: 24, icon: '🍗', image: 'dry_food_cat.jpeg', sold: 312 },
-  { id: 2,  name: 'Dry Food Anjing Adult 3kg',      cat: 'makanan',  price: 265000, stock: 18, icon: '🦴', image: 'dry_food_dog.jpeg', sold: 245 },
-  { id: 3,  name: 'Wet Food Kucing Tuna 85g',       cat: 'makanan',  price: 22000,  stock: 60, icon: '🥫', image: 'wet_food_cat.jpeg', sold: 580 },
-  { id: 4,  name: 'Snack Dental Stick Anjing',      cat: 'makanan',  price: 48000,  stock: 0,  icon: '🦷', image: 'snack_dental_stick_dog.jpeg', sold: 150 },
-  { id: 5,  name: 'Obat Cacing Broad Spectrum',     cat: 'obat',     price: 35000,  stock: 40, icon: '💊', image: 'board_guard.jpeg', sold: 410 },
-  { id: 6,  name: 'Vitamin Bulu & Kulit 60ml',      cat: 'obat',     price: 78000,  stock: 12, icon: '🧪', image: 'skin_vitamin.jpeg', sold: 198 },
-  { id: 7,  name: 'Obat Kutu Spot-On Kucing',       cat: 'obat',     price: 95000,  stock: 5,  icon: '🩹', image: 'cat_flea.jpeg', sold: 265 },
-  { id: 8,  name: 'Antibiotik (resep dokter)',      cat: 'obat',     price: 60000,  stock: 3,  icon: '⚕️', image: 'animal_antibiotik.jpeg', sold: 96 },
-  { id: 9,  name: 'Shampoo Anti-Jamur 250ml',       cat: 'skincare', price: 65000,  stock: 22, icon: '🧴', image: 'pet_shampoo.jpeg', sold: 174 },
-  { id: 10, name: 'Conditioner Silk Coat 200ml',    cat: 'skincare', price: 58000,  stock: 16, icon: '🫧', image: 'pet_conditioner.jpeg', sold: 132 },
-  { id: 11, name: 'Paw Balm Pelembab Telapak',      cat: 'skincare', price: 42000,  stock: 9,  icon: '🐾', image: 'paw_balm.jpeg', sold: 88 },
-  { id: 12, name: 'Kalung Kucing motif',            cat: 'aksesoris',price: 35000,  stock: 30, icon: '🔔', image: 'cat_collars.jpeg', sold: 142 },
-  { id: 13, name: 'Mainan Bola & Tali Anjing',      cat: 'aksesoris',price: 29000,  stock: 26, icon: '🎾', image: 'dog_toy.jpeg', sold: 210 },
-  { id: 14, name: 'Kandang Travel Size M',          cat: 'aksesoris',price: 320000, stock: 7,  icon: '🧳', image: 'pet_create.jpeg', sold: 61 },
-  
-  
+/* Data bawaan produk. min = batas minimum stok, resep = butuh resep dokter,
+   exp = jam kedaluwarsa dalam hari dari hari ini (hanya obat & skincare). */
+const DEFAULT_PRODUCTS = [
+  { id: 1,  name: 'Dry Food Kucing Premium 1,5kg',  cat: 'makanan',  price: 185000, stock: 24, min: 10, image: 'dry_food_cat.jpeg', sold: 312 },
+  { id: 2,  name: 'Dry Food Anjing Adult 3kg',      cat: 'makanan',  price: 265000, stock: 18, min: 10, image: 'dry_food_dog.jpeg', sold: 245 },
+  { id: 3,  name: 'Wet Food Kucing Tuna 85g',       cat: 'makanan',  price: 22000,  stock: 60, min: 30, image: 'wet_food_cat.jpeg', sold: 580 },
+  { id: 4,  name: 'Snack Dental Stick Anjing',      cat: 'makanan',  price: 48000,  stock: 0,  min: 12, image: 'snack_dental_stick_dog.jpeg', sold: 150 },
+  { id: 5,  name: 'Obat Cacing Broad Spectrum',     cat: 'obat',     price: 35000,  stock: 40, min: 15, image: 'board_guard.jpeg', sold: 410, expDays: 25,  batch: 'BG-2504-07' },
+  { id: 6,  name: 'Vitamin Bulu & Kulit 60ml',      cat: 'obat',     price: 78000,  stock: 12, min: 15, image: 'skin_vitamin.jpeg', sold: 198, expDays: 50,  batch: 'VB-2505-02' },
+  { id: 7,  name: 'Obat Kutu Spot-On Kucing',       cat: 'obat',     price: 95000,  stock: 5,  min: 10, image: 'cat_flea.jpeg', sold: 265, expDays: 400, batch: 'SK-2510-11' },
+  { id: 8,  name: 'Antibiotik (resep dokter)',      cat: 'obat',     price: 60000,  stock: 3,  min: 10, image: 'animal_antibiotik.jpeg', sold: 96, resep: true, expDays: -4, batch: 'AB-2412-03' },
+  { id: 9,  name: 'Shampoo Anti-Jamur 250ml',       cat: 'skincare', price: 65000,  stock: 22, min: 12, image: 'pet_shampoo.jpeg', sold: 174, expDays: 500, batch: 'SH-2509-04' },
+  { id: 10, name: 'Conditioner Silk Coat 200ml',    cat: 'skincare', price: 58000,  stock: 16, min: 10, image: 'pet_conditioner.jpeg', sold: 132, expDays: 480, batch: 'CO-2509-09' },
+  { id: 11, name: 'Paw Balm Pelembab Telapak',      cat: 'skincare', price: 42000,  stock: 9,  min: 12, image: 'paw_balm.jpeg', sold: 88, expDays: 300, batch: 'PB-2506-01' },
+  { id: 12, name: 'Kalung Kucing motif',            cat: 'aksesoris',price: 35000,  stock: 30, min: 10, image: 'cat_collars.jpeg', sold: 142 },
+  { id: 13, name: 'Mainan Bola & Tali Anjing',      cat: 'aksesoris',price: 29000,  stock: 26, min: 10, image: 'dog_toy.jpeg', sold: 210 },
+  { id: 14, name: 'Kandang Travel Size M',          cat: 'aksesoris',price: 320000, stock: 7,  min: 5,  image: 'pet_create.jpeg', sold: 61 }
 ];
+
+function isoPlusDays(n) {
+  const d = new Date(); d.setDate(d.getDate() + n);
+  return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+}
+
+/* Satu sumber data produk & stok: localStorage 'fv_products' (diubah dari panel admin),
+   atau data bawaan bila belum pernah diubah. */
+function loadProducts() {
+  let list = null;
+  try { const st = JSON.parse(localStorage.getItem('fv_products')); if (Array.isArray(st) && st.length) list = st; } catch { }
+  if (!list) {
+    list = DEFAULT_PRODUCTS.map(d => {
+      const p = { ...d };
+      if (p.expDays != null) { p.exp = isoPlusDays(p.expDays); delete p.expDays; }
+      return p;
+    });
+  }
+  return list.map(p => ({ min: 10, resep: false, aktif: true, ...p }));
+}
+const PRODUCTS = loadProducts();
+function saveProducts() { localStorage.setItem('fv_products', JSON.stringify(PRODUCTS)); }
+/* Status stok: 'habis' (0), 'kurang' (di bawah minimum), 'aman' */
+function stockStatus(p) { return p.stock <= 0 ? 'habis' : (p.stock < p.min ? 'kurang' : 'aman'); }
+/* Sumber gambar produk: file di assets/images atau data URL hasil unggahan admin */
+function productImg(p, base) {
+  if (!p.image) return '';
+  return /^(data:|https?:)/.test(p.image) ? p.image : (base === undefined ? '../assets/images/' : base) + p.image;
+}
 const CAT_LABEL = { makanan: 'Makanan', obat: 'Obat & Vitamin', skincare: 'Skincare', aksesoris: 'Aksesoris', almed: 'Alat Medis' };
 
 /* ---------- Keranjang (localStorage) ---------- */
 function addToCart(id, qty = 1) {
   const p = PRODUCTS.find(x => x.id === id);
-  if (!p || p.stock <= 0) {
+  if (p && p.resep) { toast('Produk ini membutuhkan resep dokter', 'error'); return; }
+  if (!p || p.aktif === false || p.stock <= 0) {
     toast('Maaf, barang ini sedang habis', 'error');
     return;
   }
@@ -58,7 +88,7 @@ function setQty(id, qty) {
 function getCartDetailed() {
   return getCart().map(i => {
     const p = PRODUCTS.find(prod => prod.id === i.id);
-    return p ? { ...p, qty: i.qty } : null;
+    return p && p.aktif !== false ? { ...p, qty: i.qty } : null;
   }).filter(Boolean);
 }
 
@@ -128,7 +158,7 @@ function renderCartPage() {
   } else {
     wrap.innerHTML = items.map(p => `
       <div class="cart-item">
-        <div class="cart-thumb">${p.image ? `<img src="../assets/images/${p.image}" alt="${p.name}" class="cart-img">` : ICON_BOX}</div>
+        <div class="cart-thumb">${p.image ? `<img src="${productImg(p)}" alt="${p.name}" class="cart-img">` : ICON_BOX}</div>
         <div class="cart-info">
           <div class="cart-name">${p.name}</div>
           <div class="cart-unit-price">${rupiah(p.price)} / item</div>
@@ -179,6 +209,8 @@ function checkout() {
     item: items.reduce((s, p) => s + p.qty, 0),
     total: t.total, metode: payMethodEl ? payMethodEl.value : 'Transfer Bank',
     produk: items.map(p => `${p.name} x${p.qty}`),
+    sumber: 'Online', pelanggan: (typeof getUser === 'function' && getUser() || {}).name || '',
+    statusBayar: /COD/i.test(payMethodEl ? payMethodEl.value : '') ? 'Menunggu' : 'Lunas',
     // Rincian untuk halaman Riwayat Transaksi
     rincian: items.map(p => ({ name: p.name, qty: p.qty, price: p.price })),
     subtotal: t.subtotal, diskon: t.diskon, kodePromo: t.diskon ? promoCode : '',
@@ -188,6 +220,13 @@ function checkout() {
   try { hist = JSON.parse(localStorage.getItem('fv_orders') || '[]'); } catch { }
   hist.unshift(nota);
   localStorage.setItem('fv_orders', JSON.stringify(hist));
+
+  // Kurangi stok & tambah jumlah terjual (data yang sama dibaca panel admin)
+  items.forEach(it => {
+    const prod = PRODUCTS.find(x => x.id === it.id);
+    if (prod) { prod.stock = Math.max(0, prod.stock - it.qty); prod.sold = (prod.sold || 0) + it.qty; }
+  });
+  saveProducts();
 
   saveCart([]);
   promo = 0; promoCode = '';

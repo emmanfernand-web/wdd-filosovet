@@ -2,51 +2,10 @@
    FILOSOVET — css/style.css (Global Foundation & Utilities Only)
    ============================================================ */
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap');
+@import url('tokens.css');
 
-:root {
-  /* Sage & Beige Palette (Light Mode - Primary) */
-  --bg: #F5F0E6;              /* Warm beige background */
-  --surface: #FAF6F0;         /* Lighter cream surface */
-  --surface-alt: #EFE9DE;     /* Soft secondary background */
-  --primary: #6B8F71;         /* Sage main accent */
-  --primary-dark: #4F6F52;    /* Darker sage for active/hover states */
-  --primary-light: #E2EBDD;   /* Soft pale sage for badges & highlights */
-  --accent: #D4A373;          /* Soft warm amber/beige accent */
-  --accent-dark: #B38054;     /* Darker warm accent */
-  --accent-light: #FCE8D5;    /* Soft pale amber background */
-  --danger: #C85A54;          /* Soft warm red */
-  --danger-bg: #F9E8E7;       /* Soft red background */
-  --border: #E0D8C8;          /* Soft warm border */
-  --text: #3A332C;            /* Dark warm brown/grey text (not pitch black) */
-  --muted: #62584F;           /* Warm muted text (kontras AA di atas krem) */
-  --text-light: #FFFFFF;
-  --radius: 16px;
-  --radius-sm: 10px;          /* input, chip */
-  --radius-lg: 24px;          /* banner, modal */
-  --radius-pill: 999px;
-  --shadow: 0 12px 30px -6px rgba(58, 51, 44, 0.08);
-  --shadow-hover: 0 20px 35px -10px rgba(107, 143, 113, 0.22);
-  --shadow-sm: 0 4px 12px rgba(58, 51, 44, 0.05);
-  --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  --font-serif: 'Fraunces', Georgia, 'Times New Roman', serif;
-  --transition: all 0.18s ease;
 
-  /* Skala spasi */
-  --space-1: 0.25rem;
-  --space-2: 0.5rem;
-  --space-3: 1rem;
-  --space-4: 1.5rem;
-  --space-5: 2.5rem;
-  --space-6: 4rem;
 
-  /* Tinggi kontrol */
-  --control-h: 44px;
-  --control-h-sm: 36px;
-
-  /* Focus ring */
-  --focus-ring: #3F6B6B;
-}
-:root.dark-mode, html.dark-mode { --focus-ring: #F0C48F; }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
