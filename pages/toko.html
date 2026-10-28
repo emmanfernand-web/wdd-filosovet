@@ -112,6 +112,25 @@
 
   </div>
 </section>
+
+<!-- MODAL PERINGATAN LOGIN -->
+<div class="auth-modal-overlay" id="authPromptModal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="authPromptTitle">
+  <div class="auth-modal-card">
+    <button type="button" class="auth-modal-close" id="authPromptClose" aria-label="Tutup popup">&times;</button>
+    <div class="auth-modal-icon" aria-hidden="true">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+      </svg>
+    </div>
+    <h3 class="auth-modal-title" id="authPromptTitle">Perlu Masuk Akun</h3>
+    <p class="auth-modal-desc">Silakan login terlebih dahulu untuk menambahkan barang ke keranjang!</p>
+    <div class="auth-modal-actions">
+      <a href="auth.html" class="btn btn-primary btn-block">Masuk Sekarang</a>
+      <button type="button" class="btn btn-outline btn-block" id="authPromptCancel">Nanti Saja</button>
+    </div>
+  </div>
+</div>
+
 <!-- FOOTER: dimuat dari components/footer.html -->
 <div id="footer-placeholder"></div>
 

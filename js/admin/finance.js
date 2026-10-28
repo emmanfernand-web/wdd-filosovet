@@ -211,15 +211,17 @@ Pages.laporan = {
   title: 'Laporan',
   render(view) {
     view.innerHTML = `
-      <div class="page-bar">
-        <div class="filters inline">
-          <div class="sel"><label class="sr-only" for="lpPer">Periode laporan</label><select id="lpPer">${PERIODS.filter(p => p[0] !== 'all').map(o => `<option value="${o[0]}" ${LP.period === o[0] ? 'selected' : ''}>${o[1]}</option>`).join('')}</select></div>
-          <div class="custom-range" id="lpCustom" ${LP.period === 'custom' ? '' : 'hidden'}><input type="date" id="lpFrom" value="${LP.from}" aria-label="Dari tanggal"><span>–</span><input type="date" id="lpTo" value="${LP.to}" aria-label="Sampai tanggal"></div>
-          <span class="muted" id="lpRangeLbl"></span>
+      <div id="tab-laporan">
+        <div class="page-bar">
+          <div class="filters inline">
+            <div class="sel"><label class="sr-only" for="lpPer">Periode laporan</label><select id="lpPer">${PERIODS.filter(p => p[0] !== 'all').map(o => `<option value="${o[0]}" ${LP.period === o[0] ? 'selected' : ''}>${o[1]}</option>`).join('')}</select></div>
+            <div class="custom-range" id="lpCustom" ${LP.period === 'custom' ? '' : 'hidden'}><input type="date" id="lpFrom" value="${LP.from}" aria-label="Dari tanggal"><span>–</span><input type="date" id="lpTo" value="${LP.to}" aria-label="Sampai tanggal"></div>
+            <span class="muted" id="lpRangeLbl"></span>
+          </div>
+          <div class="bar-right"><button type="button" class="btn btn-outline" id="lpPdf">${ico('printer', 16)} Unduh PDF</button><button type="button" class="btn btn-primary" id="lpCsv">${ico('download', 16)} Unduh Excel/CSV</button></div>
         </div>
-        <div class="bar-right"><button type="button" class="btn btn-outline" id="lpPdf">${ico('printer', 16)} Unduh PDF</button><button type="button" class="btn btn-primary" id="lpCsv">${ico('download', 16)} Unduh Excel/CSV</button></div>
-      </div>
-      <div id="lpBody"></div>`;
+        <div id="lpBody"></div>
+      </div>`;
     $q('#lpPer').onchange = e => { LP.period = e.target.value; $q('#lpCustom').hidden = LP.period !== 'custom'; this.body(); };
     $q('#lpFrom').onchange = e => { LP.from = e.target.value; this.body(); }; $q('#lpTo').onchange = e => { LP.to = e.target.value; this.body(); };
     $q('#lpPdf').onclick = () => this.pdf(); $q('#lpCsv').onclick = () => this.csv();
@@ -237,11 +239,11 @@ Pages.laporan = {
     const topP = cur.prod[0];
     $q('#lpBody').innerHTML = `
       <section class="stat-grid stat-grid-5" aria-label="Ringkasan periode">
-        <div class="stat static"><span class="stat-label">Omset</span><span class="stat-value">${rp(cur.omset)}</span>${deltaBadge(cur.omset, prev.omset)}</div>
-        <div class="stat static"><span class="stat-label">Reservasi Selesai</span><span class="stat-value">${cur.selesai}</span>${deltaBadge(cur.selesai, prev.selesai)}</div>
-        <div class="stat static"><span class="stat-label">Produk Terlaris</span><span class="stat-value stat-text" title="${topP ? esc(topP.name) : ''}">${topP ? esc(topP.name) : '—'}</span><span class="delta flat">${topP ? `${topP.qty} unit terjual` : 'Belum ada penjualan'}</span></div>
-        <div class="stat static"><span class="stat-label">Tingkat Tidak Hadir</span><span class="stat-value">${cur.rate}%</span>${rateDelta(cur.rate, prev.rate)}</div>
-        <div class="stat static"><span class="stat-label">Okupansi Pet Hotel</span><span class="stat-value">${cur.occ}%</span>${deltaBadge(cur.occ, prev.occ, 'pt')}</div>
+        <div class="stat stat-card static"><span class="stat-label">Omset</span><span class="stat-value">${rp(cur.omset)}</span>${deltaBadge(cur.omset, prev.omset)}</div>
+        <div class="stat stat-card static"><span class="stat-label">Reservasi Selesai</span><span class="stat-value">${cur.selesai}</span>${deltaBadge(cur.selesai, prev.selesai)}</div>
+        <div class="stat stat-card static"><span class="stat-label">Produk Terlaris</span><span class="stat-value stat-text" title="${topP ? esc(topP.name) : ''}">${topP ? esc(topP.name) : '—'}</span><span class="delta flat">${topP ? `${topP.qty} unit terjual` : 'Belum ada penjualan'}</span></div>
+        <div class="stat stat-card static"><span class="stat-label">Tingkat Tidak Hadir</span><span class="stat-value">${cur.rate}%</span>${rateDelta(cur.rate, prev.rate)}</div>
+        <div class="stat stat-card static"><span class="stat-label">Okupansi Pet Hotel</span><span class="stat-value">${cur.occ}%</span>${deltaBadge(cur.occ, prev.occ, 'pt')}</div>
       </section>
       <div class="grid-2">
         <section class="panel"><div class="panel-head"><h2>Omset per Hari</h2></div><div id="lpDaily"></div></section>

@@ -39,20 +39,20 @@ Pages.dashboard = {
     view.innerHTML = `
       ${banner}
       <section class="stat-grid ${compact ? 'stat-grid-1' : ''}" aria-label="Ringkasan hari ini">
-        <button type="button" class="stat" data-go="booking" data-gp='{"range":"today"}'>
+        <button type="button" class="stat stat-card" data-go="booking" data-gp='{"range":"today"}'>
           <span class="stat-ico">${ico('booking', 20)}</span><span class="stat-label">Booking Hari Ini</span>
           <span class="stat-value">${bt}</span>${pctDelta(bt, by, 'kemarin')}
         </button>
         ${compact ? '' : `
-        <button type="button" class="stat" data-go="transaksi" data-gp='{"period":"today"}'>
+        <button type="button" class="stat stat-card" data-go="transaksi" data-gp='{"period":"today"}'>
           <span class="stat-ico">${ico('transaksi', 20)}</span><span class="stat-label">Pendapatan Hari Ini</span>
           <span class="stat-value">${rp(rt)}</span>${pctDelta(rt, ry, 'kemarin')}
         </button>
-        <button type="button" class="stat" data-go="booking" data-gp='{"range":"today","layanan":"Pet Hotel"}'>
+        <button type="button" class="stat stat-card" data-go="booking" data-gp='{"range":"today","layanan":"Pet Hotel"}'>
           <span class="stat-ico">${ico('heart', 20)}</span><span class="stat-label">Okupansi Pet Hotel</span>
           <span class="stat-value">${opct}%</span>${pctDelta(opct, opctY, 'kemarin')}
         </button>
-        <button type="button" class="stat ${low ? 'stat-alert' : ''}" data-go="stok" data-gp='{"status":"butuh"}'>
+        <button type="button" class="stat stat-card ${low ? 'stat-alert' : ''}" data-go="stok" data-gp='{"status":"butuh"}'>
           <span class="stat-ico">${ico('stok', 20)}</span><span class="stat-label">Stok Menipis</span>
           <span class="stat-value">${low}</span><span class="delta ${low ? 'down' : 'flat'}">${low ? `${sc.habis} habis · ${sc.kurang} kurang` : 'Semua stok aman'}</span>
         </button>`}

@@ -48,6 +48,20 @@ function initShop() {
   });
   $s('resetFilter').addEventListener('click', resetFilters);
 
+  const authModal = document.getElementById('authPromptModal');
+  if (authModal) {
+    const closeBtn = document.getElementById('authPromptClose');
+    const cancelBtn = document.getElementById('authPromptCancel');
+    if (closeBtn) closeBtn.addEventListener('click', closeAuthPrompt);
+    if (cancelBtn) cancelBtn.addEventListener('click', closeAuthPrompt);
+    authModal.addEventListener('click', e => {
+      if (e.target === authModal) closeAuthPrompt();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !authModal.hidden) closeAuthPrompt();
+    });
+  }
+
   grid.addEventListener('click', onGridClick);
   grid.addEventListener('error', onImgError, true);
   window.addEventListener('pageshow', render);
@@ -159,6 +173,14 @@ function onGridClick(e) {
   const p = PRODUCTS.find(x => x.id === id);
   if (!p) return;
   const act = btn.dataset.act;
+
+  if (act === 'add' || act === 'inc') {
+    if (!localStorage.getItem('fv_user')) {
+      showAuthPrompt();
+      return;
+    }
+  }
+
   if (act === 'add') {
     const before = cartQty(id);
     addToCart(id, 1);
@@ -167,6 +189,34 @@ function onGridClick(e) {
   else if (act === 'inc') { if (cartQty(id) < p.stock) setQty(id, cartQty(id) + 1); }
   else if (act === 'dec') setQty(id, cartQty(id) - 1);
   refreshCard(id);
+}
+
+function showAuthPrompt() {
+  const modal = document.getElementById('authPromptModal');
+  if (!modal) {
+    alert('Silakan login terlebih dahulu untuk menambahkan barang ke keranjang!');
+    window.location.href = 'auth.html';
+    return;
+  }
+  modal.hidden = false;
+  requestAnimationFrame(() => {
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+  });
+  document.body.style.overflow = 'hidden';
+  const loginBtn = modal.querySelector('.btn-primary');
+  if (loginBtn) loginBtn.focus();
+}
+
+function closeAuthPrompt() {
+  const modal = document.getElementById('authPromptModal');
+  if (!modal) return;
+  modal.classList.remove('is-open');
+  modal.setAttribute('aria-hidden', 'true');
+  document.body.style.overflow = '';
+  setTimeout(() => {
+    if (!modal.classList.contains('is-open')) modal.hidden = true;
+  }, 240);
 }
 
 /* Fallback bila gambar gagal dimuat */

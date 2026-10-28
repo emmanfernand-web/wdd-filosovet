@@ -148,3 +148,105 @@
   .product-sold { display: none; }
   .product-price { font-size: 0.98rem; }
 }
+
+/* ============================================================
+   5. Modal Peringatan Login
+   ============================================================ */
+.auth-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 22, 19, 0.65);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 2500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+.auth-modal-overlay.is-open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.auth-modal-card {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg, 24px);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28), 0 4px 16px rgba(0, 0, 0, 0.12);
+  width: 100%;
+  max-width: 390px;
+  padding: 2.2rem 1.8rem 1.8rem;
+  text-align: center;
+  transform: translateY(14px) scale(0.96);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.auth-modal-overlay.is-open .auth-modal-card {
+  transform: translateY(0) scale(1);
+}
+
+.auth-modal-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 1.5rem;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.auth-modal-close:hover {
+  background: var(--surface-alt);
+  color: var(--text);
+}
+
+.auth-modal-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.2rem;
+  border-radius: 50%;
+  background: var(--primary-light);
+  color: var(--primary-dark);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 8px color-mix(in srgb, var(--primary) 14%, transparent);
+}
+
+.auth-modal-title {
+  font-family: var(--font-serif);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0 0 0.5rem;
+}
+
+.auth-modal-desc {
+  font-size: 0.92rem;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 0 0 1.5rem;
+}
+
+.auth-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.auth-modal-actions .btn {
+  width: 100%;
+}
