@@ -6,6 +6,13 @@
 <title>Profil &amp; Riwayat | Filosovet Petshop &amp; Klinik Hewan</title>
 <link rel="icon" type="image/png" href="../assets/images/logo_filosovet.png">
 
+<!-- Auth Guard Script (Anti-Flashing) -->
+<script>
+  if (!localStorage.getItem('fv_user')) {
+    window.location.href = 'auth.html';
+  }
+</script>
+
 <!-- Pre-script Anti Flashing Dark Mode -->
 <script>
   if (localStorage.getItem('fv_theme') === 'dark' || (!('fv_theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
