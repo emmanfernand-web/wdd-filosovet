@@ -79,7 +79,7 @@
       <div class="summary-row total"><span>Total</span><span id="sumTotal">Rp 0</span></div>
       <hr class="mb-3" style="border:0;border-top:1px solid var(--border);margin:1rem 0">
       <div class="form-group">
-        <label for="payMethod">Metode Pembayaran</label>
+        <label for="payMethod">Metode Pembayaran (simulasi)</label><p class="muted">Demo lokal; tidak ada pembayaran bank yang diproses.</p>
         <select id="payMethod">
           <option>QRIS</option>
           <option>Transfer Bank (BCA)</option>
@@ -88,7 +88,7 @@
           <option>COD (bayar di toko)</option>
         </select>
       </div>
-      <button type="button" class="btn btn-primary btn-block" id="btnCheckout">Bayar Sekarang</button>
+      <button type="button" class="btn btn-primary btn-block" id="btnCheckout">Simulasikan Pembayaran</button>
       <a href="toko.html" class="btn btn-outline btn-block continue-link">← Lanjut Belanja</a>
     </div>
   </div>
@@ -101,7 +101,7 @@
       <div class="nota-success-badge">
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
       </div>
-      <h2 class="nota-title" id="notaTitle">Pembayaran Berhasil</h2>
+      <h2 class="nota-title" id="notaTitle">Pesanan Simulasi Tercatat</h2>
       <p class="nota-subtitle">Terima kasih, transaksi Anda telah selesai diproses.</p>
     </div>
     <div class="nota-tear"></div>
@@ -122,6 +122,7 @@
 <div id="footer-placeholder"></div>
 
 <!-- SCRIPTS (Urutan Panggilan Presisi & Menggunakan ../) -->
+<script src="../js/operations-store.js"></script>
 <script src="../js/cart.js"></script>
 <script src="../js/main.js"></script>
 <script src="../js/dark-mode.js"></script>

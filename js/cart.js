@@ -198,6 +198,7 @@ function renderCartPage() {
 }
 
 function checkout() {
+  const latest = loadProducts(); PRODUCTS.splice(0, PRODUCTS.length, ...latest);
   const items = getCartDetailed();
   if (!items.length) return;
   const t = cartTotals(items);
@@ -212,21 +213,12 @@ function checkout() {
     sumber: 'Online', pelanggan: (typeof getUser === 'function' && getUser() || {}).name || '',
     statusBayar: /COD/i.test(payMethodEl ? payMethodEl.value : '') ? 'Menunggu' : 'Lunas',
     // Rincian untuk halaman Riwayat Transaksi
-    rincian: items.map(p => ({ name: p.name, qty: p.qty, price: p.price })),
+    rincian: items.map(p => ({ id: p.id, name: p.name, qty: p.qty, price: p.price })),
     subtotal: t.subtotal, diskon: t.diskon, kodePromo: t.diskon ? promoCode : '',
     ongkir: t.ongkir, pengiriman: t.ambil ? 'Ambil di toko' : 'Dikirim ke alamat'
   };
-  let hist = [];
-  try { hist = JSON.parse(localStorage.getItem('fv_orders') || '[]'); } catch { }
-  hist.unshift(nota);
-  localStorage.setItem('fv_orders', JSON.stringify(hist));
-
-  // Kurangi stok & tambah jumlah terjual (data yang sama dibaca panel admin)
-  items.forEach(it => {
-    const prod = PRODUCTS.find(x => x.id === it.id);
-    if (prod) { prod.stock = Math.max(0, prod.stock - it.qty); prod.sold = (prod.sold || 0) + it.qty; }
-  });
-  saveProducts();
+  try { FVStore.checkout(items, nota); }
+  catch (error) { toast(error.message, 'error'); return; }
 
   saveCart([]);
   promo = 0; promoCode = '';

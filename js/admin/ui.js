@@ -108,7 +108,7 @@ UI.modal = function ({ title, body, actions = [], size = 'md', onOpen, desc }) {
   const layer = openLayer($q('#layerRoot'), el);
   el.addEventListener('mousedown', e => { if (e.target === el) layer.close(); });
   $q('[data-close]', el).onclick = layer.close;
-  actions.forEach((a, i) => { $q(`[data-act="${i}"]`, el).onclick = () => a.onClick ? a.onClick(layer.close, el) : layer.close(); });
+  actions.forEach((a, i) => { $q(`[data-act="${i}"]`, el).onclick = () => { try { const result = a.onClick ? a.onClick(layer.close, el) : layer.close(); if (result && result.catch) result.catch(error => UI.toast(error.message, 'error')); } catch(error) { UI.toast(error.message, 'error'); } }; });
   const first = $q('input:not([type=hidden]), select, textarea', el) || $q('[data-act]:last-child', el) || $q('[data-close]', el);
   setTimeout(() => first && first.focus(), 30);
   onOpen && onOpen(el, layer.close);

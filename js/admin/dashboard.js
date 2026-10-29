@@ -18,7 +18,7 @@ function whenLabel(b) {
   return `${d === 0 ? 'Hari ini' : d === 1 ? 'Besok' : fmtDateShort(b.tanggal)} · ${b.waktu}`;
 }
 AD.whenLabel = whenLabel;
-const nameCell = b => `<div class="cell-stack"><strong class="${b.pelanggan ? '' : 'dim'}">${esc(b.pelanggan || 'Tanpa nama')}</strong><small class="sub">${esc(b.hewan || '—')}${b.spesie ? ' · ' + esc(b.spesie) : ''}</small></div>`;
+const nameCell = b => `<div class="cell-stack"><strong class="${b.pelanggan ? '' : 'dim'}">${esc(b.pelanggan || 'Tanpa nama')}</strong>${b.seed ? '<small class="sub">Contoh demo</small>' : ''}<small class="sub">${esc(b.hewan || '—')}${b.spesie ? ' · ' + esc(b.spesie) : ''}</small></div>`;
 AD.nameCell = nameCell;
 
 Pages.dashboard = {

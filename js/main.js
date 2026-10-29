@@ -146,8 +146,14 @@ const FV_DEFAULT_PETS = [
   { id: 'bubu', name: 'Bubu', species: 'Anjing', breed: 'Golden Retriever', weight: 18, vaksin: 'segera', vaksinNote: 'Vaksin diperbarui 2 bln lagi', steril: false }
 ];
 function getSavedPets() {
-  try { const p = JSON.parse(localStorage.getItem('fv_pets')); if (Array.isArray(p)) return p; } catch { }
-  return FV_DEFAULT_PETS;
+  let legacy = FV_DEFAULT_PETS;
+  try { const p = JSON.parse(localStorage.getItem('fv_pets')); if (Array.isArray(p)) legacy = p; } catch { }
+  if (typeof FVStore === 'undefined') return legacy;
+  const ids=FVStore.currentCustomerIds();
+  const shared=FVStore.state().pets.filter(p=>ids.includes(p.customerId));
+  const result=legacy.map(p=>({...p}));
+  shared.forEach(p=>{const old=result.find(x=>x.name===p.nama&&x.species===p.spesie);if(old)Object.assign(old,{name:p.nama,species:p.spesie,breed:p.ras,weight:p.weight??old.weight});else result.push({id:p.id,name:p.nama,species:p.spesie,breed:p.ras,weight:p.weight||'',vaksin:p.vaksin||'belum'});});
+  return result;
 }
 
 function getUser() { try { return JSON.parse(localStorage.getItem('fv_user')); } catch { return null; } }

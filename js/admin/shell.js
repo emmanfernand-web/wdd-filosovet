@@ -2,10 +2,7 @@
    FILOSOVET ADMIN — shell.js
    Sidebar, header (cari, notifikasi, akun), routing, tema, peran
    ============================================================ */
-const NAV = [
-  { id: 'dashboard', label: 'Dashboard' }, { id: 'booking', label: 'Booking' }, { id: 'stok', label: 'Stok & Farmasi' },
-  { id: 'produk', label: 'Produk' }, { id: 'transaksi', label: 'Transaksi' }, { id: 'laporan', label: 'Laporan' }
-];
+const NAV = Object.entries({dashboard:'Dashboard',booking:'Booking & Kalender',pelanggan:'Pelanggan & Hewan',stok:'Stok & Farmasi',produk:'Produk',transaksi:'Riwayat Transaksi',laporan:'Laporan',staff:'Staff & Role',pengaturan:'Pengaturan',pembayaran:'Pembayaran',pos:'Kasir / POS',supplier:'Restock & Supplier',mutasi:'Riwayat Stok',antrean:'Antrean / Check-in',pasien:'Pasien Hari Ini',medis:'Rekam Medis',resep:'Resep Obat',jadwal:'Jadwal Konsultasi',grooming:'Jadwal Grooming',proses:'Proses Grooming',riwayatgrooming:'Riwayat Grooming',reservasi:'Reservasi Hotel',kandang:'Kandang & Okupansi',perawatan:'Perawatan Harian',riwayathotel:'Riwayat Penitipan'}).map(([id,label])=>({id,label}));
 AD.current = 'dashboard';
 AD.nextParams = null;
 AD.params = {};
@@ -24,14 +21,14 @@ AD.render = function (fromGo) {
   const params = AD.nextParams || {}; AD.nextParams = null; AD.params = params;
   AD.current = page;
   document.title = `${Pages[page].title} | Admin Filosovet`;
-  $q('#pageTitle').textContent = Pages[page].title;
+  $q('#pageTitle').textContent = page === 'dashboard' ? ROLES[AD.role()].title : Pages[page].title;
   drawSidebar();
   const view = $q('#view');
   clearTimeout(navTimer);
   view.setAttribute('aria-busy', 'true');
   view.innerHTML = `<div class="panel">${UI.skeletonRows(6, 5)}</div>`;
   navTimer = setTimeout(() => {
-    Pages[page].render(view, params);
+    try { Pages[page].render(view, params); } catch(error) { view.innerHTML = '<section class="panel work-pad"><h2>Data tidak dapat dimuat</h2><p>'+esc(error.message)+'</p></section>'; }
     view.setAttribute('aria-busy', 'false');
     if (params.drawer && page === 'booking') AD.openBooking(params.drawer);
     window.scrollTo(0, 0);
@@ -50,7 +47,7 @@ function drawSidebar() {
   const bkBadge = AD.bookings.all().filter(b => AD.bookings.eff(b) === 'Menunggu Konfirmasi').length;
   const sc = AD.stock.counts(), stBadge = sc.habis + sc.kurang;
   const badges = { booking: bkBadge, stok: stBadge };
-  $q('#sbNav').innerHTML = NAV.filter(n => AD.can(n.id)).map(n => `<a href="#/${n.id}" class="sb-item ${AD.current === n.id ? 'active' : ''}" ${AD.current === n.id ? 'aria-current="page"' : ''} title="${n.label}" data-nav="${n.id}">${ico(n.id, 20)}<span class="sb-label">${n.label}</span>${badges[n.id] ? `<span class="sb-badge ${n.id === 'stok' ? 'warn' : ''}" aria-label="${badges[n.id]} ${n.id === 'booking' ? 'menunggu konfirmasi' : 'stok bermasalah'}">${badges[n.id]}</span>` : ''}</a>`).join('');
+  $q('#sbNav').innerHTML = ROLES[AD.role()].pages.map(id => NAV.find(n => n.id === id)).map(n => `<a href="#/${n.id}" class="sb-item ${AD.current === n.id ? 'active' : ''}" ${AD.current === n.id ? 'aria-current="page"' : ''} title="${n.label}" data-nav="${n.id}">${ico(['dashboard','booking','stok','produk','transaksi','laporan'].includes(n.id)?n.id:'user', 20)}<span class="sb-label">${n.id === 'dashboard' ? ROLES[AD.role()].title : n.id === 'booking' && AD.role() === 'admin' ? 'Booking' : n.label}</span>${badges[n.id] ? `<span class="sb-badge ${n.id === 'stok' ? 'warn' : ''}" aria-label="${badges[n.id]} ${n.id === 'booking' ? 'menunggu konfirmasi' : 'stok bermasalah'}">${badges[n.id]}</span>` : ''}</a>`).join('');
 }
 const adm = () => $q('#adm');
 function setCollapsed(c) { adm().classList.toggle('collapsed', c); localStorage.setItem('fv_admin_collapsed', c ? '1' : '0'); const b = $q('#btnCollapse'); b.innerHTML = ico(c ? 'expand' : 'collapse', 18); b.setAttribute('aria-label', c ? 'Perluas sidebar' : 'Ciutkan sidebar'); b.setAttribute('aria-expanded', !c); }
@@ -89,14 +86,15 @@ function drawAcct() {
     <button type="button" class="acct-item" data-a="profil">${ico('user', 16)} Profil</button>
     <button type="button" class="acct-item" data-a="theme">${ico(AD.isDark() ? 'sun' : 'moon', 16)} Ganti tema (${AD.isDark() ? 'terang' : 'gelap'})</button>
     <div class="acct-role"><label for="roleSel">${ico('user', 16)} Simulasi peran</label><select id="roleSel">${Object.keys(ROLES).map(k => `<option value="${k}" ${AD.role() === k ? 'selected' : ''}>${ROLES[k].label}</option>`).join('')}</select></div>
-    <button type="button" class="acct-item" data-a="reset">${ico('refresh', 16)} Reset data demo</button>
+    ${AD.role() === 'admin' ? `<button type="button" class="acct-item" data-a="reset">${ico('refresh', 16)} Reset data demo</button>` : ''}
+    <div class="acct-role"><label for="staffSel">Identitas staff demo</label><select id="staffSel">${AD.staffChoices().map(n=>`<option ${n===AD.actor()?'selected':''}>${esc(n)}</option>`).join('')}</select></div>
     <hr><button type="button" class="acct-item danger" data-a="logout">${ico('logout', 16)} Keluar</button>`;
 }
 function acctAction(a) {
   closePanels();
   if (a === 'theme') return AD.toggleTheme();
   if (a === 'profil') return UI.modal({ title: 'Profil', size: 'sm', body: `<div class="prof-box"><span class="avatar avatar-lg">${AD.roleLabel().charAt(0)}</span><div><strong>Admin Filosovet</strong><p class="muted">Peran: ${AD.roleLabel()}</p></div></div><h3 class="ds-title">Akses halaman</h3><ul class="plain">${NAV.map(n => `<li>${AD.can(n.id) ? ico('check', 14) : ico('x', 14)} ${n.label}</li>`).join('')}</ul><p class="muted small">Peran hanya simulasi tampilan; autentikasi sungguhan memerlukan server.</p>`, actions: [{ label: 'Tutup', kind: 'outline' }] });
-  if (a === 'reset') return UI.confirm({ title: 'Reset data demo?', message: 'Semua data demo admin (booking, transaksi, stok, log) dikembalikan ke kondisi awal. Data booking dan pesanan dari situs publik di browser ini juga dihapus.', confirmLabel: 'Ya, reset', danger: true }).then(ok => { if (ok) { AD.resetDemo(); location.reload(); } });
+  if (a === 'reset' && AD.allowed(PERM.STAFF)) return UI.confirm({ title: 'Reset data demo?', message: 'Semua data demo admin, termasuk rekam medis, resep, penitipan, staff, booking, transaksi, stok dan log, dihapus dan dikembalikan ke kondisi awal. Data booking dan pesanan dari situs publik di browser ini juga dihapus.', confirmLabel: 'Ya, reset', danger: true }).then(ok => { if (ok) { AD.resetDemo(); location.reload(); } });
   if (a === 'logout') return UI.confirm({ title: 'Keluar dari panel admin?', message: 'Anda akan diarahkan ke halaman masuk.', confirmLabel: 'Keluar' }).then(ok => { if (ok) location.href = 'auth.html'; });
 }
 function closePanels() { ['notifPanel', 'acctPanel'].forEach(id => { const p = $q('#' + id); if (!p.hidden) { p.hidden = true; } }); $q('#btnNotif').setAttribute('aria-expanded', 'false'); $q('#btnAcct').setAttribute('aria-expanded', 'false'); }
@@ -147,9 +145,12 @@ function initSearch() {
 
 /* ---------- Bootstrap ---------- */
 document.addEventListener('DOMContentLoaded', () => {
-  AD.init();
+  try { AD.init(); } catch(error) { $q('#view').textContent = error.message; return; }
+  window.addEventListener('error', e => { if (e.error) UI.toast(e.error.message, 'error'); });
+  window.addEventListener('unhandledrejection', e => { UI.toast(e.reason?.message || 'Tindakan gagal', 'error'); e.preventDefault(); });
+  window.addEventListener('storage', e => { if(e.key?.startsWith('fv_')) { const products=loadProducts(); PRODUCTS.splice(0,PRODUCTS.length,...products); if(!UI.layers.length) AD.render(); drawNotifBadge(); } });
   const now = new Date();
-  $q('#todayLabel').textContent = `${DAYS_LONG[now.getDay()]}, ${fmtDate(todayISO())}`;
+  $q('#todayLabel').textContent = `Demo lokal · ${DAYS_LONG[now.getDay()]}, ${fmtDate(todayISO())}`;
   $q('#btnMenu').innerHTML = ico('menu', 22);
   $q('#btnNotif').innerHTML = `${ico('bell', 20)}<span class="count" id="notifCount" hidden></span>`;
   $q('#notifMark').innerHTML = `${ico('check', 14)} Tandai semua dibaca`;
@@ -167,7 +168,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $q('#notifMark').onclick = () => { AD.notifs.markAll(); drawNotifBadge(); drawNotifList(); };
   $q('#btnAcct').onclick = e => { e.stopPropagation(); const p = $q('#acctPanel'); const open = p.hidden; closePanels(); p.hidden = !open; $q('#btnAcct').setAttribute('aria-expanded', open); };
   $q('#acctPanel').addEventListener('click', e => { const b = e.target.closest('[data-a]'); if (b) acctAction(b.dataset.a); });
-  $q('#acctPanel').addEventListener('change', e => { if (e.target.id === 'roleSel') { AD.setRole(e.target.value); closePanels(); drawAcct(); UI.toast(`Peran diubah ke ${AD.roleLabel()}`); BK.roleApplied = false; AD.go(AD.can(AD.current) ? AD.current : 'dashboard'); drawNotifBadge(); } });
+  $q('#acctPanel').addEventListener('change', e => { if (e.target.id === 'staffSel') { AD.setStaff(e.target.value); closePanels(); AD.go('dashboard'); drawNotifBadge(); } if (e.target.id === 'roleSel') { while (UI.layers.length) UI.layers[UI.layers.length - 1].close(); AD.setRole(e.target.value); closePanels(); drawAcct(); UI.toast(`Peran diubah ke ${AD.roleLabel()}`); BK.roleApplied = false; BK.layanan = 'Semua'; BK.status = 'Semua'; BK.q = ''; $q('#gSearch').value = ''; $q('#gResults').hidden = true; AD.go('dashboard'); drawNotifBadge(); } });
   document.addEventListener('mousedown', e => { if (!e.target.closest('.tb-notif, .tb-acct')) closePanels(); });
 
   document.addEventListener('click', e => { const g = e.target.closest('[data-go]'); if (g) { e.preventDefault(); AD.go(g.dataset.go, g.dataset.gp ? JSON.parse(g.dataset.gp) : {}); } });

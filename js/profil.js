@@ -57,8 +57,7 @@
     const okMail = fieldError('pEmail', /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ? '' : 'Format email belum benar.');
     const okPhone = fieldError('pPhone', !phone || /^[0-9+\-\s]{8,16}$/.test(phone) ? '' : 'Nomor HP hanya angka, 8–16 digit.');
     if (!(okName && okMail && okPhone)) return;
-    localStorage.setItem('fv_user', JSON.stringify({ ...user, name, email }));
-    localStorage.setItem('fv_profile', JSON.stringify({ phone, dob: $('pDob').value, addr: $('pAddr').value.trim() }));
+    try { const ids=FVStore.currentCustomerIds(),shared=FVStore.state();shared.customers.filter(c=>ids.includes(c.id)).forEach(c=>Object.assign(c,{nama:name,email,hp:phone}));FVStore.commit({fv_user:{...user,name,email},fv_profile:{phone,dob:$('pDob').value,addr:$('pAddr').value.trim()},[FVStore.key]:shared}); } catch(error){toast(error.message,'error');return;}
     $('profilName').textContent = name;
     $('profilEmail').textContent = email;
     $('profilAvatar').textContent = name.charAt(0).toUpperCase();
@@ -121,7 +120,7 @@
     const okW = fieldError('npWeight', w === '' || (+w >= 0.1 && +w <= 100) ? '' : 'Berat harus antara 0,1 dan 100 kg.');
     if (!(okName && okW)) return;
     pets.push({ id: 'p' + Date.now().toString(36), name, species: $('npSpecies').value, breed: $('npBreed').value.trim(), weight: w === '' ? '' : +w, vaksin: 'belum', vaksinNote: 'Vaksin belum tercatat', steril: false });
-    localStorage.setItem('fv_pets', JSON.stringify(pets));
+    try { FVStore.syncPublicPets(pets); } catch(error) { pets.pop(); toast(error.message,'error'); return; }
     $('petForm').reset(); $('petForm').hidden = true; $('btnAddPet').setAttribute('aria-expanded', 'false');
     renderPets();
     renderMedis();
@@ -140,10 +139,11 @@
     if (raw.startsWith('Menunggu')) return when(b) < new Date() ? 'Kedaluwarsa' : 'Menunggu Konfirmasi';
     return raw;
   }
-  const isUpcoming = b => ['Menunggu Konfirmasi', 'Dikonfirmasi'].includes(effectiveStatus(b)) && when(b) >= new Date();
+  const isUpcoming = b => ['Menunggu Konfirmasi', 'Dikonfirmasi'].includes(effectiveStatus(b)) && !b.checkedInAt && when(b) >= new Date();
 
   function renderBookings() {
-    const stored = read('fv_bookings', []);
+    const ids=FVStore.currentCustomerIds();
+    const stored = [...read('fv_bookings', []), ...read('fv_admin_bookings', []).filter(b=>ids.includes(b.customerId))];
     const all = [...stored, ...SAMPLE_BOOKINGS].sort((a, b) => when(b) - when(a));
     $('bookingHistoryBody').innerHTML = all.length ? all.map(b => {
       const st = effectiveStatus(b);
@@ -152,7 +152,7 @@
            <button type="button" class="btn btn-danger btn-sm" data-cancel="${escapeHtml(b.code)}">Batalkan</button>`
         : '<span class="muted">—</span>';
       return `<tr>
-        <td data-label="Kode"><strong>${escapeHtml(b.code)}</strong></td>
+        <td data-label="Kode"><strong>${escapeHtml(b.code)}</strong>${b.sample ? '<small class="muted"> · Contoh demo</small>' : ''}</td>
         <td data-label="Layanan">${escapeHtml(b.tipe || b.layanan)}</td>
         <td data-label="Jadwal">${fmtDate(b.tanggal)}, ${escapeHtml(b.waktu || '')}</td>
         <td data-label="Hewan">${escapeHtml(b.hewan || '—')}</td>
@@ -174,7 +174,7 @@
     }
     const list = read('fv_bookings', []);
     const item = list.find(b => b.code === btn.dataset.cancel);
-    if (item) { item.status = 'Dibatalkan'; localStorage.setItem('fv_bookings', JSON.stringify(list)); }
+    if (item) { if(item.checkedInAt||!['Dikonfirmasi','Menunggu Konfirmasi'].includes(item.status))return toast('Booking sudah diproses dan tidak dapat dibatalkan.','error'); item.status = 'Dibatalkan'; item.cancelReason='Dibatalkan oleh pelanggan'; item.riwayat=[...(item.riwayat||[]),{status:'Dibatalkan',reason:item.cancelReason,at:new Date().toISOString(),by:'Pelanggan'}]; const shared=FVStore.state();shared.stays.filter(s=>s.bookingCode===item.code&&s.status==='Dipesan').forEach(s=>{s.status='Dibatalkan';s.cancelReason=item.cancelReason;});FVStore.commit({fv_bookings:list,[FVStore.key]:shared}); }
     renderBookings();
     toast('Booking dibatalkan');
   });
@@ -189,7 +189,9 @@
   function renderMedis() {
     const names = ['Semua', ...new Set([...pets.map(p => p.name), ...MEDICAL.map(m => m.pet)])];
     $('medisTabs').innerHTML = names.map(n => `<button type="button" class="cat-chip${n === medFilter ? ' active' : ''}" data-pet="${escapeHtml(n)}" aria-pressed="${n === medFilter}">${escapeHtml(n)}</button>`).join('');
-    const rows = MEDICAL.filter(m => medFilter === 'Semua' || m.pet === medFilter).sort((a, b) => b.tgl.localeCompare(a.tgl));
+    const state=FVStore.state(),ids=FVStore.currentCustomerIds();
+    const live=state.medical.filter(m=>m.status==='Final'&&ids.includes(m.customerId)).map(m=>({pet:state.pets.find(p=>p.id===m.petId)?.nama||'—',tgl:m.examinationDate,oleh:m.doctor,ket:[m.diagnosis,m.procedures,m.followUp,...state.amendments.filter(a=>a.medicalId===m.id).map(a=>'Addendum: '+a.text)].filter(Boolean).join(' · ')}));
+    const rows = [...live,...MEDICAL.map(m=>({...m,ket:'[Contoh demo] '+m.ket}))].filter(m => medFilter === 'Semua' || m.pet === medFilter).sort((a, b) => b.tgl.localeCompare(a.tgl));
     $('medisList').innerHTML = rows.length ? rows.map(m => {
       const [y, mo, d] = m.tgl.split('-').map(Number);
       return `<article class="med-item">
@@ -209,7 +211,8 @@
   });
 
   /* ---------- Riwayat transaksi & detail nota ---------- */
-  const orders = read('fv_orders', []);
+  const ownIds=FVStore.currentCustomerIds();
+  const orders = [...read('fv_orders', []),...read('fv_admin_trx', []).filter(t=>ownIds.includes(t.customerId)).map(t=>({...t,no:t.id,item:t.items.reduce((n,i)=>n+i.qty,0),rincian:t.items,statusBayar:t.status}))];
   function renderOrders() {
     $('orderHistoryBody').innerHTML = orders.length ? orders.map(o => `
       <tr>
