@@ -32,22 +32,22 @@ The current implementation is a **static frontend demonstration** built with HTM
 
 - **Clinic information:** homepage sections for services, the booking process, facilities, doctors, testimonials, location, FAQs, and contact links. The open/closed indicator uses the visitor's current local hour.
 - **Service catalog:** tabbed information and prices for veterinary consultations, grooming, pet boarding, and shop categories, with links that preselect booking options.
-- **Appointment booking:** service subtype, staff selection, monthly calendar, time slots, owner and pet details, validation, estimated cost, and a confirmation code. Pet hotel bookings support a stay of 1–60 days. Available dates and slots include simulated availability.
+- **Appointment booking:** service subtype, staff selection, monthly calendar, time slots, owner and pet details, validation, estimated cost, and a confirmation code. Pet hotel bookings support a stay of 1–60 days. Available dates and slots are checked against stored bookings, actual staff conflicts, and the shared eight-room hotel capacity.
 - **Demo accounts:** login and registration forms, inline validation, password visibility controls, profile editing, and logout. Booking, cart, and profile pages redirect to login when the local user record is absent.
 - **Product storefront:** 14 default products, text search, category filters, sorting by sales count/name/price, stock indicators, quantity controls, and cart animations. Prescription products link to consultation booking instead of offering a cart action.
 - **Cart and simulated checkout:** quantity changes, removal, the `FILO10` promotion for a 10% subtotal discount, delivery at Rp 15,000 or free store pickup, payment-method selection, and a locally saved receipt. Checkout reduces local stock and increases the product sales count.
-- **Customer profile:** personal details, saved pets, booking history, cancellation and rescheduling of upcoming bookings, sample medical records, purchase history, receipt details, and receipt printing.
+- **Customer profile:** personal details, saved pets, booking history, cancellation and rescheduling of upcoming bookings, finalized clinical records plus labeled sample medical entries, purchase history, receipt details, and receipt printing.
 - **Shared interface:** responsive navigation, persistent light/dark themes, keyboard navigation for tabs, form feedback, modal focus handling, and reduced-motion handling in selected styles and interactions.
 
 ### Administrative workspace
 
 - **Dashboard:** today's bookings, paid revenue, hotel occupancy, stock warnings, recent activity, and a seven-day revenue chart.
-- **Booking management:** searchable and filtered lists, daily staff timelines, conflict indicators, manual bookings, internal notes, and status history. Completing a booking creates a linked local transaction when one does not already exist.
+- **Booking management:** searchable and filtered lists, daily staff timelines, conflict indicators, manual bookings, internal notes, and status history. Clinical finalization, grooming completion, and hotel check-out create a linked **unpaid** invoice once; service completion does not collect payment.
 - **Inventory and pharmacy:** minimum-stock warnings, batch and expiry information, stock adjustments, bulk restock orders, and receiving orders to update stock.
 - **Product management:** create, edit, duplicate, archive/reactivate, and update prices or stock inline. Images can be selected from bundled assets or uploaded and resized in the browser.
 - **Transactions:** combined customer checkout and cashier transactions, payment/source/date filters, marking pending transactions as paid, and receipt printing.
 - **Reports:** period comparisons, revenue, completed bookings, no-show rate, occupancy, top products/services, and payment-method breakdowns. Downloads use CSV; PDF output uses the browser's print dialog.
-- **Workspace tools:** global search, booking/stock notifications, collapsible navigation, theme switching, demo role switching, and demo data reset. **A seven-role expansion is specified below but is not confirmed in the uploaded implementation.**
+- **Workspace tools:** global search, booking/stock notifications, collapsible navigation, theme switching, demo role switching, and demo data reset. The seven-role extension described below is implemented through shared domain services and role-specific views.
 
 ## Technology stack and dependencies
 
@@ -100,6 +100,7 @@ Filosovet/
 │   ├── main.js                   # Shared loader, navigation, helpers, site config
 │   ├── dark-mode.js              # Public theme initialization and toggle
 │   ├── home.js                   # Homepage tabs, opening status, contact links
+│   ├── operations-store.js       # Shared persistence, stock ledger and availability
 │   ├── services-data.js          # Shared booking service definitions
 │   ├── booking.js                # Customer calendar and reservations
 │   ├── auth.js                   # Simulated login and registration
@@ -114,6 +115,17 @@ Filosovet/
 │       ├── booking.js            # Booking list, timeline, details, manual wizard
 │       ├── inventory.js          # Stock, restocking, and product management
 │       ├── finance.js            # Transactions, cashier flow, reports, exports
+│       ├── permissions.js        # Seven roles, actions and staff identity
+│       ├── operations.js         # Front desk, registration and grooming services
+│       ├── stock-service.js      # Catalog, supplier, stock and batch services
+│       ├── clinical.js           # Medical drafts/final records, prescriptions, amendments
+│       ├── boarding.js           # Rooms, stays and care logs
+│       ├── billing.js            # Invoices, payments, POS and dispensing
+│       ├── workspace-ui.js       # Shared operational tables/forms and customer UI
+│       ├── clinical-ui.js        # Examination and prescription forms
+│       ├── operations-ui.js      # Hotel, inventory, staff and settings UI
+│       ├── pos-ui.js             # Cashier invoices and searchable point of sale
+│       ├── role-dashboards.js    # Role-specific dashboard compositions
 │       └── shell.js              # Hash routing, navigation, search, and account menu
 └── pages/
     ├── auth.html
@@ -125,7 +137,7 @@ Filosovet/
     └── toko.html
 ```
 
-Operating-system metadata files are omitted from this tree. No existing README, deployment manifest, CI workflow, or test directory was present when this documentation was created.
+Operating-system metadata files are omitted from this tree. No deployment manifest or CI workflow is present. Dependency-free regression checks now live in `tests/`.
 
 ## Prerequisites
 
@@ -177,7 +189,8 @@ Configuration is embedded in source files:
 | `js/main.js` | `FV_CONFIG.whatsapp`, `whatsappText`, `emergencyPhone`, `clinicHours.open`, `clinicHours.close` | Shared quick-contact links and homepage opening-status calculation |
 | `js/services-data.js` | `SERVICES` | Booking service keys, subtypes, prices, durations, staff, time slots, and per-day billing |
 | `js/cart.js` | `DEFAULT_PRODUCTS`, `CAT_LABEL`, `PROMOS`, `SHIPPING_FEE` | Initial products/categories, promotion rules, and delivery fee |
-| `js/admin/core.js` | `HOTEL_CAPACITY`, `DISTRIBUTORS`, `PAY_METHODS`, `ROLES` | Occupancy calculations, demo restock choices, payment labels, and simulated view access |
+| `js/admin/core.js` | `HOTEL_CAPACITY`, `DISTRIBUTORS`, `PAY_METHODS` | Capacity, demo supplier defaults and payment labels |
+| `js/admin/permissions.js` | `ROLES`, `PERM`, `ACTIONS`, `ACTION_POLICY` | Seven-role navigation and action/assignment policy |
 | `css/tokens.css` | CSS custom properties | Shared palette, typography, spacing, controls, and light/dark themes |
 | `.vscode/settings.json` | `liveServer.settings.port` | Local Live Server port |
 
@@ -185,7 +198,7 @@ The footer, location content, and admin receipt template also contain static bus
 
 ## Available scripts and commands
 
-No npm scripts, Makefile targets, or project-specific command-line tasks are defined.
+No npm scripts or build tooling are required. Project checks use Node’s built-in test runner and Python’s standard library.
 
 | Command or action | Purpose |
 | --- | --- |
@@ -194,7 +207,7 @@ No npm scripts, Makefile targets, or project-specific command-line tasks are def
 | `node --check js/main.js` | Optional syntax check for one JavaScript file |
 | `git diff --check` | Check tracked changes for whitespace problems when working in Git |
 
-There are no configured `install`, `dev`, `build`, `test`, or `deploy` package scripts. Browser printing and CSV downloads are interface actions rather than shell commands.
+There are no configured `install`, `dev`, `build`, `test`, or `deploy` package scripts; use the direct verification commands below. Browser printing and CSV downloads are interface actions rather than shell commands.
 
 ## Pages, routes, and functionality
 
@@ -233,84 +246,48 @@ For example, `/pages/booking.html?layanan=konsultasi&tipe=vaksinasi` opens vacci
 
 ### Admin views
 
-Append a fragment to `/pages/dashboard-admin.html`:
-
-| Fragment | View |
-| --- | --- |
-| `#/dashboard` | Summary metrics, recent bookings, revenue chart, stock alerts, and activity |
-| `#/booking` | Booking list, daily schedule, details, and manual booking wizard |
-| `#/stok` | Stock/pharmacy alerts, adjustments, expiry information, and restock orders |
-| `#/produk` | Product catalog management |
-| `#/transaksi` | Customer/cashier transactions, receipt printing, and transaction exports |
-| `#/laporan` | Operational and financial summaries and report exports |
-
-Unknown or unavailable views fall back to the dashboard. **The four roles below are the roles documented in the original implementation; the seven-role configuration in the next section is the agreed product specification, not a verified feature of this uploaded codebase.**
-
-| Currently documented role | Existing available views |
-| --- | --- |
-| Admin | All six views |
-| Dokter | Dashboard, Booking, Stok & Farmasi, Produk; booking initially filters to consultations |
-| Kasir | Dashboard, Booking, Stok & Farmasi, Transaksi |
-| Groomer | Compact Dashboard and Booking; booking initially filters to grooming |
-
-Role switching and menu filtering currently demonstrate interface behavior only; they do not provide server-enforced authorization.
+Open `/pages/dashboard-admin.html#/dashboard`. Use the account menu’s **Simulasi peran** selector for seven roles and **Identitas staff demo** to choose a specific doctor, groomer or boarding attendant. Switching roles returns to the corresponding dashboard, closes stale dialogs, updates navigation/notifications and retains the theme and operational data. Unknown or disallowed hashes return to the role dashboard.
 
 ## Seven-role admin workspace specification
 
-> **Status: planned/approved requirements, not verified as implemented.** The uploaded README documents a four-role working demo. The seven staff roles below define the target behavior for the next admin-workspace update. Do not treat this section as evidence that these routes, forms, or persistent records already exist.
+**Implemented as a frontend demonstration.** Navigation and action handlers enforce centralized UI permissions; browser storage and role simulation do not provide secure authentication or server-side authorization.
 
-The future staff workspace supports **seven roles**: **Admin, Kasir, Inventory Staff, Resepsionis, Dokter, Groomer, and Pet Hotel Staff**. Customers remain a separate account type in the proposed unified account model, not an eighth staff role.
+| Role | Dashboard / navigation | Implemented work |
+| --- | --- | --- |
+| Admin | Dashboard; Booking; Pelanggan & Hewan; Stok & Farmasi; Produk; Transaksi; Laporan; Staff & Role; Pengaturan | Revenue/day/month, bookings, active occupancy, stock/expiry alerts, recent transactions and activity; shared customer/pet editing; staff profiles, catalog/prices, supplier orders, reports and adjustment decisions |
+| Kasir | Dashboard Kasir; Pembayaran; Kasir / POS; Riwayat Transaksi | Search catalog, quantity cart, FILO10, catalog prices, simulated payment methods, itemized service invoices, additional retail items, receipts/printing and correction requests |
+| Inventory Staff | Dashboard Inventory; Stok & Farmasi; Produk; Restock & Supplier; Riwayat Stok | Low/empty/expiry/inbound KPIs; nonfinancial catalog edits, suppliers, receiving, batches, audited expiry corrections, stock opname/write-offs, movement history and prescription dispensing |
+| Resepsionis | Dashboard Front Desk; Booking & Kalender; Antrean / Check-in; Pelanggan & Hewan | Register/edit owners and pets, manual bookings, confirmation, reasoned cancellation, rescheduling, assignment, initial complaints and verified check-in |
+| Dokter | Dashboard Dokter; Pasien Hari Ini; Rekam Medis; Resep Obat; Jadwal Konsultasi | Assigned queues, patient/owner details and prior final records; structured drafts, final examinations, procedures, follow-up, multiple medicines and immutable final records with addenda |
+| Groomer | Dashboard Groomer; Jadwal Grooming; Proses Grooming; Riwayat Grooming | Assigned schedule, check-in queue, start/progress/completion, performed-service notes, observable conditions, prior grooming records and payable service charges |
+| Pet Hotel Staff | Dashboard Pet Hotel; Reservasi Hotel; Kandang & Okupansi; Perawatan Harian; Riwayat Penitipan | Room reservation, overlap prevention, check-in/out, current occupancy, feeding/water/cleaning/activity/incident logs and medication administration referring to a dispensed veterinarian prescription |
 
-### Role responsibilities, dashboards, and navigation
+Operational fragments use their Indonesian identifiers: `#/booking`, `#/pelanggan`, `#/stok`, `#/produk`, `#/transaksi`, `#/laporan`, `#/staff`, `#/pengaturan`, `#/pembayaran`, `#/pos`, `#/supplier`, `#/mutasi`, `#/antrean`, `#/pasien`, `#/medis`, `#/resep`, `#/jadwal`, `#/grooming`, `#/proses`, `#/riwayatgrooming`, `#/reservasi`, `#/kandang`, `#/perawatan`, `#/riwayathotel`.
 
-| Staff role | Dashboard focus / KPIs | Target navigation | Core actions and scope |
-| --- | --- | --- | --- |
-| **Admin** | Bookings, revenue, hotel occupancy, stock alerts, pending payments, performance | Dashboard; Booking; Pelanggan & Hewan; Stok & Farmasi; Produk; Transaksi; Laporan; Staff & Role; Pengaturan | Supervise bookings, staff, inventory, sales, approvals, and reports; clinical amendments remain clinician-controlled |
-| **Kasir** | Today's transactions, collected revenue, pending invoices, payment methods | Dashboard Kasir; Pembayaran; Kasir / POS; Riwayat Transaksi | POS checkout, service/product invoicing, payment recording, receipt printing; no diagnoses or arbitrary stock edits |
-| **Inventory Staff** | Low/out-of-stock items, expiring medicines, stock movements, inbound orders | Dashboard Inventory; Stok & Farmasi; Produk; Restock & Supplier; Riwayat Stok | Receive and adjust inventory with movement history; manage batches, expiry, stock opname, suppliers, and product catalog; cannot issue prescriptions |
-| **Resepsionis** | Today's bookings, waiting queue, arrivals, checked-in and completed appointments | Dashboard Front Desk; Booking & Kalender; Antrean / Check-in; Pelanggan & Hewan | Register customers/pets; confirm, reschedule and cancel bookings; check in patients, assign staff, record owner-reported complaints |
-| **Dokter** | Assigned consultations, waiting/in-progress/completed patients, follow-ups | Dashboard Dokter; Pasien Hari Ini; Rekam Medis; Resep Obat; Jadwal Konsultasi | Read relevant patient history; create examination drafts, findings, diagnoses, treatment notes and multi-item prescriptions; finalize clinical records and issue addenda |
-| **Groomer** | Assigned grooming sessions, waiting/in-progress/completed animals | Dashboard Groomer; Jadwal Grooming; Proses Grooming; Riwayat Grooming | View instructions; start/complete grooming, add service notes and observations; no clinical diagnosis or prescriptions |
-| **Pet Hotel Staff** | Current boarders, room occupancy, check-ins/outs, daily care tasks | Dashboard Pet Hotel; Reservasi Hotel; Kandang & Okupansi; Perawatan Harian; Riwayat Penitipan | Assign available rooms, check pets in/out, log feeding, cleaning, observations and medication administration according to veterinary instructions |
+### Permissions and clinical access policy
 
-The sidebar should be role-aware, but the implementation should reuse shared feature modules rather than creating seven copies of the same booking or customer records. Dashboard KPI figures must be calculated from shared operational data rather than hardcoded values.
+`permissions.js` defines role routes, capability constants, action verbs (`view`, `create`, `edit`, `archive`, `confirm`, `complete`, `approve`, `export`) and reusable authorization/assignment helpers. Doctors, groomers and boarding attendants act on assigned records. Staff IDs retain references when display names change. Active assignments must be transferred before a staff member is disabled or changes role.
 
-### Proposed permissions and workflow boundaries
+The implemented clinical policy is conservative: **Admin does not open diagnoses or clinical prescriptions**. Admin supervises operational completion and financial invoice items. Responsible doctors edit drafts and append corrections to final records; final diagnoses/prescriptions are never overwritten. Inventory sees the medicine quantities and administration instructions needed for dispensing, without diagnoses. Receptionist complaints and groomer observations are not diagnoses.
 
-- **Admin:** broad operational and financial oversight; may not silently change finalized medical findings, diagnosis, or prescriptions.
-- **Kasir:** handles invoices, payments and receipts; refunds/voids require an approval trail. Cannot independently modify clinical records, base prices, or stock quantities.
-- **Inventory Staff:** handles products, medicine batches and quantity movements, including receiving, stock opname, damaged/expired write-offs. Does not prescribe medication.
-- **Resepsionis:** handles appointments, check-in, initial customer-supplied complaints and queues; does not diagnose or edit prescriptions.
-- **Dokter:** manages assigned consultations and clinical records; draft and final states must be distinguished. Finalized records require traceable addenda instead of silent overwriting.
-- **Groomer:** updates assigned grooming workflow and non-diagnostic observations.
-- **Pet Hotel Staff:** updates boarding and care logs; recorded medication administration must follow documented veterinary instructions.
+Cashiers cannot change catalog prices, manually edit stock, delete payment history or prescribe. Inventory edits nonfinancial product information; Admin creates new catalog products and sets base prices. Refund/correction requests require an explicit recorded Admin decision. **Approval only records a demo decision; it does not issue a refund, reverse an invoice, return stock or transfer money.**
 
-Permission checks should be centralized and applied to action handlers as well as visible navigation. In the static demo, these checks are **not a security boundary** because users can modify localStorage and JavaScript from their browser. Production access requires authenticated sessions and server-side role/record authorization.
+### Integrated workflows
 
-### Target cross-role workflows
+1. **Consultation:** Receptionist registers owner/pet → creates or confirms one-service booking and assigns a doctor → verifies identity and checks in → responsible Doctor opens patient, saves structured draft and optional multi-medicine prescription → checks Finalisasi and saves → one unpaid invoice contains consultation, optional billable procedures and medicine items → Cashier may add retail products and records payment → Inventory verifies itemized prescription and records actual dispensing once. Doctor final records and addenda appear in the matching customer’s medical history.
+2. **Grooming:** Public/manual booking → receptionist confirmation/check-in → assigned Groomer records Dalam Proses then Selesai with notes → one unpaid invoice → cashier payment → originating booking and customer history reflect completion.
+3. **Pet Hotel:** Confirmed reservation → assigned Hotel Staff reserves one of eight rooms for a non-overlapping date interval → check-in → record daily care (default feeding schedule: morning/evening) → check-out frees active occupancy and creates an unpaid invoice → cashier payment. Receptionist rescheduling synchronizes an unstarted stay with conflict checks; cancellation releases its placement. A public reschedule releases the previous placement for staff reassignment. Medication logs require a prescription for the same pet that has already been dispensed.
+4. **Stock and shop:** Inventory creates supplier order with quantity/batch/expiry → receives once → catalog stock and batch ledger increase → storefront/POS use the same catalog → checkout deducts once. Merchandise on service invoices is deducted on payment; prescribed medicine is deducted separately on dispensing. Expired batches cannot be sold or dispensed; explicit write-offs can remove them.
 
-1. **Consultation:** Customer booking → Resepsionis confirms/checks in → Dokter examines, records findings and prescription → Kasir bills and records payment → inventory is reduced **when medication is dispensed/used**, with movement history → Admin sees operational totals.
-2. **Grooming:** Customer booking → Front desk check-in → Groomer performs service and records progress → Kasir handles payment → service history reflects completion.
-3. **Pet Hotel:** Reservation → availability and cage assignment → check-in → daily feeding/care logs → check-out → final billing. Overlapping occupancy of the same cage must be prevented.
-4. **Stock and shop:** Supplier order received → inventory batch/stock movement added → product availability updated → POS/customer purchase → sale recorded and stock decremented exactly once.
+Bookings remain one service each. Invoices can contain multiple service/procedure/medicine/retail lines. Booking status, `serviceProgress`, invoice payment status, prescription status and hotel stay status are separate. Creating a prescription reserves no inventory. Repeated payment, order receipt and medicine dispensing are idempotent. POS also uses a request ID to avoid duplicate submissions. Staff availability comes from existing booking intervals; no random fullness simulation remains.
 
-Keep **booking state**, **service-progress state**, **payment state**, **prescription state**, and **hotel stay/occupancy state** separate. In particular, a consultation can be completed while its invoice remains unpaid.
+### Data migration and backend direction
 
-### Agreed future relational data rules
+Legacy `fv_bookings`, `fv_admin_bookings`, `fv_products`, `fv_orders`, and `fv_admin_trx` remain in use. Normalization adds stable customer, pet and staff references without clearing records. Names/contact details remain useful historical snapshots. Existing paid history remains paid; new completed services produce unpaid invoices. Historical stock changes are **not** invented: an explicit opening-balance movement marks the migration boundary.
 
-These decisions guide a future backend/ERD; they **do not describe an existing SQL database**:
+`fv_workspace_v1` groups normalized operational collections. These correspond to future relational customers/pets/staff, medical records/amendments/prescriptions, batches/movements, suppliers, payments, grooming, rooms/stays/care and approval entities. Invoice items and prescription items are currently nested arrays, ready to split into related tables later. No MySQL, PHP, Node server or payment provider has been added.
 
-1. **One unified `users` table** for customer and staff sign-in, with staff/customer profiles and role information. The current agreed initial design uses one role per user.
-2. **One booking corresponds to exactly one service.** A multi-service `booking_items` association is not required under the present scope.
-3. **Medicines and petshop goods share a `products` catalog.** Prescription-only products require suitable restrictions.
-4. **Inventory uses `stock_movements` and `inventory_batches`.** Sales, dispensing, receiving, write-offs and adjustments have traceable movement records; issuing a prescription alone does not reduce stock.
-5. **Service charges and product sales share an invoicing model** (`sales`, `sale_items`, `payments`), where one invoice may contain consultation, medicines, and retail products.
-
-Potential domain groups include `users`, `roles`, `staff`, `customers`, `pets`; `services`, `bookings`, scheduling/history; `medical_records`, `prescriptions`, `prescription_items`; `products`, batches, movements, suppliers and purchase orders; `sales`, `sale_items`, `payments`; `grooming_records`; and hotel rooms/stays/care logs. Exact columns, foreign keys, constraints and migrations remain to be designed and validated before implementation.
-
-### Suggested implementation approach
-
-Extend the existing `js/admin/` architecture in stages: (1) centralized roles and permissions, (2) seven role-specific dashboard views and navigation, (3) receptionist and clinical workflows, (4) grooming/hotel operations, (5) invoice/inventory integration, and (6) regression tests and documentation. Preserve existing public pages and storage keys where possible; do not discard existing demo records during migration.
+Persistence helpers read fresh state, validate input and attempt rollback on multi-key write failures. Corrupt workspace collections cause an error rather than being replaced with empty data. This is best-effort browser persistence, **not an ACID transaction or a cross-tab lock**. Stock movements are the quantity audit source; batch corrections preserve their own before/after history. Separate activity-log write failures display a warning without misreporting an already committed operation as failed.
 
 ## Architecture and major components
 
@@ -324,11 +301,16 @@ The public site uses separate HTML documents with shared CSS and classic scripts
 | `js/services-data.js` | Shared booking definitions used by the customer booking flow and admin data/UI modules |
 | `js/cart.js` | Loads the default or saved product catalog, provides cart operations, calculates totals, records checkout orders, and updates stock |
 | `js/booking.js`, `js/auth.js`, `js/profil.js`, `js/toko.js`, `js/home.js` | Page-specific rendering, validation, and interactions |
-| `js/admin/core.js` | Defines the `AD` data layer, seeds demo records, combines public/admin records, derives status/notifications, and persists updates |
+| `js/operations-store.js` | Shared persistence, identifiers, migration support, stock ledger, public checkout and booking availability |
+| `js/admin/core.js` | Legacy booking/transaction adapters, seed data, formatters, activity and notification primitives |
+| `js/admin/permissions.js` | Seven roles, page/action policy and staff assignment helpers |
+| `js/admin/operations.js`, `stock-service.js` | Registration, check-in, scheduling, grooming, suppliers, catalog and inventory services |
+| `js/admin/clinical.js`, `boarding.js`, `billing.js` | Clinical lifecycle, hotel operations, itemized invoices, payment, POS, dispensing and approval services |
+| `js/admin/workspace-ui.js`, `clinical-ui.js`, `operations-ui.js`, `pos-ui.js`, `role-dashboards.js` | Operational forms, role views and distinct data-backed dashboard compositions |
 | `js/admin/ui.js` | Defines `UI` helpers for tables, pagination, dialogs, drawers, menus, charts, form errors, printing, and CSV downloads |
 | Admin view scripts and `shell.js` | Register views in `Pages`, render the selected hash route, and handle search/navigation/account actions |
 
-Script order matters because scripts share global functions and objects. `main.js` must be available before handlers use its helpers; admin `core.js` requires the product and service definitions, and `dashboard.js` creates `Pages` before the remaining views register themselves. The existing HTML files specify the load order.
+Script order matters because scripts share global functions and objects. `main.js` must be available before handlers use its helpers; admin `core.js` requires the product and service definitions, and `dashboard.js` creates `Pages` before the remaining views register themselves. `operations-store.js` precedes public/admin consumers; permissions and domain services load after core; extension UI scripts load after the legacy views and before shell. The existing HTML files specify the load order.
 
 Customer bookings are written to `fv_bookings`. Admin reads them alongside `fv_admin_bookings` and writes status/note changes back to the originating store. Customer checkout writes `fv_orders`; admin combines those orders with `fv_admin_trx`. Customer checkout, cashier sales, product editing, and restocking share the product catalog persisted in `fv_products`.
 
@@ -354,10 +336,12 @@ All persistent state lives in `localStorage` for the current origin. It survives
 | `fv_admin_notif_read` | Notification read-state identifiers |
 | `fv_admin_role` | Selected simulated staff role |
 | `fv_admin_collapsed` | Sidebar collapsed preference |
+| `fv_staff_<role>` | Selected simulated staff display name per role |
+| `fv_workspace_v1` | `version: 1`; customers, pets, staff, medical, amendments, prescriptions (nested items), grooming (progress history), rooms, stays, care, batches, movements, payments, suppliers, approvals and batchHistory |
 
-The admin initializes sample data on first load. On later days it shifts records marked as seed data forward to keep the demonstration relevant to the current date. The customer profile separately includes fixed sample bookings and medical entries in `js/profil.js`; these are not a live medical-record system.
+The admin initializes sample data on first load, then freezes seeded dates once the normalized workspace exists so dependent records retain their dates. Initial products and their expiry dates are persisted during migration. Seeded staff/bookings/transactions carry demo markers, and the top bar identifies the workspace as a local demo. The customer profile retains its legacy sample bookings and explicitly labels sample clinical entries; finalized operational medical records are loaded separately.
 
-Use the admin account menu's **Reset data demo** action to restore demo operational data. After confirmation, it removes admin seed/bookings/transactions/restock orders/activity/read-state, saved products, customer bookings, and customer orders, then reloads to reseed. It retains the local user, profile, pets, cart, theme, role, and sidebar preference. Use browser developer tools to inspect storage or remove a specific key when diagnosing other state issues.
+Use the admin account menu's **Reset data demo** action to restore demo operational data. After confirmation, it removes admin seed/bookings/transactions/restock orders/activity/read-state, saved products, customer bookings, customer orders and the normalized workspace (including clinical/boarding/staff data), then reloads to reseed. Reset is restricted to Admin. It retains the local user, profile, pets, cart, theme, role, and sidebar preference. Use browser developer tools to inspect storage or remove a specific key when diagnosing other state issues.
 
 Signing out removes `fv_user`; it does not clear the other stored data. Customer histories are stored per browser origin rather than isolated per authenticated account.
 
@@ -390,30 +374,35 @@ The supported deployment here is a static demonstration. Real customer accounts,
 
 ## Testing and verification
 
-No automated test suite, test runner, linter configuration, or CI checks are included. Browser compatibility results and end-to-end test coverage are **Not documented**.
-
-During preparation of this README, all 17 JavaScript files passed `node --check`. A static check of local `href`/`src` references across the 10 page/component HTML files found three missing doctor portraits, listed below. These checks do not establish browser interaction correctness; a full browser acceptance run was not performed.
-
-To repeat syntax checks with Node.js from the project root in a POSIX-compatible shell:
+Run from the repository root:
 
 ```sh
+node --test tests/workspace.test.cjs
+python3 tests/check-assets.py
 for script in js/*.js js/admin/*.js; do
-  node --check "$script" || break
+  node --check "$script" || exit 1
 done
+git diff --check
 ```
 
-Suggested manual checks when making changes:
+The Node suite exercises scenarios A–D through the real services, shared checkout, stable references/reload, permission denials, unauthorized routing, drafts/final/addenda, multi-medicine dispensing, repeated requests, mixed invoices, corrupted totals, quota failures, batch expiry corrections, room conflicts/cancellation/rescheduling, staff rename/availability and malformed storage. View renderers execute with real table templates against a minimal DOM stub. **These are executable logic/template checks, not actual browser tests.**
 
-| Area | Verification |
-| --- | --- |
-| Navigation and layout | Open every page, confirm shared header/footer load, and test mobile menu, keyboard focus, and both themes |
-| Accounts | Exercise invalid inputs, register/login, edit profile, and log out; confirm protected pages redirect without a user record |
-| Booking | Select each service, date, slot, and saved pet; check totals, submit, view history, reschedule, and cancel an upcoming reservation |
-| Shop and cart | Search/filter/sort; check stock limits and prescription links; edit quantities, apply/remove `FILO10`, and compare delivery with pickup |
-| Checkout | Complete simulated QRIS/transfer/card and COD selections; verify receipt/history and stock changes; COD is pending while other methods are immediately marked paid |
-| Admin booking | Find a public booking using an appropriate date filter; confirm/process/complete it and inspect the resulting transaction; try manual booking and conflict indicators |
-| Products and stock | Edit/archive/reactivate a product, adjust stock, create/receive a restock order, then reload the storefront to see changes |
-| Reports and roles | Switch simulated roles, inspect available views, export CSV, and preview receipt/report printing or Save as PDF |
+The local-reference checker treats injected header/footer links as project-root links. Three pre-existing missing doctor portraits are reported separately: `assets/images/doctors/andini.jpg`, `prasetyo.jpg`, `larasati.jpg`. Newly added scripts/assets must resolve. A mechanical interface scan reported only the two existing inset stock-warning stripes in `css/admin.css`; they were retained to preserve the incumbent stock-table design.
+
+**Browser verification status:** the browser connector returned no available browser during implementation. Actual pointer/keyboard workflows, print previews, console/network state, light/dark screenshots and desktop/mobile visual layout still require the following manual acceptance run. No browser screenshots or browser console pass is claimed.
+
+### Role-by-role manual acceptance
+
+Use one origin/browser profile. Avoid Reset unless intentionally discarding demo operational records.
+
+1. **Admin:** open account menu and check all seven role choices; switch theme; inspect dashboard/report totals, staff profiles and settings. Create a staff profile and verify it becomes assignable. Attempt `#/medis` and confirm fallback. Review an explicit cashier correction request under Pengaturan.
+2. **Resepsionis:** register a customer and pet, create tomorrow’s consultation booking with a selected doctor, inspect conflict errors, confirm a public booking and check in after verifying owner/pet. Test rescheduling and cancellation with a reason. Reload to verify persistence.
+3. **Dokter:** select the assigned doctor under Identitas staff demo. Open the checked-in patient via Jadwal Konsultasi (Pasien Hari Ini filters today). Save a draft with findings, optional weight/temperature, diagnosis, procedures and follow-up. Add two different catalog medicines with complete administration instructions. Reopen, finalize and verify the record cannot be overwritten. Add an addendum.
+4. **Kasir:** find the unpaid invoice under Pembayaran. Check consultation/procedure/medicine lines, add a non-prescription retail item, pay using an explicitly simulated method, reopen/print the receipt and confirm no second payment appears. Test POS search, quantity changes and FILO10. Submit a correction request; it must not silently reverse the transaction.
+5. **Inventory Staff:** open Stok & Farmasi, verify the itemized prescription before dispensing and confirm quantities decrease once. Try dispensing again. Create a supplier order with batch/expiry, receive it once, inspect Riwayat Stok and batch details, perform stock opname/write-off, and use Koreksi batch for an audited expiry correction. Catalog base prices must remain locked.
+6. **Groomer:** receptionist checks in a grooming booking; select its groomer identity, start grooming, record performed services/observations, complete, and verify the invoice and customer booking history. Other groomers’ assignments must be unavailable.
+7. **Pet Hotel Staff:** confirm a hotel booking, assign a room, attempt an overlapping reservation, check in, record feeding/water/cleaning/incident notes, and check out. Confirm occupancy drops and an unpaid invoice appears. Medication care must reject missing/foreign/undispensed prescription references.
+8. **Public regression:** login/profile/pets, public booking/rescheduling/cancellation, storefront filters, cart quantities/FILO10/COD and pickup/delivery, receipts, shared stock after reload, medical history for the matching owner, responsive sidebar/tables/forms, tab/Escape focus behavior and both themes.
 
 ## Troubleshooting
 
@@ -424,7 +413,7 @@ Suggested manual checks when making changes:
 | Cart, products, or history appears different | Check hostname, port, browser profile, and storage settings. Data is local to that origin and may have been cleared. |
 | Admin cannot find a customer booking | Check date/service/status filters and simulated role. Booking defaults to today's records; choose an appropriate range or all dates. |
 | An admin view is unavailable | Check the account menu's simulated role and its allowed views. Unknown/unauthorized hashes fall back to the dashboard. |
-| Changes are missing in an already-open tab | Product/state snapshots are read during page initialization; reload the affected page. There is no general live cross-tab synchronization. |
+| Changes are missing in an already-open tab | Admin listens for storage events and refreshes idle views; reload public pages to refresh their product/history snapshots. Simultaneous editing in multiple tabs is not transactionally safe. |
 | Doctor photographs do not appear | Three portrait files referenced by `index.html` are absent. Its image error handlers remove failed images, leaving initials. |
 | Font looks different offline | Fraunces is fetched from Google Fonts; the configured local serif fallback is used when it is unavailable. |
 | Saving data or uploaded images fails | Check browser storage permissions and quota. Uploaded product images are stored as resized data URLs in the local catalog. |
@@ -448,23 +437,23 @@ Screenshots are **Not documented**. The existing images are website assets, not 
 
 ### Verified limitations
 
-- **Local demo identity and access:** the proposed seven-role model is not a verified implementation in this uploaded README; passwords are not verified, there is no remote session, and admin role switching is available in the browser. The login form's remember-me checkbox has no corresponding behavior in `auth.js`; password reset reports that it is unavailable in the demo.
+- **Local demo identity and access:** seven-role UI permissions are implemented, but they are not a security boundary; passwords are not verified, there is no remote session, and admin role switching is available in the browser. The login form's remember-me checkbox has no corresponding behavior in `auth.js`; password reset reports that it is unavailable in the demo.
 - **Browser-only persistence:** records are not synchronized, backed up remotely, or isolated by account. Signing out leaves operational data in storage.
 - **Simulated payment and fulfillment:** checkout records a local receipt without contacting a payment provider. Non-COD methods become paid immediately. Delivery changes the fee/label but does not implement shipping-address confirmation, courier booking, or fulfillment tracking.
-- **Simulated public availability:** customer time-slot fullness is calculated by `seededFull()` rather than actual reservations or staff schedules. Admin has local conflict checks and hotel occupancy checks, but customer booking is not connected to that availability model.
-- **Sample clinical/history content:** profile medical records and sample bookings are fixed frontend data. The service catalog's HTML copy/prices are maintained separately from the booking definitions in `SERVICES`.
+- **Availability limits:** public/admin booking checks use actual local records and capacity, but there is no server lock, staff leave calendar or cross-device synchronization.
+- **Clinical/history limits:** live final records/addenda are integrated, while labeled legacy sample content remains. Medical attachments, lab systems, prescription version replacement and server-enforced patient privacy are outside this demo. Service catalog HTML copy/prices are maintained separately from `SERVICES`.
 - **Missing portraits:** `assets/images/doctors/andini.jpg`, `prasetyo.jpg`, and `larasati.jpg` are referenced but absent; initials provide a visual fallback.
 - **Inactive scrolling utility:** `js/section-scroll.js` exists but is not loaded by `index.html`; its `.fullscreen-section` targets also differ from the current homepage's `.home-section` markup. Its custom section-scrolling behavior is not an active feature.
 - **Time handling:** opening status and scheduling depend on the visitor's device clock/timezone; no explicit clinic timezone is configured.
 - **Business content verification:** clinic contact details, staff descriptions, testimonials, and marketing figures are static content whose real-world accuracy is **Not documented**.
-- **Quality/deployment infrastructure:** automated tests, a browser support matrix, CI/CD, and a production deployment configuration are absent.
+- **Quality/deployment infrastructure:** dependency-free service/template tests are included; an actual browser acceptance run, support matrix, CI/CD and production deployment configuration remain outstanding. Refund approval is a recorded decision only, not an executed reversal. Hotel billing uses the booked duration; overstay pricing and external fulfillment are not implemented.
 
 ### Possible improvements
 
 These are suggestions based on the implementation, not an approved roadmap:
 
 - Introduce a backend with account-scoped persistence, authentication, server-side authorization, and validation.
-- Use one authoritative availability model for customer and admin bookings, including staff conflicts and hotel capacity.
+- Move availability, inventory balances and payment idempotency into server transactions with validated foreign keys and a clinic timezone.
 - Integrate payment verification, order fulfillment, and real supplier workflows if commercial use is intended.
 - Consolidate service/pricing and business/contact content into shared data definitions.
 - Supply approved doctor portraits, verify business copy, and add interface screenshots.
@@ -472,21 +461,15 @@ These are suggestions based on the implementation, not an approved roadmap:
 
 ## Seven-role implementation checklist
 
-The following items are **acceptance criteria for the planned upgrade**. Their presence here does not indicate they have been implemented or tested.
-
-- [ ] All seven roles appear in role simulation; active role updates navigation and dashboard without data loss.
-- [ ] The role/permission registry is centralized; direct hash routes and action handlers check access.
-- [ ] Each role has meaningful, data-backed KPIs and task-specific views.
-- [ ] Receptionist can register owner/pet, manage appointments, and check in patients.
-- [ ] Doctor can save draft records, finalize notes, add traceable amendments, and issue multi-item prescriptions.
-- [ ] Groomer can record assigned service progress and notes.
-- [ ] Pet Hotel Staff can assign a non-overlapping room, check in/out, and maintain daily care logs.
-- [ ] Inventory Staff can record batch-aware stock movements and purchase-order receipts.
-- [ ] Cashier can generate itemized invoices for both services and products, record simulated payments, and print receipts.
-- [ ] Medication dispensing and product checkout reduce stock exactly once; prescribing alone does not.
-- [ ] Customer, pet, booking, invoice, and product records remain consistent across views and survive refresh.
-- [ ] Light/dark theme, responsive layout, and existing public customer workflows still function.
-- [ ] JavaScript checks, manual role-by-role acceptance tests, and relevant regression checks are documented.
+- [x] Seven roles, distinct data-backed dashboard compositions, navigation, role switching and action permissions.
+- [x] Receptionist shared registration, booking/check-in/assignment with conflict checks and cancellation reasons.
+- [x] Doctor structured draft/final records, addenda and multi-medicine prescriptions; relevant customer history.
+- [x] Assigned grooming progress and hotel room/care/check-out workflows.
+- [x] Inventory batches/movements, supplier orders, receiving, stock opname/write-offs and audited metadata corrections.
+- [x] Itemized service/retail billing, POS promotions, separate simulated payments, receipts and approval decisions.
+- [x] Shared public checkout stock ledger, duplicate-operation guards, legacy normalization and reload tests.
+- [x] Syntax, local-reference, service/integration and template rendering checks.
+- [ ] Actual browser acceptance: desktop/mobile, both themes, keyboard/focus, print preview and console/network checks.
 
 ## Information still needed
 

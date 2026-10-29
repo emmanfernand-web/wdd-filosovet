@@ -17,6 +17,7 @@ const catOptions = (sel) => ['makanan', 'obat', 'skincare', 'aksesoris', 'almed'
 
 /* ---------- Restock & kurangi stok ---------- */
 AD.restockModal = function (id) {
+  AD.require(PERM.STOCK);
   const p = PRODUCTS.find(x => x.id === id); if (!p) return;
   const sug = AD.stock.suggested(p);
   UI.modal({
@@ -35,6 +36,7 @@ AD.restockModal = function (id) {
   });
 };
 AD.reduceModal = function (id) {
+  AD.require(PERM.STOCK);
   const p = PRODUCTS.find(x => x.id === id); if (!p) return;
   UI.modal({
     title: `Kurangi stok: ${p.name}`, size: 'sm', desc: `Stok saat ini <strong>${p.stock}</strong>.`,
@@ -54,6 +56,7 @@ AD.reduceModal = function (id) {
 
 /* ---------- Order restock masal ---------- */
 AD.massRestock = function () {
+  AD.require(PERM.STOCK);
   const need = AD.stock.needRestock();
   if (!need.length) { UI.toast('Semua stok dalam kondisi aman'); return; }
   UI.modal({
@@ -152,7 +155,7 @@ Pages.produk = {
     if (params.q != null) PRD.q = params.q;
     view.innerHTML = `
       <div class="page-bar"><p class="muted">Produk Nonaktif disembunyikan dari toko publik. Produk Habis tampil “Habis” dan tidak bisa dibeli.</p>
-        <button type="button" class="btn btn-primary" id="btnNew">${ico('plus', 16)} Produk Baru</button></div>
+        <button type="button" class="btn btn-primary" id="btnNew" ${AD.allowed(PERM.PRICE) ? '' : 'hidden'}>${ico('plus', 16)} Produk Baru</button></div>
       <section class="panel">
         <div class="filters">
           <div class="search-field"><label class="sr-only" for="pdQ">Cari produk</label>${ico('search', 16)}<input type="search" id="pdQ" placeholder="Cari produk…" value="${esc(PRD.q)}"></div>
@@ -179,7 +182,7 @@ Pages.produk = {
       empty: { title: 'Produk tidak ditemukan', msg: 'Coba kata kunci lain atau hapus filter.', action: 'Reset filter', onAction: () => { PRD.q = ''; PRD.cat = 'Semua'; PRD.status = 'Semua'; Pages.produk.render($q('#view'), {}); } },
       columns: [
         { key: 'name', label: 'Produk', cls: 'col-wide', render: prodName },
-        { key: 'price', label: 'Harga', align: 'right', render: p => `<span class="inline-edit"><span>${rp(p.price)}</span><button type="button" class="icon-btn icon-sm" data-inline="price" data-id="${p.id}" aria-label="Ubah harga ${esc(p.name)}">${ico('edit', 14)}</button></span>` },
+        { key: 'price', label: 'Harga', align: 'right', render: p => `<span class="inline-edit"><span>${rp(p.price)}</span><button type="button" class="icon-btn icon-sm" ${AD.allowed(PERM.PRICE) ? '' : 'hidden'} data-inline="price" data-id="${p.id}" aria-label="Ubah harga ${esc(p.name)}">${ico('edit', 14)}</button></span>` },
         { key: 'stock', label: 'Stok', render: p => `<span class="inline-edit"><span>${p.stock}</span>${UI.stockChip(p)}<button type="button" class="icon-btn icon-sm" data-inline="stock" data-id="${p.id}" aria-label="Ubah stok ${esc(p.name)}">${ico('edit', 14)}</button></span>` },
         { key: 'sold', label: 'Terjual', align: 'right', render: p => p.sold || 0 },
         { key: 'st', label: 'Status', render: p => UI.chip(p.aktif === false ? 'Nonaktif' : 'Aktif') },
@@ -204,6 +207,7 @@ Pages.produk = {
 };
 
 function startInline(btn) {
+  AD.require(btn.dataset.inline === 'price' ? PERM.PRICE : PERM.STOCK);
   const p = PRODUCTS.find(x => x.id === +btn.dataset.id), field = btn.dataset.inline;
   const wrap = btn.closest('.inline-edit');
   const old = wrap.innerHTML;
@@ -218,7 +222,7 @@ function startInline(btn) {
       if (bad || isNaN(v)) { UI.toast(field === 'price' ? 'Harga minimal Rp 100' : 'Stok tidak boleh negatif', 'error'); wrap.innerHTML = old; return; }
       if (v !== p[field]) {
         AD.log.add('Produk', `${field === 'price' ? 'Mengubah harga' : 'Mengubah stok'} ${p.name}: ${field === 'price' ? rp(p[field]) + ' → ' + rp(v) : p[field] + ' → ' + v}`);
-        p[field] = v; saveProducts(); UI.toast(`${field === 'price' ? 'Harga' : 'Stok'} ${p.name} diperbarui`);
+        AD.catalog.save(p.id, { ...p, [field]: v }); UI.toast(`${field === 'price' ? 'Harga' : 'Stok'} ${p.name} diperbarui`);
       }
       AD.refresh();
     } else wrap.innerHTML = old;
@@ -227,6 +231,7 @@ function startInline(btn) {
   inp.addEventListener('blur', () => finish(true));
 }
 function duplicate(p) {
+  AD.require(PERM.PRICE);
   const id = Math.max(...PRODUCTS.map(x => x.id)) + 1;
   const copy = { ...p, id, name: p.name + ' (Salinan)', stock: 0, sold: 0, aktif: false };
   PRODUCTS.push(copy); saveProducts();
@@ -234,6 +239,8 @@ function duplicate(p) {
   AD.refresh(); AD.productForm(id);
 }
 async function toggleArchive(p) {
+  AD.authorize('product', ACTIONS.ARCHIVE);
+  AD.require(PERM.PRODUCT);
   if (p.aktif === false) { p.aktif = true; saveProducts(); AD.log.add('Produk', `Mengaktifkan ${p.name}`); UI.toast(`${p.name} diaktifkan`); return AD.refresh(); }
   const ok = await UI.confirm({ title: 'Arsipkan produk?', message: `<strong>${esc(p.name)}</strong> akan dinonaktifkan dan disembunyikan dari toko publik. Data penjualan tetap tersimpan.`, confirmLabel: 'Ya, arsipkan', danger: true });
   if (!ok) return;
@@ -242,6 +249,8 @@ async function toggleArchive(p) {
 
 /* ---------- Drawer form produk ---------- */
 AD.productForm = function (id) {
+  AD.require(PERM.PRODUCT);
+  if (!id && !AD.allowed(PERM.PRICE)) return UI.toast('Admin menetapkan harga produk baru.', 'error');
   const isNew = !id;
   const p = isNew ? { id: 0, name: '', cat: 'makanan', price: '', stock: 0, min: 10, sold: 0, resep: false, aktif: true, image: '' } : PRODUCTS.find(x => x.id === id);
   if (!p) return;
@@ -269,6 +278,8 @@ AD.productForm = function (id) {
   const prev = () => { $('pfPrev').innerHTML = img ? `<img src="${esc(/^(data:|https?:)/.test(img) ? img : '../assets/images/' + img)}" alt="Pratinjau gambar produk">` : `<span class="thumb-fb">${ico('image', 22)}</span>`; };
   if (img && !IMAGE_FILES.includes(img)) { $('pfImgSel').value = '__upload'; } else $('pfImgSel').value = img;
   prev();
+  if (!AD.allowed(PERM.PRICE)) $('pfPrice').disabled = true;
+  if (!isNew) { $('pfBatch').disabled = true; $('pfExp').disabled = true; }
   $('pfImgSel').onchange = () => { img = $('pfImgSel').value === '__upload' ? img : $('pfImgSel').value; prev(); };
   $('pfFile').onchange = () => {
     const f = $('pfFile').files[0]; if (!f) return;
@@ -291,10 +302,8 @@ AD.productForm = function (id) {
     if (!ok) { const bad = $q('.is-invalid', el); bad && bad.focus(); return; }
     const dup = PRODUCTS.find(x => x.id !== p.id && x.name.toLowerCase() === name.toLowerCase());
     if (dup) { UI.setError('pfName', 'Nama produk sudah dipakai.'); $('pfName').focus(); return; }
-    const data = { name, cat: $('pfCat').value, price, stock, min, batch: $('pfBatch').value.trim() || undefined, exp: $('pfExp').value || undefined, image: img || undefined, resep: $('pfResep').checked, aktif: $('pfAktif').checked };
-    if (isNew) { PRODUCTS.push({ id: Math.max(0, ...PRODUCTS.map(x => x.id)) + 1, sold: 0, ...data }); AD.log.add('Produk', `Menambah produk ${name}`); }
-    else { Object.assign(p, data); AD.log.add('Produk', `Mengedit produk ${name}`); }
-    saveProducts(); dr.close(); UI.toast(isNew ? 'Produk ditambahkan' : 'Produk diperbarui'); AD.refresh();
+    const data = { name, cat: $('pfCat').value, price, stock, min, batch: isNew ? ($('pfBatch').value.trim() || undefined) : p.batch, exp: isNew ? ($('pfExp').value || undefined) : p.exp, image: img || undefined, resep: $('pfResep').checked, aktif: $('pfAktif').checked };
+    AD.catalog.save(isNew ? null : p.id, data); dr.close(); UI.toast(isNew ? 'Produk ditambahkan' : 'Produk diperbarui'); AD.refresh();
   };
   setTimeout(() => $('pfName').focus(), 60);
 };

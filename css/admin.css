@@ -461,3 +461,26 @@ button.stat-card:hover { border-color: var(--primary); box-shadow: var(--shadow)
   .stat-grid-5 { grid-template-columns: minmax(0, 1fr); gap: 10px; }
 }
 @media (prefers-reduced-motion: reduce) { .drawer, .modal, #layerRoot .overlay, .sb { transition: none; } }
+
+/* Seven-role workspaces reuse the shared tokens and components. */
+.work-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-bottom: 20px; }
+.work-pad { padding: 22px; }
+.work-pad > p + p { margin-top: 12px; }
+.work-pad h2 { margin-bottom: 14px; }
+.work-form .rx-line { padding: 18px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-block: 18px; min-width: 0; }
+.work-form legend { padding-inline: 6px; font-weight: 700; }
+.work-form .note-box { margin-block: 12px; }
+.work-error { margin-top: 12px; }
+.work-form textarea { resize: vertical; }
+.work-form .row2 { min-width: 0; }
+.work-form input, .work-form select, .work-form textarea { max-width: 100%; }
+.admin-body .stat-value, .admin-body .tbl { font-variant-numeric: tabular-nums; }
+.work-pad p, .note-box, .tbl td { overflow-wrap: anywhere; }
+#roleQueue .tbl-wrap { max-width: 100%; }
+@media (max-width: 760px) {
+  .work-split { grid-template-columns: minmax(0, 1fr); }
+  .work-pad { padding: 16px; }
+  .work-form .row2 { grid-template-columns: minmax(0, 1fr); }
+  .work-form .rx-line { padding: 12px; }
+}
+.sb-label { min-width: 0; white-space: normal; line-height: 1.25; }

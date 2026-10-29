@@ -24,7 +24,7 @@ const statusLabel = s => s === 'Menunggu' ? 'Menunggu Bayar' : s;
 /* ---------- Nota (struk 80mm) ---------- */
 AD.notaHtml = t => `
   <div class="nota">
-    <div class="nota-c"><strong class="nota-brand">FILOSOVET</strong><br>Petshop &amp; Klinik Hewan<br>Jl. Petshop Raya No. 88, Jakarta<br>(021) 555-0123</div>
+    <div class="nota-c"><strong class="nota-brand">FILOSOVET</strong><br>NOTA SIMULASI<br>Petshop &amp; Klinik Hewan<br>Jl. Petshop Raya No. 88, Jakarta<br>(021) 555-0123</div>
     <hr>
     <div class="nota-row"><span>No.</span><span>${esc(t.id)}</span></div>
     <div class="nota-row"><span>Tanggal</span><span>${fmtDateTime(t.tanggal)}</span></div>
@@ -59,7 +59,7 @@ AD.openTrx = function (id) {
   const paid = $q('#trxPaid', dr.el);
   if (paid) paid.onclick = async () => {
     const ok = await UI.confirm({ title: 'Tandai lunas?', message: `Transaksi <strong>${esc(t.id)}</strong> senilai <strong>${rp(t.total)}</strong> akan ditandai lunas.`, confirmLabel: 'Ya, tandai lunas' });
-    if (!ok) return; AD.trx.markPaid(t.id); UI.toast('Transaksi ditandai lunas'); dr.close(); AD.refresh();
+    if (!ok) return; dr.close(); AD.paymentForm(t.id);
   };
   dr.el.addEventListener('click', e => { const b = e.target.closest('[data-bk]'); if (b) { dr.close(); AD.go('booking', { drawer: b.dataset.bk, range: 'all' }); } });
 };
@@ -115,38 +115,7 @@ Pages.transaksi = {
 };
 
 /* ---------- Transaksi kasir ---------- */
-AD.kasirModal = function () {
-  const prods = PRODUCTS.filter(p => p.aktif !== false && !p.resep && p.stock > 0);
-  const lineHtml = (i) => `<div class="ks-line" data-i="${i}"><label class="sr-only" for="ksP${i}">Produk</label><select id="ksP${i}" class="ks-prod"><option value="">Pilih produk…</option>${prods.map(p => `<option value="${p.id}">${esc(p.name)} — ${rp(p.price)} (stok ${p.stock})</option>`).join('')}</select>
-    <label class="sr-only" for="ksQ${i}">Jumlah</label><input type="number" id="ksQ${i}" class="ks-qty" min="1" value="1" inputmode="numeric"><button type="button" class="icon-btn" data-rm="${i}" aria-label="Hapus baris">${ico('x', 16)}</button></div>`;
-  let n = 1;
-  UI.modal({
-    title: 'Transaksi Kasir', size: 'lg',
-    body: `<div class="row2">${UI.field({ id: 'ksName', label: 'Nama pelanggan (opsional)', attrs: 'placeholder="Pelanggan umum" autocomplete="off"' })}
-      <div class="field"><label for="ksMet">Metode bayar</label><select id="ksMet">${PAY_METHODS.map(m => `<option>${esc(m)}</option>`).join('')}</select></div></div>
-      <div class="field"><span class="lbl">Produk</span><div id="ksLines">${lineHtml(0)}</div><small class="field-error" id="err-ksLines" role="alert"></small>
-      <button type="button" class="btn btn-ghost btn-sm" id="ksAdd">${ico('plus', 14)} Tambah baris</button></div>
-      <p class="preview" id="ksSum"></p>`,
-    actions: [{ label: 'Batal', kind: 'outline' }, { label: 'Simpan Transaksi', kind: 'primary', onClick: (close, el) => {
-      const items = []; let err = '';
-      $qa('.ks-line', el).forEach(l => { const id = +$q('.ks-prod', l).value; if (!id) return; const p = PRODUCTS.find(x => x.id === id), q = Math.floor(+$q('.ks-qty', l).value) || 0; if (q < 1) err = 'Jumlah minimal 1.'; else if (q > p.stock) err = `Stok ${p.name} hanya ${p.stock}.`; else { const ex = items.find(i => i.id === id); if (ex) ex.qty += q; else items.push({ id, name: p.name, qty: q, price: p.price }); } });
-      if (!items.length && !err) err = 'Pilih minimal satu produk.';
-      if (!err) items.forEach(i => { if (i.qty > PRODUCTS.find(x => x.id === i.id).stock) err = `Stok ${i.name} tidak cukup.`; });
-      if (!UI.setError('ksLines', err)) return;
-      const sub = items.reduce((s, i) => s + i.price * i.qty, 0), met = $q('#ksMet', el).value;
-      const rec = AD.trx.add({ pelanggan: $q('#ksName', el).value.trim() || 'Pelanggan umum', tipe: 'Produk', deskripsi: items.map(i => i.name).join(', '), items: items.map(({ name, qty, price }) => ({ name, qty, price })), subtotal: sub, diskon: 0, ongkir: 0, total: sub, metode: met, status: /COD/.test(met) ? 'Menunggu' : 'Lunas' });
-      items.forEach(i => { const p = PRODUCTS.find(x => x.id === i.id); p.stock -= i.qty; p.sold = (p.sold || 0) + i.qty; });
-      saveProducts(); AD.log.add('Transaksi', `Mencatat penjualan ${rec.id} ${rp(sub)}`);
-      close(); UI.toast(`Transaksi ${rec.id} tersimpan`); AD.refresh(); AD.openTrx(rec.id);
-    } }],
-    onOpen: el => {
-      const upd = () => { const sub = $qa('.ks-line', el).reduce((s, l) => { const p = PRODUCTS.find(x => x.id === +$q('.ks-prod', l).value); return s + (p ? p.price * (Math.floor(+$q('.ks-qty', l).value) || 0) : 0); }, 0); $q('#ksSum', el).innerHTML = `Total: <strong>${rp(sub)}</strong>`; };
-      el.addEventListener('input', upd); el.addEventListener('change', upd); upd();
-      $q('#ksAdd', el).onclick = () => { $q('#ksLines', el).insertAdjacentHTML('beforeend', lineHtml(++n)); upd(); };
-      el.addEventListener('click', e => { const r = e.target.closest('[data-rm]'); if (r && $qa('.ks-line', el).length > 1) { r.closest('.ks-line').remove(); upd(); } });
-    }
-  });
-};
+AD.kasirModal = function () { AD.require(PERM.PAY); AD.go('pos'); };
 
 /* ---------- Export laporan transaksi ---------- */
 AD.exportModal = function () {

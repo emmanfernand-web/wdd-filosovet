@@ -33,14 +33,9 @@ const toISO = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0
 const currentType = () => SERVICES[state.svc].types[state.typeIdx] || SERVICES[state.svc].types[0];
 
 /* ---------- Slot: penuh (simulasi) & sudah lewat ---------- */
-function seededFull(svc, date, slot) {
-  const diffDays = Math.round((date.getTime() - today.getTime()) / 86400000);
-  const seed = (Math.abs(diffDays) * 7 + slot.split(':').reduce((a, b) => a + +b, 0) + svc.length) % 10;
-  return seed < 3;
-}
 function slotState(date, t) {
   if (sameDay(date, today) && toMinutes(t) <= _now.getHours() * 60 + _now.getMinutes()) return 'past';
-  return seededFull(state.svc, date, t) ? 'full' : 'ok';
+  return FVStore.bookingAvailable({svcKey:state.svc,tipe:currentType().name,tanggal:toISO(date),waktu:t,petugas:$('svcStaff').value,durasiHari:Math.min(60,Math.max(1,+$('hotelDurasi').value||1))},state.rescheduleCode) ? 'ok' : 'full';
 }
 function dayUnavailable(date) {
   return SERVICES[state.svc].slots.every(t => slotState(date, t) !== 'ok');
@@ -138,7 +133,7 @@ function renderService() {
   state.typeIdx = presetIdx >= 0 ? presetIdx : 0;
 
   renderTypes();
-  $('svcStaff').innerHTML = cfg.staff.map(s => `<option>${s}</option>`).join('');
+  $('svcStaff').innerHTML = FVStore.serviceStaff(state.svc).map(s => `<option>${s}</option>`).join('');
   $('durasiWrap').style.display = cfg.perDay ? 'block' : 'none';
 
   // Slot bisa berbeda per layanan
@@ -286,6 +281,7 @@ function trapModalKeys(e) {
 
 function confirmBooking() {
   if (missingItems().length) return;
+  if (slotState(state.selectedDate,state.time) !== 'ok') { toast('Slot tidak tersedia. Pilih jadwal lain.','error'); renderSlots(); return; }
   const cfg = SERVICES[state.svc];
   const type = currentType();
   const dur = cfg.perDay ? Math.min(60, Math.max(1, Math.floor(+$('hotelDurasi').value) || 1)) : 1;
@@ -317,7 +313,13 @@ function confirmBooking() {
   } else {
     all.unshift(booking);
   }
-  localStorage.setItem('fv_bookings', JSON.stringify(all));
+  try {
+    if (!FVStore.bookingAvailable({...booking,svcKey:state.svc}, state.rescheduleCode)) throw Error('Slot baru saja terisi. Pilih jadwal lain.');
+    if (rescheduled) { const old=FVStore.get('fv_bookings',[]).find(b=>b.code===state.rescheduleCode); if(old.checkedInAt || !['Dikonfirmasi','Menunggu Konfirmasi'].includes(old.status)) throw Error('Booking yang sudah diproses tidak dapat dijadwalkan ulang.'); }
+    const shared=FVStore.state(); Object.assign(booking,FVStore.identity(shared,booking)); booking.staffId=shared.staff.find(s=>s.nama===booking.petugas)?.id;
+    if(rescheduled)shared.stays.filter(s=>s.bookingCode===booking.code&&s.status==='Dipesan').forEach(s=>{s.status='Dibatalkan';s.cancelReason='Jadwal ulang pelanggan; perlu penempatan kembali';});
+    FVStore.commit({fv_bookings:all,[FVStore.key]:shared});
+  } catch(error) { toast(error.message,'error'); return; }
   $('bookingModalTitle').textContent = rescheduled ? 'Jadwal Diperbarui' : 'Booking Berhasil';
 
   $('bookingCode').value = booking.code;
@@ -330,8 +332,8 @@ function initBookingEvents() {
     t.onclick = () => { state.svc = t.dataset.svc; renderService(); };
   });
 
-  $('hotelDurasi').oninput = updateSummary;
-  $('svcStaff').onchange = updateSummary;
+  $('hotelDurasi').oninput = () => { renderCalendar(); renderSlots(); updateSummary(); };
+  $('svcStaff').onchange = () => { if(state.time && state.selectedDate && slotState(state.selectedDate,state.time)!=='ok')state.time=null; renderCalendar(); renderSlots(); updateSummary(); };
 
   $('calPrev').onclick = () => { state.viewMonth--; if (state.viewMonth < 0) { state.viewMonth = 11; state.viewYear--; } renderCalendar(); };
   $('calNext').onclick = () => { state.viewMonth++; if (state.viewMonth > 11) { state.viewMonth = 0; state.viewYear++; } renderCalendar(); };

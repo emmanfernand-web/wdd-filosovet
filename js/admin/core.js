@@ -41,15 +41,8 @@ const DISTRIBUTORS = ['PT Satwa Sehat Farma', 'CV Pakan Nusantara', 'Petindo Sup
 const PAY_METHODS = ['Tunai', 'QRIS', 'Transfer Bank (BCA)', 'Transfer Bank (Mandiri)', 'Kartu Debit/Kredit', 'COD (bayar di toko)'];
 
 /* ---------- Peran ---------- */
-const ROLES = {
-  admin:   { label: 'Admin',   pages: ['dashboard', 'booking', 'stok', 'produk', 'transaksi', 'laporan'] },
-  dokter:  { label: 'Dokter',  pages: ['dashboard', 'booking', 'stok', 'produk'], bookingFilter: 'Konsultasi Dokter Hewan' },
-  kasir:   { label: 'Kasir',   pages: ['dashboard', 'booking', 'stok', 'transaksi'] },
-  groomer: { label: 'Groomer', pages: ['dashboard', 'booking'], bookingFilter: 'Grooming', compactDashboard: true }
-};
+const ROLES = {}; // Configured centrally by permissions.js before initialization.
 AD.role = () => (ROLES[localStorage.getItem('fv_admin_role')] ? localStorage.getItem('fv_admin_role') : 'admin');
-AD.setRole = r => localStorage.setItem('fv_admin_role', r);
-AD.can = page => ROLES[AD.role()].pages.includes(page);
 AD.roleLabel = () => ROLES[AD.role()].label;
 
 /* ---------- Log aktivitas ---------- */
@@ -58,7 +51,7 @@ AD.log = {
   add(aksi, ringkas) {
     const l = read('fv_admin_log', []);
     l.unshift({ t: new Date().toISOString(), aktor: AD.roleLabel(), aksi, ringkas });
-    write('fv_admin_log', l.slice(0, 200));
+    try { write('fv_admin_log', l.slice(0, 200)); } catch(error) { if(typeof toast === 'function') toast('Operasi tersimpan, tetapi log aktivitas gagal disimpan. Mutasi stok tetap tercatat di ledger.', 'error'); return false; }
   }
 };
 
@@ -187,14 +180,14 @@ function ensureSeed() {
   let meta = read('fv_admin_seed', null);
   if (!meta) {
     const s = buildSeed();
-    write('fv_admin_bookings', s.bookings); write('fv_admin_trx', s.trx);
-    write('fv_admin_orders', s.orders);
+    if (!read('fv_admin_bookings', null)) write('fv_admin_bookings', s.bookings); if (!read('fv_admin_trx', null)) write('fv_admin_trx', s.trx);
+    if (!read('fv_admin_orders', null)) write('fv_admin_orders', s.orders);
     if (!read('fv_admin_log', null)) write('fv_admin_log', s.log);
     write('fv_admin_seed', { day: tIso });
     return;
   }
   const delta = diffDays(tIso, meta.day);
-  if (delta > 0) {
+  if (delta > 0 && !localStorage.getItem('fv_workspace_v1')) {
     const shiftDt = v => { const d = new Date(v); d.setDate(d.getDate() + delta); return `${toISO(d)}T${pad2(d.getHours())}:${pad2(d.getMinutes())}:00`; };
     write('fv_admin_bookings', read('fv_admin_bookings', []).map(b => b.seed ? { ...b, tanggal: addDaysISO(b.tanggal, delta), riwayat: (b.riwayat || []).map(h => ({ ...h, at: shiftDt(h.at) })) } : b));
     write('fv_admin_trx', read('fv_admin_trx', []).map(t => t.seed ? { ...t, tanggal: shiftDt(t.tanggal) } : t));
@@ -203,7 +196,8 @@ function ensureSeed() {
   }
 }
 AD.resetDemo = () => {
-  ['fv_admin_seed', 'fv_admin_bookings', 'fv_admin_trx', 'fv_admin_orders', 'fv_admin_log', 'fv_products', 'fv_admin_notif_read', 'fv_bookings', 'fv_orders'].forEach(k => localStorage.removeItem(k));
+  AD.require(PERM.STAFF);
+  [FVStore.key, 'fv_admin_seed', 'fv_admin_bookings', 'fv_admin_trx', 'fv_admin_orders', 'fv_admin_log', 'fv_products', 'fv_admin_notif_read', 'fv_bookings', 'fv_orders'].forEach(k => localStorage.removeItem(k));
 };
 
 /* ---------- Booking ---------- */
@@ -213,7 +207,7 @@ function normBooking(b, src) {
   const type = key ? SERVICES[key].types.find(t => t.name === b.tipe) : null;
   const status = !b.status ? 'Menunggu Konfirmasi' : /^Menunggu/.test(b.status) ? 'Menunggu Konfirmasi' : b.status === 'Diproses' || b.status === 'Dikonfirmasi' ? b.status : b.status;
   return {
-    code: b.code, _src: src, sumber: b.sumber || (src === 'public' ? 'Online' : 'Manual'),
+    ...b, code: b.code, _src: src, sumber: b.sumber || (src === 'public' ? 'Online' : 'Manual'),
     pelanggan: (b.pelanggan || b.nama || '').trim(), hp: b.hp || '', hewan: b.hewan || '', spesie: b.spesie || b.spesies || '', ras: b.ras || '', berat: b.berat || '',
     layanan: b.layanan || '', svcKey: key, tipe: b.tipe || '', tanggal: b.tanggal, waktu: b.waktu || '00:00', petugas: b.petugas || '',
     durasiHari: b.durasiHari || 1, durMin: type && type.min ? type.min : (key === 'hotel' ? 60 : 60), biaya: b.biaya || 0, status,
@@ -235,15 +229,6 @@ AD.bookings = {
     if (b.status === 'Dikonfirmasi' && past) return 'Tidak Hadir';
     return b.status;
   },
-  /* Aksi yang tersedia mengikuti status efektif */
-  actions(b) {
-    switch (AD.bookings.eff(b)) {
-      case 'Menunggu Konfirmasi': return [{ to: 'Dikonfirmasi', label: 'Konfirmasi', kind: 'primary' }, { to: 'Dibatalkan', label: 'Batalkan', kind: 'danger' }];
-      case 'Dikonfirmasi': return [{ to: 'Diproses', label: 'Proses', kind: 'primary' }, { to: 'Dibatalkan', label: 'Batalkan', kind: 'danger' }];
-      case 'Diproses': return [{ to: 'Selesai', label: 'Selesai', kind: 'primary' }];
-      default: return [];
-    }
-  },
   /* Ubah objek booking langsung di store asalnya */
   mutate(code, fn) {
     const upd = (key) => {
@@ -253,41 +238,12 @@ AD.bookings = {
     };
     return upd('fv_bookings') || upd('fv_admin_bookings');
   },
-  setStatus(code, to) {
-    const b0 = AD.bookings.get(code); if (!b0) return;
-    AD.bookings.mutate(code, o => {
-      o.status = to; o.riwayat = [...(o.riwayat || []), { status: to, at: new Date().toISOString(), by: AD.roleLabel() }];
-    });
-    AD.log.add('Booking', `${to === 'Selesai' ? 'Menyelesaikan' : to === 'Dibatalkan' ? 'Membatalkan' : 'Mengubah status'} booking ${b0.pelanggan || 'Tanpa nama'} (${code}) → ${to}`);
-    if (to === 'Selesai') AD.trx.ensureForBooking(AD.bookings.get(code));
-  },
-  setNote(code, note) { AD.bookings.mutate(code, o => { o.catatanInternal = note; }); AD.log.add('Booking', `Memperbarui catatan internal ${code}`); },
-  addManual(data) {
-    const list = read('fv_admin_bookings', []);
-    const code = 'FV-' + Date.now().toString(36).toUpperCase().slice(-6);
-    list.unshift({ ...data, code, sumber: 'Manual', status: 'Dikonfirmasi', riwayat: [{ status: 'Dikonfirmasi', at: new Date().toISOString(), by: AD.roleLabel() }] });
-    write('fv_admin_bookings', list);
-    AD.log.add('Booking', `Menambah booking manual ${data.pelanggan} (${code})`);
-    return code;
-  },
   /* Bentrok: petugas yang sama, tanggal sama, jam bertumpuk */
   conflicts(b, all) {
     if (!b.petugas || b.svcKey === 'hotel') return [];
     const s1 = AD.bookings.start(b).getTime(), e1 = AD.bookings.end(b).getTime();
     return (all || AD.bookings.all()).filter(o => o.code !== b.code && o.tanggal === b.tanggal && o.petugas === b.petugas && !['Dibatalkan', 'Kedaluwarsa'].includes(o.status) &&
       AD.bookings.start(o).getTime() < e1 && AD.bookings.end(o).getTime() > s1);
-  },
-  customers() {
-    const map = new Map();
-    SEED_CUSTOMERS.forEach(c => map.set(c.hp, { nama: c.nama, hp: c.hp, pets: c.pets.map(p => ({ nama: p[0], spesie: p[1], ras: p[2] })) }));
-    AD.bookings.all().forEach(b => {
-      if (!b.pelanggan) return;
-      const k = b.hp || b.pelanggan;
-      if (!map.has(k)) map.set(k, { nama: b.pelanggan, hp: b.hp, pets: [] });
-      const c = map.get(k);
-      if (b.hewan && !c.pets.find(p => p.nama === b.hewan)) c.pets.push({ nama: b.hewan, spesie: b.spesie, ras: b.ras });
-    });
-    return [...map.values()];
   },
   /* Jumlah kandang terisi pada tanggal tertentu */
   hotelOccupied(iso) {
@@ -324,23 +280,7 @@ AD.trx = {
     list.unshift(rec); write('fv_admin_trx', list);
     return rec;
   },
-  /* Transaksi otomatis saat booking selesai (jika belum ada) */
-  ensureForBooking(b) {
-    if (!b || b.trxId || AD.trx.all().some(t => t.ref === b.code)) return;
-    const rec = AD.trx.add({
-      pelanggan: b.pelanggan || 'Tanpa nama', tipe: 'Layanan', deskripsi: `${b.tipe} · ${b.hewan}`,
-      items: [{ name: `${b.layanan}: ${b.tipe}${b.durasiHari > 1 ? ` × ${b.durasiHari} hari` : ''}`, qty: 1, price: b.biaya }],
-      subtotal: b.biaya, diskon: 0, ongkir: 0, total: b.biaya, metode: 'Tunai', status: 'Lunas', ref: b.code
-    });
-    AD.bookings.mutate(b.code, o => { o.trxId = rec.id; });
-    AD.log.add('Transaksi', `Transaksi ${rec.id} dibuat otomatis dari booking ${b.code}`);
-  },
-  markPaid(id) {
-    const t = AD.trx.get(id); if (!t) return;
-    if (t._src === 'orders') { const l = read('fv_orders', []); const o = l.find(x => x.no === id); if (o) { o.statusBayar = 'Lunas'; write('fv_orders', l); } }
-    else { const l = read('fv_admin_trx', []); const o = l.find(x => x.id === id); if (o) { o.status = 'Lunas'; write('fv_admin_trx', l); } }
-    AD.log.add('Transaksi', `Menandai ${id} lunas (${rp(t.total)})`);
-  }
+
 };
 
 /* ---------- Stok & produk ---------- */
@@ -358,27 +298,8 @@ AD.stock = {
   },
   needRestock: () => PRODUCTS.filter(p => p.aktif !== false && stockStatus(p) !== 'aman').sort((a, b) => AD.stock.rank(a) - AD.stock.rank(b) || a.name.localeCompare(b.name, 'id')),
   suggested: p => Math.max(1, p.min * 2 - p.stock),
-  adjust(id, delta, note) {
-    const p = PRODUCTS.find(x => x.id === id); if (!p) return;
-    p.stock = Math.max(0, p.stock + delta); saveProducts();
-    AD.log.add('Stok', `${delta >= 0 ? 'Restock' : 'Mengurangi stok'} ${p.name} ${delta >= 0 ? '+' : ''}${delta}${note ? ' (' + note + ')' : ''}`);
-  },
   orders: () => read('fv_admin_orders', []),
-  placeOrder(distributor, items) {
-    const l = read('fv_admin_orders', []);
-    const d = new Date(); const n = l.length + 1;
-    const rec = { id: `PO-${String(d.getFullYear()).slice(2)}${pad2(d.getMonth() + 1)}-${String(n).padStart(3, '0')}`, tanggal: `${todayISO()}T${pad2(d.getHours())}:${pad2(d.getMinutes())}:00`, distributor, status: 'Dipesan', items };
-    l.unshift(rec); write('fv_admin_orders', l);
-    AD.log.add('Stok', `Order restock ${rec.id} ke ${distributor} (${items.length} produk, ${items.reduce((s, i) => s + i.qty, 0)} unit)`);
-    return rec;
-  },
-  receiveOrder(id) {
-    const l = read('fv_admin_orders', []); const o = l.find(x => x.id === id); if (!o || o.status === 'Diterima') return;
-    o.status = 'Diterima'; o.diterima = new Date().toISOString(); write('fv_admin_orders', l);
-    o.items.forEach(it => { const p = PRODUCTS.find(x => x.id === it.id); if (p) p.stock += it.qty; });
-    saveProducts();
-    AD.log.add('Stok', `Menerima order ${id}: stok ditambahkan`);
-  }
+
 };
 
 /* ---------- Notifikasi (diturunkan dari data) ---------- */

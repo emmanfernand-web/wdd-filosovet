@@ -36,10 +36,12 @@ function actionButtons(b, small = true) {
 }
 async function runAction(code, to) {
   const b = AD.bookings.get(code); if (!b) return;
+  FVStore.require(AD.can('booking') && AD.scope(b), 'Booking ini tidak dapat diakses oleh peran aktif.');
   if (to === 'Dibatalkan') {
     const ok = await UI.confirm({ title: 'Batalkan booking?', message: `Booking <strong>${esc(b.pelanggan || 'Tanpa nama')}</strong> (${esc(b.tipe)}, ${fmtDateShort(b.tanggal)} ${b.waktu}) akan dibatalkan. Tindakan ini tercatat di riwayat.`, confirmLabel: 'Ya, batalkan', cancelLabel: 'Kembali', danger: true });
     if (!ok) return;
   }
+  if (to === 'Dibatalkan') return W.form('Alasan pembatalan', W.text('cancelReason', 'Alasan pembatalan'), v => AD.bookings.setStatus(code, to, v('cancelReason')), 'Batalkan booking');
   AD.bookings.setStatus(code, to);
   UI.toast(`Status booking diubah menjadi ${to}`);
   AD.refresh();
@@ -183,12 +185,13 @@ Pages.booking = {
 /* ---------- Drawer detail booking ---------- */
 AD.openBooking = function (code) {
   const b = AD.bookings.get(code); if (!b) return;
+  FVStore.require(AD.can('booking') && AD.scope(b), 'Booking ini tidak dapat diakses oleh peran aktif.');
   const eff = AD.bookings.eff(b), all = AD.bookings.all();
   const conf = AD.bookings.conflicts(b, all);
   const wa = waLink(b.hp);
   const trx = b.trxId || AD.trx.all().find(x => x.ref === b.code)?.id;
   const row = (k, v) => `<div class="kv"><dt>${k}</dt><dd>${v}</dd></div>`;
-  const hist = [...b.riwayat].reverse().map(h => `<li><span class="log-dot"></span><div><p>${esc(h.status)}</p><small class="muted">${esc(h.by || '—')} · ${fmtDateTime(h.at)}</small></div></li>`).join('');
+  const hist = [...b.riwayat].reverse().map(h => `<li><span class="log-dot"></span><div><p>${esc(h.status)}${h.reason ? ' · ' + esc(h.reason) : ''}</p><small class="muted">${esc(h.by || '—')} · ${fmtDateTime(h.at)}</small></div></li>`).join('');
   const dr = UI.drawer({
     title: b.pelanggan || 'Tanpa nama', subtitle: `${esc(b.code)} · ${UI.chip(eff)}`,
     body: `
@@ -207,7 +210,7 @@ AD.openBooking = function (code) {
       <button type="button" class="btn btn-outline btn-sm" id="dsSaveNote">Simpan catatan</button>
       <h3 class="ds-title">Riwayat status</h3>
       <ul class="log-list">${hist || '<li class="muted">Belum ada riwayat.</li>'}</ul>`,
-    footer: `${actionButtons(b, false)}<button type="button" class="btn btn-outline" data-close2>Tutup</button>`
+    footer: `${b.status === 'Dikonfirmasi' && !b.checkedInAt ? W.button('Verifikasi & check-in','checkin',b.code) : ''}${!b.checkedInAt && ['Dikonfirmasi','Menunggu Konfirmasi'].includes(b.status) ? W.button('Jadwal / petugas','schedule',b.code) : ''}${actionButtons(b, false)}<button type="button" class="btn btn-outline" data-close2>Tutup</button>`
   });
   dr.el.querySelector('.drawer').dataset.code = code;
   $q('#dsSaveNote', dr.el).onclick = () => { AD.bookings.setNote(code, $q('#dsNote', dr.el).value.trim()); UI.toast('Catatan disimpan'); };
@@ -220,6 +223,7 @@ AD.openBooking = function (code) {
 
 /* ---------- Tambah booking manual (3 langkah) ---------- */
 AD.manualBooking = function (pre = {}) {
+  AD.require(PERM.BOOK);
   const customers = AD.bookings.customers();
   const st = { step: 1, svc: pre.svc || 'konsultasi', typeIdx: 0, waktu: pre.waktu || '', petugas: pre.petugas || '' };
   const dateMin = todayISO();
@@ -263,7 +267,7 @@ AD.manualBooking = function (pre = {}) {
     const c = cfg();
     $('mbType').innerHTML = c.types.map((t, i) => `<option value="${i}">${esc(t.name)} — ${rp(t.price)}${c.perDay ? ' / hari' : ''}</option>`).join('');
     $('mbType').value = String(Math.min(st.typeIdx, c.types.length - 1));
-    $('mbStaff').innerHTML = c.staff.map(s => `<option ${s === st.petugas ? 'selected' : ''}>${esc(s)}</option>`).join('');
+    $('mbStaff').innerHTML = AD.serviceStaff($('mbSvc').value).map(s => `<option ${s === st.petugas ? 'selected' : ''}>${esc(s)}</option>`).join('');
     $('mbDaysWrap').hidden = !c.perDay;
     drawSlots();
   }
