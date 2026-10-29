@@ -14,6 +14,7 @@ The current implementation is a **static frontend demonstration** built with HTM
 - [Environment variables and configuration](#environment-variables-and-configuration)
 - [Available scripts and commands](#available-scripts-and-commands)
 - [Pages, routes, and functionality](#pages-routes-and-functionality)
+- [Seven-role admin workspace specification](#seven-role-admin-workspace-specification)
 - [Architecture and major components](#architecture-and-major-components)
 - [Browser storage and demo data](#browser-storage-and-demo-data)
 - [Integrations, backend, and database](#integrations-backend-and-database)
@@ -22,6 +23,7 @@ The current implementation is a **static frontend demonstration** built with HTM
 - [Troubleshooting](#troubleshooting)
 - [Screenshots](#screenshots)
 - [Known limitations and possible improvements](#known-limitations-and-possible-improvements)
+- [Seven-role implementation checklist](#seven-role-implementation-checklist)
 - [Information still needed](#information-still-needed)
 
 ## Key features
@@ -45,7 +47,7 @@ The current implementation is a **static frontend demonstration** built with HTM
 - **Product management:** create, edit, duplicate, archive/reactivate, and update prices or stock inline. Images can be selected from bundled assets or uploaded and resized in the browser.
 - **Transactions:** combined customer checkout and cashier transactions, payment/source/date filters, marking pending transactions as paid, and receipt printing.
 - **Reports:** period comparisons, revenue, completed bookings, no-show rate, occupancy, top products/services, and payment-method breakdowns. Downloads use CSV; PDF output uses the browser's print dialog.
-- **Workspace tools:** global search, booking/stock notifications, collapsible navigation, theme switching, demo role switching, and demo data reset.
+- **Workspace tools:** global search, booking/stock notifications, collapsible navigation, theme switching, demo role switching, and demo data reset. **A seven-role expansion is specified below but is not confirmed in the uploaded implementation.**
 
 ## Technology stack and dependencies
 
@@ -160,7 +162,7 @@ Serve the entire project root so `pages/`, `components/`, `css/`, `js/`, and `as
 
 Open `pages/auth.html` to use the simulated login or registration forms. Login validates email format and requires a nonempty password, but does not verify an account or password against a server. Registration saves the entered name/email and phone locally; passwords are not persisted by these handlers.
 
-The admin workspace is available directly at `pages/dashboard-admin.html` and through the admin link on the authentication page. It does not require a separate admin login. Its account menu provides **Simulasi peran** (role simulation) and **Reset data demo** (reset demo data).
+The currently documented admin workspace is available directly at `pages/dashboard-admin.html` and through the admin link on the authentication page. It does not require a separate admin login. Its account menu provides **Simulasi peran** (role simulation) and **Reset data demo** (reset demo data).
 
 Use one browser profile and the same scheme, hostname, and port throughout a demo so all pages read the same storage.
 
@@ -242,16 +244,73 @@ Append a fragment to `/pages/dashboard-admin.html`:
 | `#/transaksi` | Customer/cashier transactions, receipt printing, and transaction exports |
 | `#/laporan` | Operational and financial summaries and report exports |
 
-Unknown or unavailable views fall back to the dashboard. The simulated role controls which pages appear and can be rendered:
+Unknown or unavailable views fall back to the dashboard. **The four roles below are the roles documented in the original implementation; the seven-role configuration in the next section is the agreed product specification, not a verified feature of this uploaded codebase.**
 
-| Role | Available views |
+| Currently documented role | Existing available views |
 | --- | --- |
 | Admin | All six views |
 | Dokter | Dashboard, Booking, Stok & Farmasi, Produk; booking initially filters to consultations |
 | Kasir | Dashboard, Booking, Stok & Farmasi, Transaksi |
 | Groomer | Compact Dashboard and Booking; booking initially filters to grooming |
 
-These controls demonstrate interface behavior and do not provide server-enforced authorization.
+Role switching and menu filtering currently demonstrate interface behavior only; they do not provide server-enforced authorization.
+
+## Seven-role admin workspace specification
+
+> **Status: planned/approved requirements, not verified as implemented.** The uploaded README documents a four-role working demo. The seven staff roles below define the target behavior for the next admin-workspace update. Do not treat this section as evidence that these routes, forms, or persistent records already exist.
+
+The future staff workspace supports **seven roles**: **Admin, Kasir, Inventory Staff, Resepsionis, Dokter, Groomer, and Pet Hotel Staff**. Customers remain a separate account type in the proposed unified account model, not an eighth staff role.
+
+### Role responsibilities, dashboards, and navigation
+
+| Staff role | Dashboard focus / KPIs | Target navigation | Core actions and scope |
+| --- | --- | --- | --- |
+| **Admin** | Bookings, revenue, hotel occupancy, stock alerts, pending payments, performance | Dashboard; Booking; Pelanggan & Hewan; Stok & Farmasi; Produk; Transaksi; Laporan; Staff & Role; Pengaturan | Supervise bookings, staff, inventory, sales, approvals, and reports; clinical amendments remain clinician-controlled |
+| **Kasir** | Today's transactions, collected revenue, pending invoices, payment methods | Dashboard Kasir; Pembayaran; Kasir / POS; Riwayat Transaksi | POS checkout, service/product invoicing, payment recording, receipt printing; no diagnoses or arbitrary stock edits |
+| **Inventory Staff** | Low/out-of-stock items, expiring medicines, stock movements, inbound orders | Dashboard Inventory; Stok & Farmasi; Produk; Restock & Supplier; Riwayat Stok | Receive and adjust inventory with movement history; manage batches, expiry, stock opname, suppliers, and product catalog; cannot issue prescriptions |
+| **Resepsionis** | Today's bookings, waiting queue, arrivals, checked-in and completed appointments | Dashboard Front Desk; Booking & Kalender; Antrean / Check-in; Pelanggan & Hewan | Register customers/pets; confirm, reschedule and cancel bookings; check in patients, assign staff, record owner-reported complaints |
+| **Dokter** | Assigned consultations, waiting/in-progress/completed patients, follow-ups | Dashboard Dokter; Pasien Hari Ini; Rekam Medis; Resep Obat; Jadwal Konsultasi | Read relevant patient history; create examination drafts, findings, diagnoses, treatment notes and multi-item prescriptions; finalize clinical records and issue addenda |
+| **Groomer** | Assigned grooming sessions, waiting/in-progress/completed animals | Dashboard Groomer; Jadwal Grooming; Proses Grooming; Riwayat Grooming | View instructions; start/complete grooming, add service notes and observations; no clinical diagnosis or prescriptions |
+| **Pet Hotel Staff** | Current boarders, room occupancy, check-ins/outs, daily care tasks | Dashboard Pet Hotel; Reservasi Hotel; Kandang & Okupansi; Perawatan Harian; Riwayat Penitipan | Assign available rooms, check pets in/out, log feeding, cleaning, observations and medication administration according to veterinary instructions |
+
+The sidebar should be role-aware, but the implementation should reuse shared feature modules rather than creating seven copies of the same booking or customer records. Dashboard KPI figures must be calculated from shared operational data rather than hardcoded values.
+
+### Proposed permissions and workflow boundaries
+
+- **Admin:** broad operational and financial oversight; may not silently change finalized medical findings, diagnosis, or prescriptions.
+- **Kasir:** handles invoices, payments and receipts; refunds/voids require an approval trail. Cannot independently modify clinical records, base prices, or stock quantities.
+- **Inventory Staff:** handles products, medicine batches and quantity movements, including receiving, stock opname, damaged/expired write-offs. Does not prescribe medication.
+- **Resepsionis:** handles appointments, check-in, initial customer-supplied complaints and queues; does not diagnose or edit prescriptions.
+- **Dokter:** manages assigned consultations and clinical records; draft and final states must be distinguished. Finalized records require traceable addenda instead of silent overwriting.
+- **Groomer:** updates assigned grooming workflow and non-diagnostic observations.
+- **Pet Hotel Staff:** updates boarding and care logs; recorded medication administration must follow documented veterinary instructions.
+
+Permission checks should be centralized and applied to action handlers as well as visible navigation. In the static demo, these checks are **not a security boundary** because users can modify localStorage and JavaScript from their browser. Production access requires authenticated sessions and server-side role/record authorization.
+
+### Target cross-role workflows
+
+1. **Consultation:** Customer booking → Resepsionis confirms/checks in → Dokter examines, records findings and prescription → Kasir bills and records payment → inventory is reduced **when medication is dispensed/used**, with movement history → Admin sees operational totals.
+2. **Grooming:** Customer booking → Front desk check-in → Groomer performs service and records progress → Kasir handles payment → service history reflects completion.
+3. **Pet Hotel:** Reservation → availability and cage assignment → check-in → daily feeding/care logs → check-out → final billing. Overlapping occupancy of the same cage must be prevented.
+4. **Stock and shop:** Supplier order received → inventory batch/stock movement added → product availability updated → POS/customer purchase → sale recorded and stock decremented exactly once.
+
+Keep **booking state**, **service-progress state**, **payment state**, **prescription state**, and **hotel stay/occupancy state** separate. In particular, a consultation can be completed while its invoice remains unpaid.
+
+### Agreed future relational data rules
+
+These decisions guide a future backend/ERD; they **do not describe an existing SQL database**:
+
+1. **One unified `users` table** for customer and staff sign-in, with staff/customer profiles and role information. The current agreed initial design uses one role per user.
+2. **One booking corresponds to exactly one service.** A multi-service `booking_items` association is not required under the present scope.
+3. **Medicines and petshop goods share a `products` catalog.** Prescription-only products require suitable restrictions.
+4. **Inventory uses `stock_movements` and `inventory_batches`.** Sales, dispensing, receiving, write-offs and adjustments have traceable movement records; issuing a prescription alone does not reduce stock.
+5. **Service charges and product sales share an invoicing model** (`sales`, `sale_items`, `payments`), where one invoice may contain consultation, medicines, and retail products.
+
+Potential domain groups include `users`, `roles`, `staff`, `customers`, `pets`; `services`, `bookings`, scheduling/history; `medical_records`, `prescriptions`, `prescription_items`; `products`, batches, movements, suppliers and purchase orders; `sales`, `sale_items`, `payments`; `grooming_records`; and hotel rooms/stays/care logs. Exact columns, foreign keys, constraints and migrations remain to be designed and validated before implementation.
+
+### Suggested implementation approach
+
+Extend the existing `js/admin/` architecture in stages: (1) centralized roles and permissions, (2) seven role-specific dashboard views and navigation, (3) receptionist and clinical workflows, (4) grooming/hotel operations, (5) invoice/inventory integration, and (6) regression tests and documentation. Preserve existing public pages and storage keys where possible; do not discard existing demo records during migration.
 
 ## Architecture and major components
 
@@ -389,7 +448,7 @@ Screenshots are **Not documented**. The existing images are website assets, not 
 
 ### Verified limitations
 
-- **Local demo identity and access:** passwords are not verified, there is no remote session, and admin role switching is available in the browser. The login form's remember-me checkbox has no corresponding behavior in `auth.js`; password reset reports that it is unavailable in the demo.
+- **Local demo identity and access:** the proposed seven-role model is not a verified implementation in this uploaded README; passwords are not verified, there is no remote session, and admin role switching is available in the browser. The login form's remember-me checkbox has no corresponding behavior in `auth.js`; password reset reports that it is unavailable in the demo.
 - **Browser-only persistence:** records are not synchronized, backed up remotely, or isolated by account. Signing out leaves operational data in storage.
 - **Simulated payment and fulfillment:** checkout records a local receipt without contacting a payment provider. Non-COD methods become paid immediately. Delivery changes the fee/label but does not implement shipping-address confirmation, courier booking, or fulfillment tracking.
 - **Simulated public availability:** customer time-slot fullness is calculated by `seededFull()` rather than actual reservations or staff schedules. Admin has local conflict checks and hotel occupancy checks, but customer booking is not connected to that availability model.
@@ -410,6 +469,24 @@ These are suggestions based on the implementation, not an approved roadmap:
 - Consolidate service/pricing and business/contact content into shared data definitions.
 - Supply approved doctor portraits, verify business copy, and add interface screenshots.
 - Add meaningful browser workflow tests, accessibility checks, timezone handling, storage-error feedback, and deployment automation.
+
+## Seven-role implementation checklist
+
+The following items are **acceptance criteria for the planned upgrade**. Their presence here does not indicate they have been implemented or tested.
+
+- [ ] All seven roles appear in role simulation; active role updates navigation and dashboard without data loss.
+- [ ] The role/permission registry is centralized; direct hash routes and action handlers check access.
+- [ ] Each role has meaningful, data-backed KPIs and task-specific views.
+- [ ] Receptionist can register owner/pet, manage appointments, and check in patients.
+- [ ] Doctor can save draft records, finalize notes, add traceable amendments, and issue multi-item prescriptions.
+- [ ] Groomer can record assigned service progress and notes.
+- [ ] Pet Hotel Staff can assign a non-overlapping room, check in/out, and maintain daily care logs.
+- [ ] Inventory Staff can record batch-aware stock movements and purchase-order receipts.
+- [ ] Cashier can generate itemized invoices for both services and products, record simulated payments, and print receipts.
+- [ ] Medication dispensing and product checkout reduce stock exactly once; prescribing alone does not.
+- [ ] Customer, pet, booking, invoice, and product records remain consistent across views and survive refresh.
+- [ ] Light/dark theme, responsive layout, and existing public customer workflows still function.
+- [ ] JavaScript checks, manual role-by-role acceptance tests, and relevant regression checks are documented.
 
 ## Information still needed
 
