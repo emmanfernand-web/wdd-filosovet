@@ -2,7 +2,7 @@
    FILOSOVET ADMIN — shell.js
    Sidebar, header (cari, notifikasi, akun), routing, tema, peran
    ============================================================ */
-const NAV = Object.entries({dashboard:'Dashboard',booking:'Booking & Kalender',pelanggan:'Pelanggan & Hewan',stok:'Stok & Farmasi',produk:'Produk',transaksi:'Riwayat Transaksi',laporan:'Laporan',staff:'Staff & Role',pengaturan:'Pengaturan',pembayaran:'Pembayaran',pos:'Kasir / POS',supplier:'Restock & Supplier',mutasi:'Riwayat Stok',antrean:'Antrean / Check-in',pasien:'Pasien Hari Ini',medis:'Rekam Medis',resep:'Resep Obat',jadwal:'Jadwal Konsultasi',grooming:'Jadwal Grooming',proses:'Proses Grooming',riwayatgrooming:'Riwayat Grooming',reservasi:'Reservasi Hotel',kandang:'Kandang & Okupansi',perawatan:'Perawatan Harian',riwayathotel:'Riwayat Penitipan'}).map(([id,label])=>({id,label}));
+const NAV = Object.entries({dashboard:'Dashboard',booking:'Booking & Kalender',pelanggan:'Pelanggan & Hewan',stok:'Stok & Farmasi',produk:'Produk',transaksi:'Riwayat Transaksi',laporan:'Laporan',staff:'Staff & Role',pengaturan:'Pengaturan',pembayaran:'Pembayaran',pos:'Kasir / POS',supplier:'Restock & Supplier',mutasi:'Riwayat Stok',antrean:'Antrean / Check-in',pasien:'Pasien Hari Ini',medis:'Rekam Medis',resep:'Resep Obat',jadwal:'Jadwal Konsultasi',grooming:'Jadwal Grooming',proses:'Proses Grooming',riwayatgrooming:'Riwayat Grooming',reservasi:'Reservasi Hotel',kandang:'Kandang & Okupansi',perawatan:'Perawatan Harian',riwayathotel:'Riwayat Penitipan',antreanfarmasi:'Antrean Resep',stokobat:'Stok Obat',riwayatdispensing:'Riwayat Dispensing'}).map(([id,label])=>({id,label}));
 AD.current = 'dashboard';
 AD.nextParams = null;
 AD.params = {};
@@ -46,8 +46,16 @@ AD.refresh = function () {
 function drawSidebar() {
   const bkBadge = AD.bookings.all().filter(b => AD.bookings.eff(b) === 'Menunggu Konfirmasi').length;
   const sc = AD.stock.counts(), stBadge = sc.habis + sc.kurang;
-  const badges = { booking: bkBadge, stok: stBadge };
-  $q('#sbNav').innerHTML = ROLES[AD.role()].pages.map(id => NAV.find(n => n.id === id)).map(n => `<a href="#/${n.id}" class="sb-item ${AD.current === n.id ? 'active' : ''}" ${AD.current === n.id ? 'aria-current="page"' : ''} title="${n.label}" data-nav="${n.id}">${ico(['dashboard','booking','stok','produk','transaksi','laporan'].includes(n.id)?n.id:'user', 20)}<span class="sb-label">${n.id === 'dashboard' ? ROLES[AD.role()].title : n.id === 'booking' && AD.role() === 'admin' ? 'Booking' : n.label}</span>${badges[n.id] ? `<span class="sb-badge ${n.id === 'stok' ? 'warn' : ''}" aria-label="${badges[n.id]} ${n.id === 'booking' ? 'menunggu konfirmasi' : 'stok bermasalah'}">${badges[n.id]}</span>` : ''}</a>`).join('');
+  const rxBadge = (FVStore.state().prescriptions || []).filter(r => ['Diterbitkan', 'Pending', 'Menunggu', 'Diproses'].includes(r.status)).length;
+  const badges = { booking: bkBadge, stok: stBadge, antreanfarmasi: rxBadge };
+  const navIcon = id => {
+    if (['dashboard','booking','stok','produk','transaksi','laporan'].includes(id)) return id;
+    if (id === 'stokobat') return 'stok';
+    if (id === 'antreanfarmasi') return 'transaksi';
+    if (id === 'riwayatdispensing') return 'list';
+    return 'user';
+  };
+  $q('#sbNav').innerHTML = ROLES[AD.role()].pages.map(id => NAV.find(n => n.id === id)).map(n => `<a href="#/${n.id}" class="sb-item ${AD.current === n.id ? 'active' : ''}" ${AD.current === n.id ? 'aria-current="page"' : ''} title="${n.label}" data-nav="${n.id}">${ico(navIcon(n.id), 20)}<span class="sb-label">${n.id === 'dashboard' ? ROLES[AD.role()].title : n.id === 'booking' && AD.role() === 'admin' ? 'Booking' : n.label}</span>${badges[n.id] ? `<span class="sb-badge ${n.id === 'stok' ? 'warn' : ''}" aria-label="${badges[n.id]}">${badges[n.id]}</span>` : ''}</a>`).join('');
 }
 const adm = () => $q('#adm');
 function setCollapsed(c) { adm().classList.toggle('collapsed', c); localStorage.setItem('fv_admin_collapsed', c ? '1' : '0'); const b = $q('#btnCollapse'); b.innerHTML = ico(c ? 'expand' : 'collapse', 18); b.setAttribute('aria-label', c ? 'Perluas sidebar' : 'Ciutkan sidebar'); b.setAttribute('aria-expanded', !c); }

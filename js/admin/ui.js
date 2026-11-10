@@ -59,7 +59,12 @@ const CHIP = {
   'Selesai': ['ok', 'Selesai'], 'Dibatalkan': ['bad', 'Dibatalkan'], 'Tidak Hadir': ['bad-outline', 'Tidak Hadir'], 'Kedaluwarsa': ['neutral', 'Kedaluwarsa'],
   'Lunas': ['ok', 'Lunas'], 'Menunggu Bayar': ['warn', 'Menunggu'], 'Aktif': ['ok', 'Aktif'], 'Nonaktif': ['neutral', 'Nonaktif'],
   'Habis': ['bad', 'Habis'], 'Kurang': ['warn', 'Kurang'], 'Aman': ['ok', 'Aman'], 'Dipesan': ['warn', 'Dipesan'], 'Diterima': ['ok', 'Diterima'],
-  'Segera kedaluwarsa': ['warn', 'Segera kedaluwarsa'], 'Resep': ['info', 'Resep'], 'Online': ['neutral', 'Online'], 'Kasir': ['neutral', 'Kasir'], 'Manual': ['neutral', 'Manual']
+  'Segera kedaluwarsa': ['warn', 'Segera kedaluwarsa'], 'Resep': ['info', 'Resep'], 'Online': ['neutral', 'Online'], 'Kasir': ['neutral', 'Kasir'], 'Manual': ['neutral', 'Manual'],
+  'Menunggu': ['warn', 'Menunggu'], 'Pending': ['warn', 'Pending'], 'Diterbitkan': ['warn', 'Menunggu'],
+  'Disiapkan': ['solid', 'Disiapkan'], 'Processing': ['solid', 'Diproses'],
+  'Siap': ['ok-outline', 'Siap'], 'Ready': ['ok-outline', 'Siap'],
+  'Diserahkan': ['ok', 'Diserahkan'], 'Dispensed': ['ok', 'Diserahkan'],
+  'Cancelled': ['bad', 'Dibatalkan'], 'Klarifikasi': ['bad-outline', 'Klarifikasi']
 };
 UI.chip = (label, text) => { const c = CHIP[label] || ['neutral', label]; return `<span class="chip chip-${c[0]}">${esc(text || c[1])}</span>`; };
 UI.stockChip = p => UI.chip({ habis: 'Habis', kurang: 'Kurang', aman: 'Aman' }[stockStatus(p)]);

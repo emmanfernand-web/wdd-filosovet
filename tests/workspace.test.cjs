@@ -90,6 +90,7 @@ function app(initial = [], render = false) {
     'js/admin/clinical.js',
     'js/admin/boarding.js',
     'js/admin/billing.js',
+    'js/admin/pharmacy.js',
   ]) {
     if (fs.existsSync(f)) vm.runInContext(fs.readFileSync(f, 'utf8'), ctx, { filename: f });
   }
@@ -104,6 +105,7 @@ function app(initial = [], render = false) {
       'clinical-ui',
       'operations-ui',
       'pos-ui',
+      'pharmacy-ui',
       'role-dashboards',
       'shell',
     ])
@@ -117,12 +119,19 @@ const setup = `AD.init(); AD.setRole('resepsionis');
 const c = AD.ops.customer({nama:'Test Owner',hp:'081234567890'});
 const p = AD.ops.pet({customerId:c.id,nama:'Test Pet',spesie:'Kucing'});
 function book(svc, time='09:30') { return AD.bookings.addManual({customerId:c.id,petId:p.id,pelanggan:c.nama,hp:c.hp,hewan:p.nama,spesie:p.spesie,layanan:SERVICES[svc].label,tipe:SERVICES[svc].types[0].name,tanggal:addDaysISO(todayISO(),10),waktu:time,petugas:SERVICES[svc].staff[0],durasiHari:2,biaya:SERVICES[svc].types[0].price*(svc==='hotel'?2:1)}); }`;
-test('seven roles and action permissions deny cashier stock edits', () => {
+test('eight roles and action permissions deny cashier and pharmacist stock edits', () => {
   const run = app();
-  assert.equal(run('Object.keys(ROLES).length'), 7);
+  assert.equal(run('Object.keys(ROLES).length'), 8);
   run("AD.setRole('kasir')");
   assert.equal(run("AD.can('stok')"), false);
   assert.throws(() => run("AD.stock.adjust(1,1,'test')"));
+  run("AD.setRole('pharmacist')");
+  assert.equal(run("AD.can('stok')"), false);
+  assert.equal(run("AD.can('produk')"), false);
+  assert.equal(run("AD.can('antreanfarmasi')"), true);
+  assert.equal(run("AD.can('stokobat')"), true);
+  assert.throws(() => run("AD.stock.adjust(1,1,'test')"));
+  assert.throws(() => run("AD.catalog.save(1,{...PRODUCTS[0],name:'Ganti nama'})"));
 });
 test('A: shared registration, assigned doctor draft/final/amendment, payable invoice and one dispensing', () => {
   const run = app();
@@ -224,7 +233,7 @@ test('public checkout uses fresh stock and rolls back failed persistence', () =>
 test('role routes are distinct and clinical data is inaccessible to unrelated roles', () => {
   const run = app();
   run('AD.init()');
-  for (const role of ['kasir', 'inventory', 'resepsionis', 'groomer', 'hotel', 'admin']) {
+  for (const role of ['kasir', 'inventory', 'resepsionis', 'groomer', 'hotel', 'admin', 'pharmacist']) {
     run(`AD.setRole('${role}')`);
     assert.throws(() => run('AD.clinic.records()'));
   }
@@ -258,7 +267,7 @@ test('persistent state reloads without losing normalized references or balances'
 test('all authorized view renderers execute with the real table templates (DOM stub, not browser)', () => {
   const run = app([], true);
   run('AD.init()');
-  for (const role of ['admin', 'kasir', 'inventory', 'resepsionis', 'dokter', 'groomer', 'hotel']) {
+  for (const role of ['admin', 'kasir', 'inventory', 'resepsionis', 'dokter', 'pharmacist', 'groomer', 'hotel']) {
     run(`AD.setRole('${role}')`);
     for (const page of JSON.parse(run('JSON.stringify(ROLES[AD.role()].pages)'))) {
       run(`AD.current='${page}'; Pages['${page}'].render(document.querySelector('#view'), {});`);
@@ -394,4 +403,94 @@ test('final medical record viewer retains all structured examination details', (
   );
   assert.equal(run("UI.layers.at(-1).el.innerHTML.includes('Riwayat terstruktur')"), true);
   assert.equal(run("UI.layers.at(-1).el.innerHTML.includes('Catatan dokter final')"), true);
+});
+
+test('pharmacist: prescription queue, preparation, dispensing with stock deduction and duplicate prevention', () => {
+  const run = app();
+  run(
+    setup +
+      `const code=book('konsultasi'); AD.ops.checkIn(code); AD.setRole('dokter');
+       AD.clinic.save(code,{diagnosis:'Infeksi bakteri',physical:'Demam, lesi kulit'},[{productId:5,dosage:'1 tablet',route:'Oral',frequency:'1x sehari',duration:'3 hari',quantity:2}],true);`,
+  );
+
+  // Switch to pharmacist
+  run("AD.setRole('pharmacist')");
+  const rxList = JSON.parse(run("JSON.stringify(AD.pharmacy.prescriptions())"));
+  const rx = rxList.find(r => r.bookingCode === run("code"));
+  assert.ok(rx, 'Prescription should appear in pharmacist queue');
+  assert.equal(rx.normalizedStatus, 'Pending');
+
+  // Verify stock check
+  const stockBefore = run("PRODUCTS.find(p => p.id === 5).stock");
+  assert.ok(stockBefore >= 2);
+
+  // Start preparation
+  run(`AD.pharmacy.startPreparation('${rx.id}')`);
+  assert.equal(run(`AD.pharmacy.get('${rx.id}').normalizedStatus`), 'Processing');
+
+  // Save preparation with actual prepared quantity and notes
+  run(`AD.pharmacy.savePreparation('${rx.id}', { items: [{ productId: 5, preparedQuantity: 2 }], notes: 'Disiapkan etiket putih' })`);
+  assert.equal(run(`AD.pharmacy.get('${rx.id}').normalizedStatus`), 'Ready');
+  assert.equal(run(`AD.pharmacy.get('${rx.id}').preparationNotes`), 'Disiapkan etiket putih');
+
+  // Confirm dispensing
+  run(`AD.pharmacy.dispense('${rx.id}', { recipientName: 'Test Owner', notes: 'Aturan pakai telah diedukasi' })`);
+  assert.equal(run(`AD.pharmacy.get('${rx.id}').normalizedStatus`), 'Dispensed');
+  assert.equal(run("PRODUCTS.find(p => p.id === 5).stock"), stockBefore - 2);
+
+  // Verify dispensing record exists in s.dispenses
+  assert.equal(run(`FVStore.state().dispenses.filter(d => d.prescriptionId === '${rx.id}').length`), 1);
+
+  // Verify duplicate dispensing prevention
+  assert.throws(() => run(`AD.pharmacy.dispense('${rx.id}', { recipientName: 'Test Owner' })`));
+  assert.equal(run("PRODUCTS.find(p => p.id === 5).stock"), stockBefore - 2);
+});
+
+test('pharmacist: clarification request flags issue without modifying doctor prescription', () => {
+  const run = app();
+  run(
+    setup +
+      `const code=book('konsultasi'); AD.ops.checkIn(code); AD.setRole('dokter');
+       AD.clinic.save(code,{diagnosis:'Alergi',physical:'Gatal'},[{productId:6,dosage:'5ml',route:'Oral',frequency:'1x sehari',duration:'7 hari',quantity:1}],true);`,
+  );
+
+  run("AD.setRole('pharmacist')");
+  const rxList = JSON.parse(run("JSON.stringify(AD.pharmacy.prescriptions())"));
+  const rx = rxList.find(r => r.bookingCode === run("code"));
+
+  // Flag clarification
+  run(`AD.pharmacy.flagClarification('${rx.id}', 'Stok sirup botol 60ml mendekati habis, konfirmasi alternatif')`);
+  const updatedRx = JSON.parse(run(`JSON.stringify(AD.pharmacy.get('${rx.id}'))`));
+  assert.equal(updatedRx.clarification.status, 'Menunggu Tanggapan');
+  assert.equal(updatedRx.clarification.note, 'Stok sirup botol 60ml mendekati habis, konfirmasi alternatif');
+  // Original doctor prescription item remains unchanged
+  assert.equal(updatedRx.items[0].quantity, 1);
+  assert.equal(updatedRx.items[0].dosage, '5ml');
+
+  // Resolve clarification
+  run(`AD.pharmacy.resolveClarification('${rx.id}', 'Gunakan stok batch cadangan')`);
+  const resolvedRx = JSON.parse(run(`JSON.stringify(AD.pharmacy.get('${rx.id}'))`));
+  assert.equal(resolvedRx.clarification.status, 'Selesai');
+  assert.equal(resolvedRx.clarification.resolutionNote, 'Gunakan stok batch cadangan');
+});
+
+test('pharmacist: read-only inventory visibility and separation from inventory staff', () => {
+  const run = app();
+  run("AD.init()");
+
+  // Pharmacist can view medications
+  run("AD.setRole('pharmacist')");
+  const meds = JSON.parse(run("JSON.stringify(AD.pharmacy.medications())"));
+  assert.ok(meds.length > 0);
+  assert.ok(meds.every(m => m.cat === 'obat'));
+
+  // Pharmacist cannot modify master catalog or adjust stock
+  assert.throws(() => run("AD.stock.adjust(5, 5, 'Adjust tidak diizinkan')"));
+  assert.throws(() => run("AD.catalog.save(5, { name: 'Obat diubah' })"));
+
+  // Inventory staff can adjust stock and view stock
+  run("AD.setRole('inventory')");
+  const before = run("PRODUCTS.find(p => p.id === 5).stock");
+  run("AD.stock.adjust(5, 2, 'Restock inventory')");
+  assert.equal(run("PRODUCTS.find(p => p.id === 5).stock"), before + 2);
 });

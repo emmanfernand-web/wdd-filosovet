@@ -101,6 +101,64 @@
     e.preventDefault();
     if (!validate(['loginEmail', 'loginPass'])) return;
     const email = $('loginEmail').value.trim();
+    const emailLower = email.toLowerCase();
+
+    // Deteksi akun staf / peran
+    const roleMap = {
+      'apoteker': 'pharmacist',
+      'pharmacist': 'pharmacist',
+      'farmasi': 'pharmacist',
+      'dokter': 'dokter',
+      'doctor': 'dokter',
+      'kasir': 'kasir',
+      'cashier': 'kasir',
+      'inventory': 'inventory',
+      'resepsionis': 'resepsionis',
+      'receptionist': 'resepsionis',
+      'groomer': 'groomer',
+      'hotel': 'hotel',
+      'admin': 'admin'
+    };
+
+    const userPrefix = emailLower.split('@')[0];
+    let matchedRole = null;
+    for (const [key, role] of Object.entries(roleMap)) {
+      if (userPrefix.includes(key) || emailLower.startsWith(key + '@')) {
+        matchedRole = role;
+        break;
+      }
+    }
+
+    if (matchedRole) {
+      localStorage.setItem('fv_admin_role', matchedRole);
+      const staffNames = {
+        pharmacist: 'Apt. Siti Rahma, S.Farm.',
+        dokter: 'drh. Andini',
+        groomer: 'Rani — Groomer',
+        hotel: 'Paramedis Rawat Inap',
+        kasir: 'Kasir Utama',
+        inventory: 'Staff Gudang',
+        resepsionis: 'Front Desk',
+        admin: 'Admin Filosovet'
+      };
+      const name = staffNames[matchedRole] || email.split('@')[0];
+      localStorage.setItem('fv_user', JSON.stringify({ name, email, role: matchedRole }));
+      localStorage.setItem('fv_staff_' + matchedRole, name);
+      const roleLabels = {
+        pharmacist: 'Apoteker',
+        dokter: 'Dokter',
+        kasir: 'Kasir',
+        inventory: 'Inventory Staff',
+        resepsionis: 'Resepsionis',
+        groomer: 'Groomer',
+        hotel: 'Pet Hotel Staff',
+        admin: 'Admin'
+      };
+      toast(`Berhasil masuk sebagai ${roleLabels[matchedRole]}! Mengalihkan ke Dashboard...`);
+      setTimeout(() => { location.href = 'dashboard-admin.html#/dashboard'; }, 800);
+      return;
+    }
+
     localStorage.setItem('fv_user', JSON.stringify({ name: email.split('@')[0], email }));
     toast('Berhasil masuk! Mengalihkan...');
     setTimeout(() => { location.href = 'profil-pelanggan.html'; }, 900);

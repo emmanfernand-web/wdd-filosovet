@@ -14,7 +14,9 @@ The current implementation is a **static frontend demonstration** built with HTM
 - [Environment variables and configuration](#environment-variables-and-configuration)
 - [Available scripts and commands](#available-scripts-and-commands)
 - [Pages, routes, and functionality](#pages-routes-and-functionality)
-- [Seven-role admin workspace specification](#seven-role-admin-workspace-specification)
+- [Eight-role admin workspace specification](#eight-role-admin-workspace-specification)
+- [Pharmacist (Apoteker) role and dashboard](#pharmacist-apoteker-role-and-dashboard)
+- [Proposed future database design and architecture](#proposed-future-database-design-and-architecture)
 - [Architecture and major components](#architecture-and-major-components)
 - [Browser storage and demo data](#browser-storage-and-demo-data)
 - [Integrations, backend, and database](#integrations-backend-and-database)
@@ -23,7 +25,7 @@ The current implementation is a **static frontend demonstration** built with HTM
 - [Troubleshooting](#troubleshooting)
 - [Screenshots](#screenshots)
 - [Known limitations and possible improvements](#known-limitations-and-possible-improvements)
-- [Seven-role implementation checklist](#seven-role-implementation-checklist)
+- [Eight-role implementation checklist](#eight-role-implementation-checklist)
 - [Information still needed](#information-still-needed)
 
 ## Key features
@@ -43,11 +45,11 @@ The current implementation is a **static frontend demonstration** built with HTM
 
 - **Dashboard:** today's bookings, paid revenue, hotel occupancy, stock warnings, recent activity, and a seven-day revenue chart.
 - **Booking management:** searchable and filtered lists, daily staff timelines, conflict indicators, manual bookings, internal notes, and status history. Clinical finalization, grooming completion, and hotel check-out create a linked **unpaid** invoice once; service completion does not collect payment.
-- **Inventory and pharmacy:** minimum-stock warnings, batch and expiry information, stock adjustments, bulk restock orders, and receiving orders to update stock.
+- **Inventory and pharmacy:** minimum-stock warnings, batch and expiry information, stock adjustments, bulk restock orders, receiving orders, and dedicated pharmacy dispensing with medication preparation verification.
 - **Product management:** create, edit, duplicate, archive/reactivate, and update prices or stock inline. Images can be selected from bundled assets or uploaded and resized in the browser.
 - **Transactions:** combined customer checkout and cashier transactions, payment/source/date filters, marking pending transactions as paid, and receipt printing.
 - **Reports:** period comparisons, revenue, completed bookings, no-show rate, occupancy, top products/services, and payment-method breakdowns. Downloads use CSV; PDF output uses the browser's print dialog.
-- **Workspace tools:** global search, booking/stock notifications, collapsible navigation, theme switching, demo role switching, and demo data reset. The seven-role extension described below is implemented through shared domain services and role-specific views.
+- **Workspace tools:** global search, booking/stock notifications, collapsible navigation, theme switching, demo role switching, and demo data reset. The eight-role extension described below is implemented through shared domain services and role-specific views.
 
 ## Technology stack and dependencies
 
@@ -190,7 +192,7 @@ Configuration is embedded in source files:
 | `js/services-data.js` | `SERVICES` | Booking service keys, subtypes, prices, durations, staff, time slots, and per-day billing |
 | `js/cart.js` | `DEFAULT_PRODUCTS`, `CAT_LABEL`, `PROMOS`, `SHIPPING_FEE` | Initial products/categories, promotion rules, and delivery fee |
 | `js/admin/core.js` | `HOTEL_CAPACITY`, `DISTRIBUTORS`, `PAY_METHODS` | Capacity, demo supplier defaults and payment labels |
-| `js/admin/permissions.js` | `ROLES`, `PERM`, `ACTIONS`, `ACTION_POLICY` | Seven-role navigation and action/assignment policy |
+| `js/admin/permissions.js` | `ROLES`, `PERM`, `ACTIONS`, `ACTION_POLICY` | Eight-role navigation and action/assignment policy |
 | `css/tokens.css` | CSS custom properties | Shared palette, typography, spacing, controls, and light/dark themes |
 | `.vscode/settings.json` | `liveServer.settings.port` | Local Live Server port |
 
@@ -246,9 +248,9 @@ For example, `/pages/booking.html?layanan=konsultasi&tipe=vaksinasi` opens vacci
 
 ### Admin views
 
-Open `/pages/dashboard-admin.html#/dashboard`. Use the account menu’s **Simulasi peran** selector for seven roles and **Identitas staff demo** to choose a specific doctor, groomer or boarding attendant. Switching roles returns to the corresponding dashboard, closes stale dialogs, updates navigation/notifications and retains the theme and operational data. Unknown or disallowed hashes return to the role dashboard.
+Open `/pages/dashboard-admin.html#/dashboard`. Use the account menu’s **Simulasi peran** selector for eight roles and **Identitas staff demo** to choose a specific doctor, pharmacist, groomer or boarding attendant. Switching roles returns to the corresponding dashboard, closes stale dialogs, updates navigation/notifications and retains the theme and operational data. Unknown or disallowed hashes return to the role dashboard.
 
-## Seven-role admin workspace specification
+## Eight-role admin workspace specification
 
 **Implemented as a frontend demonstration.** Navigation and action handlers enforce centralized UI permissions; browser storage and role simulation do not provide secure authentication or server-side authorization.
 
@@ -256,21 +258,152 @@ Open `/pages/dashboard-admin.html#/dashboard`. Use the account menu’s **Simula
 | --- | --- | --- |
 | Admin | Dashboard; Booking; Pelanggan & Hewan; Stok & Farmasi; Produk; Transaksi; Laporan; Staff & Role; Pengaturan | Revenue/day/month, bookings, active occupancy, stock/expiry alerts, recent transactions and activity; shared customer/pet editing; staff profiles, catalog/prices, supplier orders, reports and adjustment decisions |
 | Kasir | Dashboard Kasir; Pembayaran; Kasir / POS; Riwayat Transaksi | Search catalog, quantity cart, FILO10, catalog prices, simulated payment methods, itemized service invoices, additional retail items, receipts/printing and correction requests |
-| Inventory Staff | Dashboard Inventory; Stok & Farmasi; Produk; Restock & Supplier; Riwayat Stok | Low/empty/expiry/inbound KPIs; nonfinancial catalog edits, suppliers, receiving, batches, audited expiry corrections, stock opname/write-offs, movement history and prescription dispensing |
+| Inventory Staff | Dashboard Inventory; Stok & Farmasi; Produk; Restock & Supplier; Riwayat Stok | Low/empty/expiry/inbound KPIs; nonfinancial catalog edits, suppliers, receiving, batches, audited expiry corrections, stock opname/write-offs, and movement history |
 | Resepsionis | Dashboard Front Desk; Booking & Kalender; Antrean / Check-in; Pelanggan & Hewan | Register/edit owners and pets, manual bookings, confirmation, reasoned cancellation, rescheduling, assignment, initial complaints and verified check-in |
 | Dokter | Dashboard Dokter; Pasien Hari Ini; Rekam Medis; Resep Obat; Jadwal Konsultasi | Assigned queues, patient/owner details and prior final records; structured drafts, final examinations, procedures, follow-up, multiple medicines and immutable final records with addenda |
+| Pharmacist (Apoteker) | Dashboard Farmasi; Antrean Resep; Stok Obat; Riwayat Dispensing | Dedicated prescription queue (Pending, Processing, Ready, Dispensed), stock availability verification, preparation notes & actual prepared quantities, doctor clarification mechanism, dispensing confirmation with stock movement audit, receipt proof, and read-only medication inventory visibility |
 | Groomer | Dashboard Groomer; Jadwal Grooming; Proses Grooming; Riwayat Grooming | Assigned schedule, check-in queue, start/progress/completion, performed-service notes, observable conditions, prior grooming records and payable service charges |
 | Pet Hotel Staff | Dashboard Pet Hotel; Reservasi Hotel; Kandang & Okupansi; Perawatan Harian; Riwayat Penitipan | Room reservation, overlap prevention, check-in/out, current occupancy, feeding/water/cleaning/activity/incident logs and medication administration referring to a dispensed veterinarian prescription |
 
-Operational fragments use their Indonesian identifiers: `#/booking`, `#/pelanggan`, `#/stok`, `#/produk`, `#/transaksi`, `#/laporan`, `#/staff`, `#/pengaturan`, `#/pembayaran`, `#/pos`, `#/supplier`, `#/mutasi`, `#/antrean`, `#/pasien`, `#/medis`, `#/resep`, `#/jadwal`, `#/grooming`, `#/proses`, `#/riwayatgrooming`, `#/reservasi`, `#/kandang`, `#/perawatan`, `#/riwayathotel`.
+Operational fragments use their Indonesian identifiers: `#/booking`, `#/pelanggan`, `#/stok`, `#/produk`, `#/transaksi`, `#/laporan`, `#/staff`, `#/pengaturan`, `#/pembayaran`, `#/pos`, `#/supplier`, `#/mutasi`, `#/antrean`, `#/pasien`, `#/medis`, `#/resep`, `#/jadwal`, `#/grooming`, `#/proses`, `#/riwayatgrooming`, `#/reservasi`, `#/kandang`, `#/perawatan`, `#/riwayathotel`, `#/antreanfarmasi`, `#/stokobat`, `#/riwayatdispensing`.
 
-### Permissions and clinical access policy
+### Permissions and role separation matrix
 
-`permissions.js` defines role routes, capability constants, action verbs (`view`, `create`, `edit`, `archive`, `confirm`, `complete`, `approve`, `export`) and reusable authorization/assignment helpers. Doctors, groomers and boarding attendants act on assigned records. Staff IDs retain references when display names change. Active assignments must be transferred before a staff member is disabled or changes role.
+The Pharmacist (Apoteker) role operates as an independent medical-support role separate from both prescribing Doctors and warehouse Inventory Staff:
 
-The implemented clinical policy is conservative: **Admin does not open diagnoses or clinical prescriptions**. Admin supervises operational completion and financial invoice items. Responsible doctors edit drafts and append corrections to final records; final diagnoses/prescriptions are never overwritten. Inventory sees the medicine quantities and administration instructions needed for dispensing, without diagnoses. Receptionist complaints and groomer observations are not diagnoses.
+| Function / Capability | Doctor (Dokter) | Pharmacist (Apoteker) | Inventory Staff |
+| --- | --- | --- | --- |
+| Create & edit medical records | **Yes** (Assigned) | No | No |
+| Create original prescriptions | **Yes** | No | No |
+| View doctor prescriptions | Authorized records | **Yes** (Full queue) | No (Item metadata on invoice) |
+| Modify doctor original diagnosis / items | **Yes** (Drafts / Addenda) | **No** (Strictly read-only; clarification flag) | No |
+| Medication stock availability check | As needed | **Yes** (Batch-level check) | **Yes** |
+| Initiate medication preparation | No | **Yes** (Pending → Processing) | No |
+| Record actual prepared quantity & notes | No | **Yes** (Prescribed vs Prepared) | No |
+| Request doctor clarification / flag issue | No (Receives flags) | **Yes** (Attached to prescription) | No |
+| Confirm dispensing & patient handover | No | **Yes** (Ready → Dispensed) | No |
+| View medication catalog & batches | As needed | **Yes** (Read-only) | **Yes** |
+| Create / delete product master data | No | **No** | **Yes** |
+| Edit product prices / nonfinancial info | No | **No** | **Yes** (Nonfinancial) |
+| Manage suppliers & purchase orders (PO) | No | **No** | **Yes** |
+| Adjust stock manually / Stock opname | No | **No** | **Yes** |
+| Record stock movements | Clinical workflows | Dispensing audit | Receiving, opname, write-offs |
 
-Cashiers cannot change catalog prices, manually edit stock, delete payment history or prescribe. Inventory edits nonfinancial product information; Admin creates new catalog products and sets base prices. Refund/correction requests require an explicit recorded Admin decision. **Approval only records a demo decision; it does not issue a refund, reverse an invoice, return stock or transfer money.**
+### Pharmacist (Apoteker) role and dashboard
+
+The Pharmacist role is designed to fulfill professional clinical pharmacy standards in veterinary practice, ensuring medication safety, patient instruction verification, and separation of duties.
+
+#### Modules:
+
+1. **Dashboard Overview (`#/dashboard`):**
+   - KPI metrics: Total prescriptions received, pending preparation, in processing, ready for handover, completed dispensing, and low-stock medications.
+   - Priority Penyiapan Obat: Quick queue of active prescriptions requiring preparation.
+   - Siap Diserahkan: Ready-to-handover prescriptions awaiting customer collection.
+   - Peringatan Stok Obat Farmasi: Live alerts for low stock, zero stock, or medicines expiring within 60 days.
+   - Aktivitas Peran: Real-time activity audit log of pharmacy actions.
+
+2. **Prescription Queue (`#/antreanfarmasi`):**
+   - Live queue of all prescriptions issued by veterinarians.
+   - Multi-state filter tabs: Semua, Menunggu (Pending), Diproses (Processing), Siap (Ready), Diserahkan (Dispensed).
+   - Real-time search by prescription ID, patient/pet name, owner name, doctor, or medicine name.
+   - Visual status indicators with clarification alerts.
+
+3. **Prescription Details & Safety Verification:**
+   - Patient details: Pet name, species, breed, owner name, contact phone, chief complaint.
+   - Doctor details: Prescribing veterinarian, date, consultation reference.
+   - Clinical exam context: Read-only diagnosis, physical examination notes, weight, and temperature.
+   - Doctor's original prescription cannot be modified by the pharmacist.
+   - Doctor Clarification Mechanism: If stock is insufficient or a dosage question arises, the pharmacist can flag a clarification note to the prescribing doctor (`flagClarification`). The doctor or pharmacist can subsequently record the resolution without altering original prescribed data.
+
+4. **Medication Preparation and Dispensing Workflow:**
+   - **Step 1 (Open & Review):** Pharmacist opens a pending prescription and verifies stock availability and batch expiry.
+   - **Step 2 (Start Preparation):** Pharmacist starts preparation (`Pending` → `Diproses`), assigning the responsible pharmacist identity.
+   - **Step 3 (Record Prepared Quantity & Notes):** Pharmacist selects batches, records actual prepared quantity (`preparedQuantity`), adds preparation/compounding instructions (e.g. puyer, white label), and marks as ready (`Diproses` → `Siap`).
+   - **Step 4 (Confirm Dispensing & Handover):** Pharmacist verifies patient identity, provides medication usage instructions, records recipient name, and confirms handover (`Siap` → `Diserahkan`).
+   - **Step 5 (Audited Stock Deduction & Duplicate Prevention):** The dispensing transaction automatically executes stock deduction via `FVStore.movement` and generates a timestamped dispensing record (`DISP-...`) in `s.dispenses`. Attempting to dispense an already dispensed prescription is strictly prevented.
+   - **Step 6 (Proof of Dispensing):** Produces a printable proof of dispensing receipt featuring clinic header, prescription reference, patient/owner details, dispensed medicines, batch numbers, and recipient/pharmacist sign-off lines.
+
+5. **Medication Stock Visibility (`#/stokobat`):**
+   - Read-only visibility into veterinary pharmaceuticals (`cat: 'obat'`).
+   - Filter tabs: Semua Obat, Stok Menipis / Habis, Mendekati Kedaluwarsa.
+   - Inspection modal for active batches, batch quantities, and expiry dates.
+   - Explicit read-only boundary: Master product creation, distributor purchase orders, and manual stock opname adjustments remain restricted to Inventory Staff.
+
+---
+
+## Proposed future database design and architecture
+
+> [!IMPORTANT]
+> **Implementation Status Notice:**
+> The production database has **NOT** been implemented yet. The application currently operates purely on client-side state (`localStorage`) and a structured mock data service layer (`FVStore`, `AD.pharmacy`).
+> Below is the proposed production database architecture, relational schema, entity relationships, and data integrity specification prepared for future backend implementation.
+
+### A. Entity Relationship Diagram (Proposed)
+
+```mermaid
+erDiagram
+    USERS ||--o{ STAFF_PROFILES : has
+    ROLES ||--o{ USERS : assigned_to
+    STAFF_PROFILES ||--o{ MEDICAL_RECORDS : examines
+    STAFF_PROFILES ||--o{ PRESCRIPTIONS : prescribes
+    STAFF_PROFILES ||--o{ PRESCRIPTION_DISPENSES : dispenses
+    CUSTOMERS ||--o{ PETS : owns
+    CUSTOMERS ||--o{ BOOKINGS : books
+    PETS ||--o{ BOOKINGS : for
+    BOOKINGS ||--o| MEDICAL_RECORDS : results_in
+    MEDICAL_RECORDS ||--o{ PRESCRIPTIONS : generates
+    MEDICAL_RECORDS ||--o{ MEDICAL_AMENDMENTS : amended_by
+    PRESCRIPTIONS ||--o{ PRESCRIPTION_ITEMS : contains
+    PRESCRIPTIONS ||--o{ PRESCRIPTION_CLARIFICATIONS : flagged_with
+    PRESCRIPTIONS ||--o| PRESCRIPTION_DISPENSES : fulfilled_by
+    PRESCRIPTION_DISPENSES ||--o{ PRESCRIPTION_DISPENSE_ITEMS : contains
+    PRODUCTS ||--o{ PRODUCT_BATCHES : tracked_in
+    PRODUCTS ||--o{ PRESCRIPTION_ITEMS : prescribed_as
+    PRODUCT_BATCHES ||--o{ PRESCRIPTION_DISPENSE_ITEMS : fulfilled_from
+    PRODUCT_BATCHES ||--o{ STOCK_MOVEMENTS : audited_by
+    SUPPLIERS ||--o{ PRODUCT_BATCHES : supplied_by
+```
+
+### B. Proposed Relational Schema and Entity Definitions
+
+#### 1. Users, Roles & Staff
+- **`roles`**: `id` (PK, VARCHAR), `name` (VARCHAR), `description` (TEXT). Values: `admin`, `kasir`, `inventory`, `resepsionis`, `dokter`, `pharmacist`, `groomer`, `hotel`.
+- **`users`**: `id` (PK, UUID), `role_id` (FK -> `roles.id`), `email` (VARCHAR, UNIQUE), `password_hash` (VARCHAR), `is_active` (BOOLEAN), `created_at` (TIMESTAMP).
+- **`staff_profiles`**: `id` (PK, UUID), `user_id` (FK -> `users.id`), `full_name` (VARCHAR), `license_number` (VARCHAR, e.g. SIPA for pharmacists, SIP/SIPDrh for veterinarians), `phone` (VARCHAR), `created_at` (TIMESTAMP).
+
+#### 2. Clinical Records & Prescriptions
+- **`medical_records`**: `id` (PK, UUID), `booking_id` (FK -> `bookings.id`), `pet_id` (FK -> `pets.id`), `customer_id` (FK -> `customers.id`), `doctor_id` (FK -> `staff_profiles.id`), `examination_date` (DATE), `anamnesis` (TEXT), `physical_findings` (TEXT), `weight_kg` (NUMERIC(5,2)), `temperature_c` (NUMERIC(4,2)), `diagnosis` (TEXT), `procedures` (TEXT), `procedure_fee` (NUMERIC(12,2)), `status` (ENUM: `draft`, `final`), `finalized_at` (TIMESTAMP), `created_at` (TIMESTAMP).
+- **`prescriptions`**: `id` (PK, UUID, e.g. `RX-...`), `medical_record_id` (FK -> `medical_records.id`), `doctor_id` (FK -> `staff_profiles.id`), `pet_id` (FK -> `pets.id`), `customer_id` (FK -> `customers.id`), `status` (ENUM: `pending`, `processing`, `ready`, `dispensed`, `cancelled`), `preparation_notes` (TEXT), `prep_started_at` (TIMESTAMP), `prepared_at` (TIMESTAMP), `dispensed_at` (TIMESTAMP), `created_at` (TIMESTAMP), `updated_at` (TIMESTAMP).
+- **`prescription_items`**: `id` (PK, UUID), `prescription_id` (FK -> `prescriptions.id`, ON DELETE CASCADE), `product_id` (FK -> `products.id`), `dosage` (VARCHAR), `route` (VARCHAR), `frequency` (VARCHAR), `duration` (VARCHAR), `prescribed_quantity` (INTEGER, CHECK > 0), `instructions` (TEXT), `created_at` (TIMESTAMP).
+- **`prescription_clarifications`**: `id` (PK, UUID), `prescription_id` (FK -> `prescriptions.id`), `pharmacist_id` (FK -> `staff_profiles.id`), `doctor_id` (FK -> `staff_profiles.id`), `issue_note` (TEXT), `resolution_note` (TEXT), `status` (ENUM: `requested`, `resolved`), `requested_at` (TIMESTAMP), `resolved_at` (TIMESTAMP).
+
+#### 3. Pharmacy Dispensing
+- **`prescription_dispenses`**: `id` (PK, UUID, e.g. `DISP-...`), `prescription_id` (FK -> `prescriptions.id`, UNIQUE — prevents double dispensing), `pharmacist_id` (FK -> `staff_profiles.id`), `recipient_name` (VARCHAR), `dispensed_at` (TIMESTAMP), `counseling_notes` (TEXT), `created_at` (TIMESTAMP).
+- **`prescription_dispense_items`**: `id` (PK, UUID), `dispense_id` (FK -> `prescription_dispenses.id`), `prescription_item_id` (FK -> `prescription_items.id`), `product_id` (FK -> `products.id`), `batch_id` (FK -> `product_batches.id`), `prepared_quantity` (INTEGER, CHECK >= 0), `dispensed_quantity` (INTEGER, CHECK >= 0), `created_at` (TIMESTAMP).
+
+#### 4. Inventory & Stock Auditing
+- **`products`**: `id` (PK, INTEGER), `name` (VARCHAR), `category` (VARCHAR), `price` (NUMERIC(12,2)), `stock` (INTEGER, DEFAULT 0, CHECK >= 0), `min_stock` (INTEGER, DEFAULT 0), `is_prescription_only` (BOOLEAN), `is_active` (BOOLEAN).
+- **`product_batches`**: `id` (PK, VARCHAR, e.g. `BATCH-...`), `product_id` (FK -> `products.id`), `supplier_id` (FK -> `suppliers.id`, NULLABLE), `initial_quantity` (INTEGER), `current_quantity` (INTEGER, CHECK >= 0), `expiry_date` (DATE), `created_at` (TIMESTAMP).
+- **`stock_movements`**: `id` (PK, UUID), `product_id` (FK -> `products.id`), `batch_id` (FK -> `product_batches.id`, NULLABLE), `type` (ENUM: `IN`, `OUT`, `ADJUSTMENT`), `quantity` (INTEGER, CHECK > 0), `delta` (INTEGER), `reason` (VARCHAR), `reference_source` (VARCHAR, e.g. `dispense:RX-...`, `order:PO-...`), `staff_id` (FK -> `staff_profiles.id`), `created_at` (TIMESTAMP).
+
+### C. Data Integrity, Business Rules and Transactional Constraints
+
+1. **Doctor Prescription Immutability:** Once a medical record and prescription are finalized (`status = 'final'`), rows in `prescriptions` and `prescription_items` cannot be edited or deleted by Pharmacists or Inventory Staff. If an issue arises, it must be recorded in `prescription_clarifications`.
+2. **Duplicate Dispensing Prevention:** A unique database constraint on `prescription_dispenses(prescription_id)` guarantees at the database engine level that no prescription can be dispensed more than once.
+3. **Transactional Stock Deduction:** Medication dispensing must execute within an ACID database transaction:
+   - Lock target prescription row (`SELECT FOR UPDATE`).
+   - Validate prescription status (`status IN ('pending', 'processing', 'ready')`).
+   - Lock candidate batch rows in `product_batches` ordered by FEFO (First Expired, First Out).
+   - Verify that batch available stock >= dispensed quantity.
+   - Insert row into `prescription_dispenses` and `prescription_dispense_items`.
+   - Update `product_batches.current_quantity = current_quantity - dispensed_qty`.
+   - Update `products.stock = stock - dispensed_qty`.
+   - Insert corresponding audited row into `stock_movements`.
+   - Update `prescriptions.status = 'dispensed'`.
+4. **Prevention of Negative Stock:** `CHECK (stock >= 0)` and `CHECK (current_quantity >= 0)` constraints strictly prevent inventory deficits.
+5. **Batch Expiry Safety:** Dispensing transactions must reject batches where `expiry_date < CURRENT_DATE`.
+
+---
 
 ### Integrated workflows
 
@@ -303,10 +436,11 @@ The public site uses separate HTML documents with shared CSS and classic scripts
 | `js/booking.js`, `js/auth.js`, `js/profil.js`, `js/toko.js`, `js/home.js` | Page-specific rendering, validation, and interactions |
 | `js/operations-store.js` | Shared persistence, identifiers, migration support, stock ledger, public checkout and booking availability |
 | `js/admin/core.js` | Legacy booking/transaction adapters, seed data, formatters, activity and notification primitives |
-| `js/admin/permissions.js` | Seven roles, page/action policy and staff assignment helpers |
+| `js/admin/permissions.js` | Eight roles, page/action policy and staff assignment helpers |
 | `js/admin/operations.js`, `stock-service.js` | Registration, check-in, scheduling, grooming, suppliers, catalog and inventory services |
-| `js/admin/clinical.js`, `boarding.js`, `billing.js` | Clinical lifecycle, hotel operations, itemized invoices, payment, POS, dispensing and approval services |
-| `js/admin/workspace-ui.js`, `clinical-ui.js`, `operations-ui.js`, `pos-ui.js`, `role-dashboards.js` | Operational forms, role views and distinct data-backed dashboard compositions |
+| `js/admin/clinical.js`, `boarding.js`, `billing.js` | Clinical lifecycle, hotel operations, itemized invoices, payment, POS, and approval services |
+| `js/admin/pharmacy.js` | Pharmacy service: prescription lifecycle, stock verification, preparation, clarification, and audited dispensing |
+| `js/admin/workspace-ui.js`, `clinical-ui.js`, `operations-ui.js`, `pos-ui.js`, `pharmacy-ui.js`, `role-dashboards.js` | Operational forms, role views, pharmacy UI, and distinct data-backed dashboard compositions |
 | `js/admin/ui.js` | Defines `UI` helpers for tables, pagination, dialogs, drawers, menus, charts, form errors, printing, and CSV downloads |
 | Admin view scripts and `shell.js` | Register views in `Pages`, render the selected hash route, and handle search/navigation/account actions |
 
@@ -395,14 +529,15 @@ The local-reference checker treats injected header/footer links as project-root 
 
 Use one origin/browser profile. Avoid Reset unless intentionally discarding demo operational records.
 
-1. **Admin:** open account menu and check all seven role choices; switch theme; inspect dashboard/report totals, staff profiles and settings. Create a staff profile and verify it becomes assignable. Attempt `#/medis` and confirm fallback. Review an explicit cashier correction request under Pengaturan.
+1. **Admin:** open account menu and check all eight role choices; switch theme; inspect dashboard/report totals, staff profiles and settings. Create a staff profile and verify it becomes assignable. Attempt `#/medis` and confirm fallback. Review an explicit cashier correction request under Pengaturan.
 2. **Resepsionis:** register a customer and pet, create tomorrow’s consultation booking with a selected doctor, inspect conflict errors, confirm a public booking and check in after verifying owner/pet. Test rescheduling and cancellation with a reason. Reload to verify persistence.
 3. **Dokter:** select the assigned doctor under Identitas staff demo. Open the checked-in patient via Jadwal Konsultasi (Pasien Hari Ini filters today). Save a draft with findings, optional weight/temperature, diagnosis, procedures and follow-up. Add two different catalog medicines with complete administration instructions. Reopen, finalize and verify the record cannot be overwritten. Add an addendum.
 4. **Kasir:** find the unpaid invoice under Pembayaran. Check consultation/procedure/medicine lines, add a non-prescription retail item, pay using an explicitly simulated method, reopen/print the receipt and confirm no second payment appears. Test POS search, quantity changes and FILO10. Submit a correction request; it must not silently reverse the transaction.
-5. **Inventory Staff:** open Stok & Farmasi, verify the itemized prescription before dispensing and confirm quantities decrease once. Try dispensing again. Create a supplier order with batch/expiry, receive it once, inspect Riwayat Stok and batch details, perform stock opname/write-off, and use Koreksi batch for an audited expiry correction. Catalog base prices must remain locked.
-6. **Groomer:** receptionist checks in a grooming booking; select its groomer identity, start grooming, record performed services/observations, complete, and verify the invoice and customer booking history. Other groomers’ assignments must be unavailable.
-7. **Pet Hotel Staff:** confirm a hotel booking, assign a room, attempt an overlapping reservation, check in, record feeding/water/cleaning/incident notes, and check out. Confirm occupancy drops and an unpaid invoice appears. Medication care must reject missing/foreign/undispensed prescription references.
-8. **Public regression:** login/profile/pets, public booking/rescheduling/cancellation, storefront filters, cart quantities/FILO10/COD and pickup/delivery, receipts, shared stock after reload, medical history for the matching owner, responsive sidebar/tables/forms, tab/Escape focus behavior and both themes.
+5. **Inventory Staff:** open Stok & Farmasi, verify inventory stock, batches, and supplier management. Create a supplier order with batch/expiry, receive it once, inspect Riwayat Stok and batch details, perform stock opname/write-off, and use Koreksi batch for an audited expiry correction. Catalog base prices must remain locked.
+6. **Apoteker:** switch to Apoteker role or log in with `apoteker@filosovet.id`. Inspect Dashboard Farmasi KPIs (resep masuk, pending, diproses, siap, diserahkan, stok obat menipis). Open Antrean Resep, filter by status, and search. Open a prescription to inspect patient information, prescribing doctor, and medications with stock availability checks. Start preparation (`Mulai Penyiapan`), record prepared quantities and preparation notes, and mark ready (`Tandai Siap`). Confirm dispensing handover with recipient verification, check that stock movements are audited and stock is deducted, and view the printable proof of dispensing receipt. Attempt duplicate dispensing to confirm it is blocked. Test the doctor clarification request workflow. Open Stok Obat to verify read-only pharmaceutical inventory visibility (no add product, no adjust stock, no PO buttons).
+7. **Groomer:** receptionist checks in a grooming booking; select its groomer identity, start grooming, record performed services/observations, complete, and verify the invoice and customer booking history. Other groomers’ assignments must be unavailable.
+8. **Pet Hotel Staff:** confirm a hotel booking, assign a room, attempt an overlapping reservation, check in, record feeding/water/cleaning/incident notes, and check out. Confirm occupancy drops and an unpaid invoice appears. Medication care must reject missing/foreign/undispensed prescription references.
+9. **Public regression:** login/profile/pets, public booking/rescheduling/cancellation, storefront filters, cart quantities/FILO10/COD and pickup/delivery, receipts, shared stock after reload, medical history for the matching owner, responsive sidebar/tables/forms, tab/Escape focus behavior and both themes.
 
 ## Troubleshooting
 
@@ -459,11 +594,12 @@ These are suggestions based on the implementation, not an approved roadmap:
 - Supply approved doctor portraits, verify business copy, and add interface screenshots.
 - Add meaningful browser workflow tests, accessibility checks, timezone handling, storage-error feedback, and deployment automation.
 
-## Seven-role implementation checklist
+## Eight-role implementation checklist
 
-- [x] Seven roles, distinct data-backed dashboard compositions, navigation, role switching and action permissions.
+- [x] Eight roles, distinct data-backed dashboard compositions, navigation, role switching and action permissions.
 - [x] Receptionist shared registration, booking/check-in/assignment with conflict checks and cancellation reasons.
 - [x] Doctor structured draft/final records, addenda and multi-medicine prescriptions; relevant customer history.
+- [x] Dedicated Pharmacist (Apoteker) role and dashboard with prescription queue, preparation workflow, dispensing confirmation, duplicate prevention, doctor clarification, read-only medication inventory, and future database architecture specification.
 - [x] Assigned grooming progress and hotel room/care/check-out workflows.
 - [x] Inventory batches/movements, supplier orders, receiving, stock opname/write-offs and audited metadata corrections.
 - [x] Itemized service/retail billing, POS promotions, separate simulated payments, receipts and approval decisions.

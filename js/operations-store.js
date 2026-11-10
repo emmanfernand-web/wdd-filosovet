@@ -7,6 +7,7 @@ const FVStore = (() => {
     'medical',
     'amendments',
     'prescriptions',
+    'dispenses',
     'grooming',
     'rooms',
     'stays',

@@ -298,6 +298,11 @@ AD.init = () => {
         s.staff.push({ id, nama, role, active: true, demo: true });
     });
   });
+  const phName = 'Apt. Siti Rahma, S.Farm.';
+  const phId = AD.baseStaffId('pharmacist', phName);
+  if (!s.staff.some((p) => p.role === 'pharmacist')) {
+    s.staff.push({ id: phId, nama: phName, role: 'pharmacist', active: true, demo: true });
+  }
   ['fv_bookings', 'fv_admin_bookings'].forEach((key) => {
     migrated[key] = FVStore.get(key, []).map((b) => ({
       ...b,
@@ -326,5 +331,106 @@ AD.init = () => {
     }));
   if (!s.suppliers.length)
     s.suppliers = DISTRIBUTORS.map((nama) => ({ id: FVStore.uid('SUP'), nama, hp: '' }));
+  if (!s.prescriptions.length && s.customers.length && s.pets.length) {
+    const docStaff = s.staff.find((p) => p.role === 'dokter')?.nama || 'drh. Andini';
+    const docId = s.staff.find((p) => p.role === 'dokter')?.id || AD.baseStaffId('dokter', docStaff);
+    const pet1 = s.pets[0] || { id: 'PET-mochi', customerId: s.customers[0]?.id };
+    const pet2 = s.pets[1] || s.pets[0];
+    const pet3 = s.pets[2] || s.pets[0];
+    const pet4 = s.pets[3] || s.pets[0];
+
+    const rx1 = {
+      id: 'RX-DEMO-001',
+      bookingCode: 'BK-DEMO-RX1',
+      petId: pet1.id,
+      customerId: pet1.customerId,
+      doctor: docStaff,
+      doctorId: docId,
+      status: 'Diterbitkan',
+      createdAt: addDaysISO(todayISO(), -1) + 'T09:30:00.000Z',
+      items: [
+        { productId: 5, name: 'Obat Cacing Broad Spectrum', dosage: '1 tablet sekali sehari', route: 'Oral', frequency: '1x sehari', duration: '3 hari', quantity: 3, instructions: 'Berikan sesudah makan.' },
+        { productId: 6, name: 'Vitamin Bulu & Kulit 60ml', dosage: '2.5 ml', route: 'Oral', frequency: '1x sehari', duration: '14 hari', quantity: 1, instructions: 'Campur ke pakan basah.' },
+      ],
+    };
+
+    const rx2 = {
+      id: 'RX-DEMO-002',
+      bookingCode: 'BK-DEMO-RX2',
+      petId: pet2.id,
+      customerId: pet2.customerId,
+      doctor: 'drh. Prasetyo',
+      doctorId: AD.baseStaffId('dokter', 'drh. Prasetyo'),
+      status: 'Diproses',
+      createdAt: todayISO() + 'T08:15:00.000Z',
+      prepStartedAt: todayISO() + 'T08:30:00.000Z',
+      pharmacist: phName,
+      pharmacistId: phId,
+      preparationNotes: 'Disiapkan untuk pengobatan infeksi kulit pasca pemeriksaan.',
+      items: [
+        { productId: 7, name: 'Obat Kutu Spot-On Kucing', dosage: '1 tube tetes tengkuk', route: 'Topikal', frequency: 'Dosis tunggal', duration: '1 hari', quantity: 1, preparedQuantity: 1, instructions: 'Teteskan di tengkuk agar tidak terjilat.' },
+      ],
+    };
+
+    const rx3 = {
+      id: 'RX-DEMO-003',
+      bookingCode: 'BK-DEMO-RX3',
+      petId: pet3.id,
+      customerId: pet3.customerId,
+      doctor: 'drh. Larasati',
+      doctorId: AD.baseStaffId('dokter', 'drh. Larasati'),
+      status: 'Siap',
+      createdAt: todayISO() + 'T07:45:00.000Z',
+      prepStartedAt: todayISO() + 'T08:00:00.000Z',
+      preparedAt: todayISO() + 'T08:20:00.000Z',
+      pharmacist: phName,
+      pharmacistId: phId,
+      preparationNotes: 'Obat telah disiapkan dan dikemas dengan etiket putih. Siap diserahkan.',
+      items: [
+        { productId: 5, name: 'Obat Cacing Broad Spectrum', dosage: '1 tablet', route: 'Oral', frequency: 'Dosis tunggal', duration: '1 hari', quantity: 1, preparedQuantity: 1, instructions: 'Diberikan langsung ke mulut.' },
+      ],
+    };
+
+    const rx4 = {
+      id: 'RX-DEMO-004',
+      bookingCode: 'BK-DEMO-RX4',
+      petId: pet4.id,
+      customerId: pet4.customerId,
+      doctor: docStaff,
+      doctorId: docId,
+      status: 'Diserahkan',
+      createdAt: addDaysISO(todayISO(), -2) + 'T10:00:00.000Z',
+      prepStartedAt: addDaysISO(todayISO(), -2) + 'T10:15:00.000Z',
+      preparedAt: addDaysISO(todayISO(), -2) + 'T10:30:00.000Z',
+      dispensedAt: addDaysISO(todayISO(), -2) + 'T10:45:00.000Z',
+      dispensedBy: phName,
+      dispenseId: 'DISP-DEMO-001',
+      items: [
+        { productId: 6, name: 'Vitamin Bulu & Kulit 60ml', dosage: '5 ml', route: 'Oral', frequency: '1x sehari', duration: '12 hari', quantity: 1, preparedQuantity: 1, dispensedQuantity: 1, instructions: 'Kocok dahulu sebelum digunakan.' },
+      ],
+    };
+
+    s.prescriptions.push(rx1, rx2, rx3, rx4);
+
+    if (!Array.isArray(s.dispenses)) s.dispenses = [];
+    s.dispenses.push({
+      id: 'DISP-DEMO-001',
+      prescriptionId: rx4.id,
+      bookingCode: rx4.bookingCode,
+      patientName: s.pets.find((p) => p.id === pet4.id)?.nama || 'Milo',
+      species: s.pets.find((p) => p.id === pet4.id)?.spesie || 'Kucing',
+      customerName: s.customers.find((c) => c.id === pet4.customerId)?.nama || 'Pelanggan Demo',
+      customerPhone: s.customers.find((c) => c.id === pet4.customerId)?.hp || '081234500018',
+      doctor: docStaff,
+      pharmacist: phName,
+      pharmacistId: phId,
+      dispensedAt: rx4.dispensedAt,
+      recipientName: s.customers.find((c) => c.id === pet4.customerId)?.nama || 'Pelanggan Demo',
+      items: [
+        { productId: 6, name: 'Vitamin Bulu & Kulit 60ml', prescribedQuantity: 1, preparedQuantity: 1, dispensedQuantity: 1, batchId: 'OPEN-6', dosage: '5 ml', instructions: 'Kocok dahulu sebelum digunakan.' },
+      ],
+      notes: 'Penyerahan selesai dan aturan pakai telah dijelaskan kepada pemilik.',
+    });
+  }
   FVStore.commit({ ...migrated, [FVStore.key]: s, fv_products: PRODUCTS });
 };
