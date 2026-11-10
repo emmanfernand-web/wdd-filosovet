@@ -128,6 +128,73 @@ Pages.dashboard.render = function (view) {
       ],
     ];
     headline = 'Antrean grooming & pekerjaan aktif';
+  } else if (role === 'pharmacist') {
+    const pStats = AD.pharmacy.stats();
+    const rxAll = AD.pharmacy.prescriptions();
+    const rxPending = rxAll.filter((r) => r.normalizedStatus === 'Pending' || r.normalizedStatus === 'Processing');
+    const rxReady = rxAll.filter((r) => r.normalizedStatus === 'Ready');
+    const medList = AD.pharmacy.medications();
+
+    kpis = [
+      ['Total resep diterima', pStats.total],
+      ['Menunggu diproses', pStats.pending],
+      ['Sedang disiapkan', pStats.processing],
+      ['Siap diserahkan', pStats.ready],
+      ['Selesai diserahkan', pStats.dispensed],
+      ['Obat menipis / perlu restock', pStats.lowStock],
+    ];
+    headline = 'Ringkasan antrean & penyerahan resep farmasi';
+    body = `
+      <section class="panel work-pad">
+        <h2>Prioritas Penyiapan Obat</h2>
+        <p class="muted small">Resep aktif yang menunggu diproses dan disiapkan oleh apoteker.</p>
+        ${
+          rxPending.slice(0, 5).map((r) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+              <div>
+                <strong>${esc(r.id)}</strong> · ${esc(r.petName)} (${esc(r.customerName)})
+                <small class="sub">${(r.items || []).map((i) => esc(i.name)).join(', ')} · Dr. ${esc(r.doctor)}</small>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                ${UI.chip(r.normalizedStatus)}
+                ${W.button('Proses', 'rxprep', r.id, 'primary')}
+              </div>
+            </div>
+          `).join('') || '<p class="muted">Tidak ada resep yang menunggu penyiapan.</p>'
+        }
+        <div style="margin-top:12px;">
+          <button class="btn btn-primary" type="button" data-go="antreanfarmasi">Buka Antrean Resep</button>
+        </div>
+      </section>
+      <section class="panel work-pad">
+        <h2>Siap Diserahkan & Riwayat</h2>
+        <p class="muted small">Resep yang siap diserahkan kepada pemilik pasien.</p>
+        ${
+          rxReady.slice(0, 4).map((r) => `
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+              <div>
+                <strong>${esc(r.id)}</strong> · ${esc(r.petName)} (${esc(r.customerName)})
+                <small class="sub">${(r.items || []).map((i) => esc(i.name)).join(', ')}</small>
+              </div>
+              <div style="display:flex;gap:6px;align-items:center;">
+                ${UI.chip('Siap')}
+                ${W.button('Serahkan', 'rxdispense', r.id, 'primary')}
+              </div>
+            </div>
+          `).join('') || '<p class="muted">Belum ada obat yang menunggu penyerahan.</p>'
+        }
+        <h3 class="ds-title" style="margin-top:16px;">Peringatan Stok Obat Farmasi</h3>
+        ${
+          medList.filter((m) => m.stockStatusKey === 'kurang' || m.stockStatusKey === 'habis' || m.isExpSoon).slice(0, 4).map((m) => `
+            <p>${esc(m.name)} · Stok ${m.stock} unit ${UI.stockChip(m)} ${m.isExpSoon ? '<span class="chip chip-warn">Exp Segera</span>' : ''}</p>
+          `).join('') || '<p class="muted">Semua stok obat dalam kondisi aman.</p>'
+        }
+        <div style="margin-top:10px;">
+          <button class="btn btn-outline" type="button" data-go="stokobat">Lihat Ketersediaan Obat</button>
+          <button class="btn btn-outline" type="button" data-go="riwayatdispensing">Riwayat Penyerahan</button>
+        </div>
+      </section>
+    `;
   } else {
     const stays = s.stays.filter((x) => AD.owns(x));
     const live = AD.hotel.active();
@@ -168,7 +235,54 @@ Pages.dashboard.render = function (view) {
   const rows = (role === 'resepsionis' ? bookings : assigned)
     .filter((b) => b.tanggal >= today && !['Selesai', 'Dibatalkan'].includes(b.status))
     .sort((a, b) => (a.tanggal + a.waktu).localeCompare(b.tanggal + b.waktu));
-  if (['kasir', 'inventory'].includes(role))
+  if (role === 'pharmacist') {
+    const rxQueueRows = AD.pharmacy.prescriptions().slice(0, 8);
+    UI.table($q('#roleQueue', view), {
+      id: 'pharmacist-dashboard-queue',
+      rows: rxQueueRows,
+      pageSize: 5,
+      empty: {
+        title: 'Belum ada resep',
+        msg: 'Resep yang diterbitkan dokter akan tampil di antrean ini.',
+      },
+      columns: [
+        {
+          key: 'id',
+          label: 'ID Resep & Tgl',
+          render: (r) => `<strong>${esc(r.id)}</strong><small class="sub">${fmtDateTime(r.createdAt || todayISO())}</small>`,
+        },
+        {
+          key: 'pet',
+          label: 'Pasien & Pemilik',
+          render: (r) => `<strong>${esc(r.petName)}</strong> (${esc(r.species)})<small class="sub">${esc(r.customerName)}</small>`,
+        },
+        {
+          key: 'doctor',
+          label: 'Dokter',
+          render: (r) => esc(r.doctor),
+        },
+        {
+          key: 'items',
+          label: 'Obat',
+          render: (r) => (r.items || []).map((i) => `${esc(i.name)} × ${i.quantity}`).join('<br>'),
+        },
+        {
+          key: 'status',
+          label: 'Status',
+          render: (r) => UI.chip(r.normalizedStatus),
+        },
+        {
+          key: 'actions',
+          label: 'Aksi',
+          render: (r) => {
+            if (r.normalizedStatus === 'Ready') return W.button('Serahkan', 'rxdispense', r.id, 'primary') + ' ' + W.button('Detail', 'rxopen', r.id, 'outline');
+            if (r.normalizedStatus === 'Pending' || r.normalizedStatus === 'Processing') return W.button('Proses', 'rxprep', r.id, 'primary') + ' ' + W.button('Detail', 'rxopen', r.id, 'outline');
+            return W.button('Detail', 'rxopen', r.id, 'outline');
+          },
+        },
+      ],
+    });
+  } else if (['kasir', 'inventory'].includes(role))
     $q('#roleQueue', view).innerHTML =
       '<p class="panel-note muted">Gunakan navigasi untuk melanjutkan pekerjaan harian.</p>';
   else
@@ -235,6 +349,18 @@ AD.notifs.items = () => {
         desc: `${fmtDate(b.tanggal)} ${b.waktu}`,
         go: [page, {}],
       }));
+  }
+  if (role === 'pharmacist' && typeof AD.pharmacy !== 'undefined') {
+    const rxPending = AD.pharmacy.prescriptions().filter((r) => r.normalizedStatus === 'Pending' || r.normalizedStatus === 'Ready');
+    rxPending.slice(0, 6).forEach((r) => {
+      items.push({
+        key: `pharmacy:${r.id}:${r.status}`,
+        kind: 'booking',
+        title: `Resep ${r.normalizedStatus === 'Ready' ? 'Siap Diserahkan' : 'Perlu Diproses'} · ${r.petName}`,
+        desc: `${r.id} · ${(r.items || []).length} obat · ${r.customerName}`,
+        go: ['antreanfarmasi', { status: r.normalizedStatus }],
+      });
+    });
   }
   if (AD.allowed(PERM.PAY))
     AD.trx

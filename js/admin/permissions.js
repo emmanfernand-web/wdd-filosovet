@@ -12,6 +12,7 @@ const PERM = Object.freeze({
   APPROVE: 'adjustment.approve',
   STAFF: 'staff.edit',
   EXPORT: 'report.export',
+  DISPENSE: 'prescription.dispense',
 });
 Object.assign(ROLES, {
   admin: {
@@ -79,6 +80,12 @@ Object.assign(ROLES, {
     permissions: [PERM.HOTEL],
     service: 'hotel',
   },
+  pharmacist: {
+    label: 'Apoteker',
+    title: 'Dashboard Farmasi',
+    pages: ['dashboard', 'antreanfarmasi', 'stokobat', 'riwayatdispensing'],
+    permissions: [PERM.DISPENSE],
+  },
 });
 AD.can = (page) => ROLES[AD.role()].pages.includes(page);
 AD.allowed = (permission) => ROLES[AD.role()].permissions.includes(permission);
@@ -114,6 +121,7 @@ AD.assigned = (b) =>
   (b.staffId ? b.staffId === AD.actorId() : b.petugas === AD.actor());
 AD.scope = (b) => ['admin', 'resepsionis'].includes(AD.role()) || AD.assigned(b);
 AD.setRole = (role) => {
+  if (role === 'apoteker') role = 'pharmacist';
   FVStore.require(!!ROLES[role], 'Peran tidak valid.');
   localStorage.setItem('fv_admin_role', role);
 };
@@ -135,18 +143,40 @@ const ACTION_POLICY = {
     dokter: ['view'],
     groomer: ['view'],
     hotel: ['view'],
+    pharmacist: ['view'],
   },
-  customer: { admin: ['view', 'create', 'edit'], resepsionis: ['view', 'create', 'edit'] },
+  customer: {
+    admin: ['view', 'create', 'edit'],
+    resepsionis: ['view', 'create', 'edit'],
+    pharmacist: ['view'],
+  },
   clinical: { dokter: ['view', 'create', 'edit', 'complete'] },
-  prescription: { dokter: ['view', 'create', 'edit', 'complete'], inventory: ['view'] },
-  product: { admin: ['view', 'create', 'edit', 'archive'], inventory: ['view', 'edit', 'archive'] },
-  stock: { admin: ['view', 'create', 'edit', 'complete'], inventory: ['view', 'create', 'edit', 'complete'] },
+  prescription: {
+    dokter: ['view', 'create', 'edit', 'complete'],
+    pharmacist: ['view', 'edit', 'complete'],
+    inventory: ['view'],
+  },
+  product: {
+    admin: ['view', 'create', 'edit', 'archive'],
+    inventory: ['view', 'edit', 'archive'],
+    pharmacist: ['view'],
+  },
+  stock: {
+    admin: ['view', 'create', 'edit', 'complete'],
+    inventory: ['view', 'create', 'edit', 'complete'],
+    pharmacist: ['view'],
+  },
   sale: {
     admin: ['view', 'create', 'edit', 'complete', 'export'],
     kasir: ['view', 'create', 'edit', 'complete', 'export'],
   },
   adjustment: { admin: ['view', 'create', 'approve'], kasir: ['view', 'create'] },
   staff: { admin: ['view', 'create', 'edit', 'archive'] },
+  dispensing: {
+    admin: ['view'],
+    pharmacist: ['view', 'create', 'complete'],
+    inventory: ['view'],
+  },
 };
 AD.permitted = (resource, action) => (ACTION_POLICY[resource]?.[AD.role()] || []).includes(action);
 AD.authorize = (resource, action) =>
