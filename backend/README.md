@@ -1,3 +1,13 @@
+# Filosovet Backend
+
+Modul User & Access Management tersedia. Lihat [dokumentasi modul](docs/access-management.md) untuk schema, mapping permission, service, otorisasi, dan hasil verifikasi.
+
+Modul 2 Customer & Pet Management tersedia. Lihat [dokumentasi API customer dan pet](docs/customer-pet-management.md) untuk endpoint, validasi, kepemilikan, schema pets, dan batas integrasi autentikasi.
+
+Modul 3 Service & Booking Management tersedia. Lihat [dokumentasi layanan dan booking](docs/service-booking-management.md) untuk katalog, lifecycle, permission, overlap, dan batas integrasi.
+
+Modul 4 Inventory & Pharmacy Management tersedia. Lihat [dokumentasi inventory dan ledger](docs/inventory-pharmacy-management.md) untuk katalog, batch, stok, permission, API dan hasil verifikasi.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

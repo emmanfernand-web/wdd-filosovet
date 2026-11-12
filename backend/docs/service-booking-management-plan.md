@@ -1,0 +1,17 @@
+# Module 3 Implementation Plan
+
+Spec: user Module 3 attachment; master context read before changes. Preserve all uncommitted Module 1–2 files. Baseline: 79 tests / 377 assertions.
+
+1. Add feature tests on existing explicit SQLite in-memory setup; observe failures before implementation.
+2. Add three tables in new migration: service_categories, services, bookings. RESTRICT historical FKs, unique slugs/code, price snapshot DECIMAL(12,2), schedule/customer/pet indexes. No payments or hotel operational tables.
+3. Add models/relations, BookingStatus lifecycle, strict shared validation, policies and services. Public catalog shows active category+service; managers can filter inactive records. Catalog permission manage_services is new and distinct from manage_products/manage_bookings.
+4. Dedicated Module3 seeder firstOrCreate categories and new permission; initial Admin grant only when permission is first created. Run dedicated seeder after AccessControlSeeder in DatabaseSeeder; keep legacy 26-permission config unchanged and initialize the additional permission via its dedicated seeder. Existing roles retain all old grants. Never restore a revoked grant. Do not import frontend demo prices as production defaults: actual JS catalog exists, but hotel is per-day and approved production rates are unverified. Seed only categories, let authorized staff create services.
+5. Shared booking system: server-derived owner from active pet; staff may create for a customer via pet_id without trusting body customer_id. Customer PATCH only schedule/notes, pending/confirmed before start; staff PATCH uses same whitelist. Status endpoint only manage_bookings and strict lifecycle. No customer cancellation endpoint until that policy is defined.
+6. Scope staff reads: view_bookings + manage_bookings grants global reads; otherwise view_bookings + manage_medical_records/manage_grooming/manage_hotel restricts category slug klinik-dokter/grooming/pet-hotel (union). No role-name controller checks. Do not rename referenced category slugs/reclassify booked services, preserving scope.
+7. Require RFC3339 seconds with explicit offset/Z; normalize storage and responses UTC without assuming clinic timezone. Compute ends_at only when duration exists. Per-pet active-status half-open overlap; null duration treated as point reservation. Pet row lock serializes create/reschedule/status under MySQL; no doctor/global capacity assumption. Booking code FV-ULID unique with bounded retry for code collisions.
+8. Resources hide staff_notes/created_by from owner-only views. Public catalog separate from existing protected routes; no login/token/CORS changes.
+9. Full tests/Pint/Composer/routes/syntax, independent review, MySQL before/after data fingerprints, safe additive migrate and dedicated seeder only. Update module doc, backend README link and master context after verification. Stop at Module 3.
+
+Open decisions: clinic timezone, staff assignment/capacity, unknown-duration occupancy, hotel stay pricing, DP slot securing, customer cancellation policy. No business defaults invented for these.
+
+Completed: independent review found no important issue; timestamp hour-24 normalization reproduced RED then fixed GREEN. Full suite 116 tests / 755 assertions; Pint, Composer, 89-file PHP syntax and routes verified. MySQL additive migration and dedicated seed succeeded; 16 old-table fingerprints preserved except authorized appended migration/permission/admin grant; 3 categories, 0 service/booking seeded. No frontend/config/auth changes or Git mutations.
