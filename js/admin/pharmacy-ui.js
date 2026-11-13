@@ -7,6 +7,13 @@
 AD.pharmacyUI = (() => {
   let activeTab = 'Semua';
   let activeMedTab = 'all';
+  const openPharmacyModal = (options) => UI.modal({
+    ...options,
+    onOpen: (el, close) => {
+      $q('.modal', el)?.classList.add('pharmacy-modal');
+      options.onOpen?.(el, close);
+    },
+  });
 
   /* ---------- Halaman Antrean Resep ---------- */
   const renderQueue = (view, params = {}) => {
@@ -22,7 +29,7 @@ AD.pharmacyUI = (() => {
       ['Dispensed', `Diserahkan (${stats.dispensed})`],
     ];
 
-    view.innerHTML = `
+    view.innerHTML = `<div class="pharmacy-module pharmacy-page pharmacy-queue">
       <div class="page-bar">
         <div>
           <p class="muted">Antrean resep masuk dari dokter pemeriksaan klinis</p>
@@ -46,7 +53,7 @@ AD.pharmacyUI = (() => {
         </div>
         <div id="rxTableWrap"></div>
       </section>
-    `;
+    </div>`;
 
     const draw = () => {
       const q = $q('#rxSearch', view)?.value || '';
@@ -151,13 +158,13 @@ AD.pharmacyUI = (() => {
       ['exp', `Mendekati Kedaluwarsa (${stats.expSoon})`],
     ];
 
-    view.innerHTML = `
+    view.innerHTML = `<div class="pharmacy-module pharmacy-page pharmacy-stock">
       <div class="page-bar">
         <div>
           <p class="muted">Ketersediaan obat, batch aktif, dan masa kedaluwarsa</p>
         </div>
       </div>
-      <div class="banner info" style="margin-bottom:16px;padding:12px 16px;background:var(--surface-sunken,#f8fafc);border:1px solid var(--border);border-radius:var(--radius);">
+      <div class="banner info" style="margin-bottom:16px;padding:12px 16px;background:var(--surface-alt);border:1px solid var(--border);border-radius:var(--radius);">
         <p class="small muted" style="margin:0;">
           <strong>Akses Visibilitas Farmasi (Read-Only):</strong> Apoteker memiliki hak baca penuh untuk memverifikasi stok, batch, dan tanggal kedaluwarsa sebelum peracikan. Pengelolaan katalog produk, pemesanan supplier, dan penyesuaian stok opname manual dikelola secara eksklusif oleh <strong>Inventory Staff</strong>.
         </p>
@@ -180,7 +187,7 @@ AD.pharmacyUI = (() => {
         </div>
         <div id="medTableWrap"></div>
       </section>
-    `;
+    </div>`;
 
     const draw = () => {
       const q = $q('#medSearch', view)?.value || '';
@@ -253,7 +260,7 @@ AD.pharmacyUI = (() => {
   /* ---------- Halaman Riwayat Dispensing ---------- */
   const renderDispensingHistory = (view) => {
     AD.require(PERM.DISPENSE);
-    view.innerHTML = `
+    view.innerHTML = `<div class="pharmacy-module pharmacy-page pharmacy-history">
       <div class="page-bar">
         <div>
           <p class="muted">Catatan penyerahan obat resep kepada pasien / pemilik</p>
@@ -269,7 +276,7 @@ AD.pharmacyUI = (() => {
         </div>
         <div id="dispTableWrap"></div>
       </section>
-    `;
+    </div>`;
 
     const draw = () => {
       const q = $q('#dispSearch', view)?.value.toLowerCase().trim() || '';
@@ -388,15 +395,15 @@ AD.pharmacyUI = (() => {
     }
 
     const body = `
-      <div class="work-split" style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-        <div class="panel work-pad" style="background:var(--surface-sunken,#f8fafc);border:1px solid var(--border);border-radius:var(--radius);padding:14px;">
-          <h3 style="margin-top:0;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);">Informasi Pasien</h3>
+      <div class="pharmacy-info-grid">
+        <div class="pharmacy-info-card">
+          <h3 style="margin-top:0;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text);">Informasi Pasien</h3>
           <p><strong>Nama Hewan:</strong> ${esc(rx.petName)} (${esc(rx.species)} - ${esc(rx.breed)})</p>
           <p><strong>Pemilik:</strong> ${esc(rx.customerName)} (${esc(rx.customerPhone)})</p>
           <p><strong>Keluhan Awal:</strong> ${esc(rx.chiefComplaint)}</p>
         </div>
-        <div class="panel work-pad" style="background:var(--surface-sunken,#f8fafc);border:1px solid var(--border);border-radius:var(--radius);padding:14px;">
-          <h3 style="margin-top:0;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text-muted);">Informasi Dokter & Diagnosa</h3>
+        <div class="pharmacy-info-card">
+          <h3 style="margin-top:0;font-size:14px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text);">Informasi Dokter & Diagnosa</h3>
           <p><strong>Dokter Peresep:</strong> ${esc(rx.doctor)}</p>
           <p><strong>Tanggal Pemeriksaan:</strong> ${fmtDate(rx.examinationDate)}</p>
           <p><strong>Diagnosa Dokter:</strong> <em>${esc(rx.diagnosis)}</em></p>
@@ -471,8 +478,12 @@ AD.pharmacyUI = (() => {
       });
     }
 
-    UI.modal({
-      title: `Detail Resep: ${rx.id} (${UI.chip(rx.normalizedStatus)})`,
+    openPharmacyModal({
+      title: `Detail Resep: ${rx.id}`,
+      titleBadge: {
+        text: ({ Pending: 'Menunggu', Processing: 'Diproses', Ready: 'Siap', Dispensed: 'Diserahkan', Cancelled: 'Dibatalkan' }[rx.normalizedStatus] || rx.normalizedStatus),
+        className: `chip-${({ Pending: 'warn', Processing: 'solid', Ready: 'ok-outline', Dispensed: 'ok', Cancelled: 'bad' }[rx.normalizedStatus] || 'neutral')}`,
+      },
       size: 'lg',
       body,
       actions,
@@ -492,17 +503,18 @@ AD.pharmacyUI = (() => {
     const itemsFields = rx.items
       .map((it, idx) => {
         const stockCheck = AD.pharmacy.checkStock(it.productId, it.quantity);
-        const batchOptions = stockCheck.batches.length
-          ? stockCheck.batches.map((b) => `<option value="${esc(b.id)}" ${b.id === it.batchId ? 'selected' : ''}>${esc(b.id)} (Sisa: ${b.quantity}, Exp: ${fmtDate(b.expiry)})</option>`).join('')
+        const usableBatches = stockCheck.batches.filter((b) => !b.expiry || b.expiry >= todayISO());
+        const batchOptions = usableBatches.length
+          ? usableBatches.map((b) => `<option value="${esc(b.id)}" ${b.id === it.batchId ? 'selected' : ''}>${esc(b.id)} (Sisa: ${b.quantity}, Exp: ${fmtDate(b.expiry)})</option>`).join('')
           : '<option value="">Tidak ada batch terdaftar</option>';
 
         return `
-          <div style="padding:12px;margin-bottom:12px;background:var(--surface-sunken,#f8fafc);border:1px solid var(--border);border-radius:var(--radius);">
+          <div class="pharmacy-form-card" style="padding:12px;margin-bottom:12px;">
             <div style="display:flex;justify-content:space-between;align-items:flex-start;">
               <div>
                 <strong>${idx + 1}. ${esc(it.name)}</strong>
                 <p class="muted small" style="margin:2px 0 0 0;">Dosis: ${esc(it.dosage || '—')} · ${esc(it.frequency || '—')} (${esc(it.duration || '—')})</p>
-                <p class="small" style="margin:2px 0 0 0;color:var(--text-muted);">Jumlah diresepkan dokter: <strong>${it.quantity}</strong> unit</p>
+                <p class="small" style="margin:2px 0 0 0;color:var(--muted);">Jumlah diresepkan dokter: <strong>${it.quantity}</strong> unit</p>
               </div>
               <div>
                 ${stockCheck.isSufficient
@@ -541,7 +553,7 @@ AD.pharmacyUI = (() => {
       </form>
     `;
 
-    UI.modal({
+    openPharmacyModal({
       title: `Penyiapan Obat — Resep ${rx.id}`,
       size: 'lg',
       body,
@@ -636,7 +648,7 @@ AD.pharmacyUI = (() => {
       </form>
     `;
 
-    UI.modal({
+    openPharmacyModal({
       title: `Konfirmasi Penyerahan Obat — Resep ${rx.id}`,
       size: 'md',
       body,
@@ -694,7 +706,7 @@ AD.pharmacyUI = (() => {
       </form>
     `;
 
-    UI.modal({
+    openPharmacyModal({
       title: `Klarifikasi Resep ${rx.id}`,
       size: 'md',
       body,
@@ -734,7 +746,7 @@ AD.pharmacyUI = (() => {
     FVStore.require(disp, 'Catatan penyerahan obat tidak ditemukan.');
 
     const body = `
-      <div id="dispenseProofPrint" style="padding:16px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);font-family:sans-serif;">
+      <div id="dispenseProofPrint" class="pharmacy-proof">
         <div style="text-align:center;border-bottom:2px solid var(--border);padding-bottom:12px;margin-bottom:14px;">
           <h2 style="margin:0 0 4px 0;font-size:18px;">KLINIK HEWAN FILOSOVET</h2>
           <p class="muted small" style="margin:0;">Instalasi Farmasi & Pelayanan Resep Hewan</p>
@@ -757,7 +769,7 @@ AD.pharmacyUI = (() => {
 
         <table class="tbl" style="width:100%;font-size:12px;margin-bottom:14px;">
           <thead>
-            <tr style="background:var(--surface-sunken,#f1f5f9);">
+            <tr>
               <th style="padding:6px 8px;text-align:left;">Nama Obat</th>
               <th style="padding:6px 8px;text-align:left;">Dosis & Aturan</th>
               <th style="padding:6px 8px;text-align:center;">Jml Resep</th>
@@ -782,7 +794,7 @@ AD.pharmacyUI = (() => {
           </tbody>
         </table>
 
-        ${disp.notes ? `<div style="font-size:12px;background:var(--surface-sunken,#f8fafc);padding:8px 12px;border-radius:4px;margin-bottom:14px;"><strong>Catatan Penyerahan:</strong> ${esc(disp.notes)}</div>` : ''}
+        ${disp.notes ? `<div class="proof-note"><strong>Catatan Penyerahan:</strong> ${esc(disp.notes)}</div>` : ''}
 
         <div style="display:flex;justify-content:space-between;text-align:center;font-size:12px;margin-top:20px;padding-top:10px;">
           <div style="width:40%;">
@@ -797,7 +809,7 @@ AD.pharmacyUI = (() => {
       </div>
     `;
 
-    UI.modal({
+    openPharmacyModal({
       title: 'Bukti Penyerahan Obat',
       size: 'lg',
       body,
@@ -805,9 +817,7 @@ AD.pharmacyUI = (() => {
         {
           label: 'Cetak Bukti',
           kind: 'outline',
-          onClick: () => {
-            window.print();
-          },
+          onClick: () => UI.print(body, 'a4'),
         },
         { label: 'Tutup', kind: 'primary' },
       ],
@@ -866,7 +876,7 @@ AD.pharmacyUI = (() => {
       <p class="small muted" style="margin-top:14px;">Penambahan batch baru atau penyesuaian tanggal kedaluwarsa dilakukan oleh <strong>Inventory Staff</strong> melalui penerimaan pesanan supplier atau audit batch.</p>
     `;
 
-    UI.modal({
+    openPharmacyModal({
       title: `Informasi Batch: ${p.name}`,
       size: 'md',
       body,

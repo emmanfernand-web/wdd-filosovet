@@ -101,7 +101,7 @@ function openLayer(root, el, { trap = true, onClose } = {}) {
 }
 
 /* Modal: UI.modal({title, body, actions:[{label, kind, onClick(close, el)}], size, onOpen}) */
-UI.modal = function ({ title, body, actions = [], size = 'md', onOpen, desc }) {
+UI.modal = function ({ title, body, actions = [], size = 'md', onOpen, desc, titleBadge }) {
   const el = document.createElement('div');
   el.className = 'overlay';
   el.innerHTML = `<div class="modal modal-${size}" role="dialog" aria-modal="true" aria-label="${esc(title)}">
@@ -111,6 +111,13 @@ UI.modal = function ({ title, body, actions = [], size = 'md', onOpen, desc }) {
     ${actions.length ? `<div class="modal-foot">${actions.map((a, i) => `<button type="button" class="btn btn-${a.kind || 'outline'}" data-act="${i}">${esc(a.label)}</button>`).join('')}</div>` : ''}
   </div>`;
   const layer = openLayer($q('#layerRoot'), el);
+  if (titleBadge) {
+    const heading = $q('.modal-head h2', el);
+    const badge = document.createElement('span');
+    badge.className = `chip ${titleBadge.className || 'chip-neutral'}`;
+    badge.textContent = titleBadge.text || '';
+    heading.append(document.createTextNode(' '), badge);
+  }
   el.addEventListener('mousedown', e => { if (e.target === el) layer.close(); });
   $q('[data-close]', el).onclick = layer.close;
   actions.forEach((a, i) => { $q(`[data-act="${i}"]`, el).onclick = () => { try { const result = a.onClick ? a.onClick(layer.close, el) : layer.close(); if (result && result.catch) result.catch(error => UI.toast(error.message, 'error')); } catch(error) { UI.toast(error.message, 'error'); } }; });

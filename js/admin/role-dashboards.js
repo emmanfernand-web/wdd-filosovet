@@ -144,7 +144,7 @@ Pages.dashboard.render = function (view) {
       ['Obat menipis / perlu restock', pStats.lowStock],
     ];
     headline = 'Ringkasan antrean & penyerahan resep farmasi';
-    body = `
+    body = `<div class="pharmacy-module pharmacy-dashboard">
       <section class="panel work-pad">
         <h2>Prioritas Penyiapan Obat</h2>
         <p class="muted small">Resep aktif yang menunggu diproses dan disiapkan oleh apoteker.</p>
@@ -194,7 +194,7 @@ Pages.dashboard.render = function (view) {
           <button class="btn btn-outline" type="button" data-go="riwayatdispensing">Riwayat Penyerahan</button>
         </div>
       </section>
-    `;
+    </div>`;
   } else {
     const stays = s.stays.filter((x) => AD.owns(x));
     const live = AD.hotel.active();

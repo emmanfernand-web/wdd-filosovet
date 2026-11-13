@@ -1,0 +1,79 @@
+/* Pharmacist workspace: scoped visual system for pharmacy pages and modals. */
+.pharmacy-module { --pharmacy-ink: var(--text); --pharmacy-muted: var(--muted); --pharmacy-panel: var(--surface); --pharmacy-soft: var(--surface-alt); color: var(--pharmacy-ink); }
+.pharmacy-page { display: grid; gap: 18px; }
+.pharmacy-dashboard { display: grid; gap: 20px; }
+.pharmacy-page .page-bar { margin-bottom: 0; }
+.pharmacy-page .page-bar h2 { margin: 0; font-size: clamp(1.35rem, 2vw, 1.75rem); letter-spacing: -0.02em; }
+.pharmacy-page .page-bar p { color: var(--pharmacy-muted); margin: 4px 0 0; }
+.pharmacy-panel { background: var(--pharmacy-panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow-sm); }
+.pharmacy-panel > .panel-head { padding: 18px 20px 0; }
+.pharmacy-panel > .panel-head h2 { color: var(--pharmacy-ink); }
+.pharmacy-toolbar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.pharmacy-toolbar .search-field { flex: 1 1 280px; min-width: 220px; }
+.pharmacy-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.pharmacy-tabs .btn { min-height: 38px; }
+.pharmacy-module .muted, .pharmacy-module .sub { color: var(--pharmacy-muted); }
+.pharmacy-module .panel,
+.pharmacy-module .work-pad { color: var(--pharmacy-ink); }
+.pharmacy-module .panel p, .pharmacy-module .panel li { color: inherit; }
+.pharmacy-module .tbl-wrap { background: var(--pharmacy-panel); border-color: var(--border); }
+.pharmacy-module .tbl th { background: var(--pharmacy-soft); color: var(--pharmacy-muted); }
+.pharmacy-module .tbl td { color: var(--pharmacy-ink); }
+.pharmacy-module .tbl td strong { color: var(--pharmacy-ink); }
+.pharmacy-module .tbl .row-actions { min-width: 180px; }
+.pharmacy-module .chip { line-height: 1.25; }
+.pharmacy-module .empty-state { color: var(--pharmacy-muted); background: var(--pharmacy-soft); }
+.pharmacy-module .empty-state h3 { color: var(--pharmacy-ink); }
+.pharmacy-summary-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.pharmacy-summary-card { padding: 16px; background: var(--pharmacy-soft); border: 1px solid var(--border); border-radius: var(--radius-sm); }
+.pharmacy-summary-card .label { color: var(--pharmacy-muted); font-size: .78rem; font-weight: 700; }
+.pharmacy-summary-card .value { color: var(--pharmacy-ink); font-size: 1.35rem; font-weight: 800; margin-top: 4px; }
+.pharmacy-info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.pharmacy-info-card { padding: 16px; background: var(--pharmacy-soft); border: 1px solid var(--border); border-radius: var(--radius); }
+.pharmacy-info-card h3 { color: var(--pharmacy-ink); font-size: .82rem; letter-spacing: .06em; margin: 0 0 12px; text-transform: uppercase; }
+.pharmacy-info-card p { color: var(--pharmacy-ink); margin: 8px 0 0; }
+.pharmacy-info-card strong { color: var(--pharmacy-ink); }
+.pharmacy-info-card .sub { color: var(--pharmacy-muted); }
+.pharmacy-modal .modal-body { color: var(--pharmacy-ink); }
+.pharmacy-modal .modal-body h3, .pharmacy-modal .modal-body h4 { color: var(--pharmacy-ink); }
+.pharmacy-modal .modal-body p, .pharmacy-modal .modal-body label { color: var(--pharmacy-ink); }
+.pharmacy-modal .modal-body .muted, .pharmacy-modal .modal-body .sub { color: var(--pharmacy-muted); }
+.pharmacy-modal .field label { font-weight: 700; }
+.pharmacy-modal .field input, .pharmacy-modal .field select, .pharmacy-modal .field textarea { color: var(--pharmacy-ink); background: var(--pharmacy-panel); border-color: var(--border); }
+.pharmacy-modal .field input::placeholder, .pharmacy-modal .field textarea::placeholder { color: var(--pharmacy-muted); opacity: 1; }
+.pharmacy-modal .field-error { color: var(--bad-fg); min-height: 1.25em; font-weight: 700; }
+.pharmacy-form-card { padding: 14px; background: var(--pharmacy-soft); border: 1px solid var(--border); border-radius: var(--radius); }
+.pharmacy-proof { color: #1d241f; background: #fff; border: 1px solid #cfd8cf; border-radius: var(--radius-sm); padding: 24px; }
+.pharmacy-proof h2, .pharmacy-proof h3, .pharmacy-proof strong { color: #1d241f; }
+.pharmacy-proof p, .pharmacy-proof td, .pharmacy-proof th { color: #28332b; }
+.pharmacy-proof table { width: 100%; border-collapse: collapse; }
+.pharmacy-proof th, .pharmacy-proof td { border-bottom: 1px solid #cfd8cf; padding: 8px; text-align: left; vertical-align: top; }
+.pharmacy-proof th { background: #edf2ed; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; }
+.pharmacy-proof .proof-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 24px; }
+.pharmacy-proof .proof-note { background: #edf2ed; border: 1px solid #cfd8cf; border-radius: 6px; padding: 10px 12px; }
+.pharmacy-proof .proof-signatures { display: flex; justify-content: space-between; gap: 24px; margin-top: 28px; text-align: center; }
+.pharmacy-proof .proof-signatures > div { width: 42%; }
+.pharmacy-proof .proof-signatures p { margin: 0; }
+.pharmacy-proof .proof-signatures p:first-child { min-height: 58px; }
+.pharmacy-module .banner { color: var(--pharmacy-ink); }
+.pharmacy-module .banner strong, .pharmacy-module .banner p { color: inherit; }
+
+@media (max-width: 760px) {
+  .pharmacy-summary-grid, .pharmacy-info-grid { grid-template-columns: 1fr; }
+  .pharmacy-module .tbl-wrap { border-inline: 0; border-radius: 0; margin-inline: -1px; }
+  .pharmacy-module .tbl { min-width: 720px; }
+  .pharmacy-toolbar { align-items: stretch; }
+  .pharmacy-toolbar .search-field { flex-basis: 100%; }
+  .pharmacy-proof { padding: 16px; }
+  .pharmacy-proof .proof-meta { grid-template-columns: 1fr; }
+  .pharmacy-proof .proof-signatures { gap: 12px; }
+}
+
+@media print {
+  @page { size: A4; margin: 14mm; }
+  body.admin-body .pharmacy-proof { border: 0; border-radius: 0; padding: 0; }
+  body.admin-body .pharmacy-proof .proof-note { break-inside: avoid; }
+  body.admin-body .pharmacy-proof table { page-break-inside: auto; }
+  body.admin-body .pharmacy-proof tr { page-break-inside: avoid; page-break-after: auto; }
+  body.admin-body .pharmacy-proof thead { display: table-header-group; }
+}

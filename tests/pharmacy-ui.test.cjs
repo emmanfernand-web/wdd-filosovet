@@ -1,0 +1,32 @@
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+
+const root = path.resolve(__dirname, '..');
+const html = fs.readFileSync(path.join(root, 'pages/dashboard-admin.html'), 'utf8');
+const css = fs.readFileSync(path.join(root, 'css/pharmacy.css'), 'utf8');
+
+assert.match(html, /css\/pharmacy\.css/);
+assert.match(css, /\.pharmacy-module/);
+assert.match(css, /@media print/);
+console.log('pharmacy scoped stylesheet is linked and has print rules');
+const pharmacyUiSource = fs.readFileSync(path.join(root, 'js/admin/pharmacy-ui.js'), 'utf8');
+assert.match(pharmacyUiSource, /stockCheck\.batches\.filter\(\(b\) => !b\.expiry/);
+console.log('preparation batch selector excludes expired batches');
+const proofStart = pharmacyUiSource.indexOf('const openDispenseDetail');
+const proofEnd = pharmacyUiSource.indexOf('/* ---------- Modal: Rincian Batch Obat', proofStart);
+const proofSource = pharmacyUiSource.slice(proofStart, proofEnd);
+assert.match(proofSource, /UI\.print\(/);
+assert.doesNotMatch(proofSource, /window\.print\(\)/);
+console.log('dispensing proof uses the shared print pathway');
+const dashboardSource = fs.readFileSync(path.join(root, 'js/admin/role-dashboards.js'), 'utf8');
+assert.match(dashboardSource, /pharmacy-module pharmacy-dashboard/);
+assert.match(dashboardSource, /pharmacist-dashboard-queue/);
+assert.match(pharmacyUiSource, /pharmacy-modal/);
+console.log('pharmacist dashboard and modal scopes retain existing hooks');
+assert.match(pharmacyUiSource, /pharmacy-info-grid/);
+assert.match(pharmacyUiSource, /titleBadge:/);
+console.log('prescription detail uses structured scoped information cards and DOM badge title');
+assert.match(css, /\.pharmacy-dashboard\s*\{[^}]*display:\s*grid/);
+assert.match(css, /\.pharmacy-dashboard\s*\{[^}]*gap:\s*20px/);
+console.log('pharmacy dashboard panels have a consistent vertical gap');
