@@ -2,9 +2,9 @@
 
 **Referensi utama untuk sesi pengembangan Filosovet berikutnya.** Baca file ini terlebih dahulu, kemudian dokumentasi modul yang ditugaskan dan source code terkait. Dokumen ini memberi konteks, bukan izin untuk memulai fitur, migration, deployment, atau modul berikutnya. Tunggu instruksi implementasi khusus dari pengguna.
 
-Snapshot terakhir diverifikasi: **12 November 2026, Asia/Jakarta**. Branch saat pemeriksaan: `tes-laravel`. Module 1–4 sudah diimplementasikan dan diverifikasi; seluruh perubahan masih belum di-commit. Status branch, file, database dan hasil tes wajib diperiksa ulang pada sesi baru.
+Snapshot terakhir diverifikasi: **14 November 2026, Asia/Jakarta**. Branch saat pemeriksaan: `tes-laravel`. Module 1–6 sudah diimplementasikan dan diverifikasi; perubahan Module 5–6 masih belum di-commit. Status branch, file, database dan hasil tes wajib diperiksa ulang pada sesi baru.
 
-**Status terkini:** Module 4 Inventory & Pharmacy **Completed / Implemented** setelah rancangan disetujui, implementasi, migration additive dan QA. Module 5–8 tetap **Planned**; pembaruan master plan sebelumnya dipertahankan sebagai konteks masa depan dan bukan izin implementasi. Tidak ada modul yang sedang otomatis dilanjutkan.
+**Status terkini:** Module 6 Transactions & Payments **Completed / Implemented** setelah implementasi, migration additive dan QA SQLite/MySQL. Module 7–8 tetap **Planned**; pembaruan master plan sebelumnya dipertahankan sebagai konteks masa depan dan bukan izin implementasi. Tidak ada modul yang sedang otomatis dilanjutkan.
 
 ### Rekonsiliasi awal Module 4 (baseline historis)
 
@@ -23,7 +23,7 @@ Sebelum implementasi, source/dokumentasi Module 1–3, routes dan MySQL diperiks
 | **Proposed** | Usulan desain konseptual untuk ditinjau saat spesifikasi modul dibuat; belum menjadi schema atau lifecycle final. |
 | **Open Decisions** | Membutuhkan keputusan lanjutan; jangan mengubah asumsi menjadi persyaratan tetap. |
 
-Sumber utama adalah Master Context dan pembaruan master plan Module 5–8 yang diberikan pengguna. Dokumentasi ini juga mencocokkan [README backend](../README.md), [Module 1](access-management.md), [rencana Module 1](access-management-plan.md), [Module 2](customer-pet-management.md), [rencana Module 2](customer-pet-management-plan.md), [Module 3](service-booking-management.md), [Module 4](inventory-pharmacy-management.md), source code, migration, hasil tes aktual dan metadata MySQL secara read-only. Nama file di bawah relatif terhadap root repository kecuali disebut relatif terhadap `backend/`.
+Sumber utama adalah Master Context dan pembaruan master plan Module 5–8 yang diberikan pengguna. Dokumentasi ini juga mencocokkan [README backend](../README.md), [Module 1](access-management.md), [rencana Module 1](access-management-plan.md), [Module 2](customer-pet-management.md), [rencana Module 2](customer-pet-management-plan.md), [Module 3](service-booking-management.md), [Module 4](inventory-pharmacy-management.md), [Module 5](purchasing-suppliers.md), [Module 6](transactions-payments.md), source code, migration, hasil tes aktual dan metadata MySQL secara read-only. Nama file di bawah relatif terhadap root repository kecuali disebut relatif terhadap `backend/`.
 
 ## 1. Project Overview
 
@@ -31,11 +31,11 @@ Filosovet adalah sistem manajemen klinik hewan dan layanan pelanggan, dengan pet
 
 **Confirmed Decisions:** proyek terdiri dari frontend HTML/CSS/JavaScript yang sudah ada, backend REST API Laravel di `backend/`, dan database relasional MySQL. Customer dan staf memakai fondasi akun yang sama. Jangan membangun CRUD terpisah yang menduplikasi customer, pet, produk, booking atau identitas akun.
 
-**Implemented:** backend mencakup Module 1–4, termasuk katalog layanan/booking, katalog inventory, batch medicine, ledger stok dan monitoring. Frontend memiliki simulasi operasional yang jauh lebih luas, tetapi fitur frontend tersebut bukan bukti implementasi backend.
+**Implemented:** backend mencakup Module 1–6, termasuk layanan/booking, inventory, purchasing, transaksi service/product, pembayaran/refund uang dan receipts. Frontend memiliki simulasi operasional yang jauh lebih luas, tetapi fitur frontend tersebut bukan bukti implementasi backend.
 
-**Completed / Implemented:** Module 4 telah diverifikasi; tidak mencakup dispensing/resep atau receiving supplier.
+**Completed / Implemented:** receiving supplier Module 5 memakai ledger Module 4; dispensing/resep belum tersedia.
 
-**Planned:** purchasing, transaksi/pembayaran, rekam medis/resep, operasional hotel, laporan terintegrasi, integrasi frontend/deployment, dan AI customer service.
+**Planned:** rekam medis/resep, operasional hotel, laporan terintegrasi, integrasi frontend/deployment, dan AI customer service.
 
 ## 2. Technology Stack & Architecture
 
@@ -68,22 +68,22 @@ Filosovet/
     ├── app/
     │   ├── Auth/ActiveUserProvider.php
     │   ├── Http/
-    │   │   ├── Controllers/Api/       # Customer/Pet, service/booking dan inventory controllers
+    │   │   ├── Controllers/Api/       # Customer/Pet, service/booking, inventory dan purchasing controllers
     │   │   ├── Middleware/           # EnsureAccountIsActive
     │   │   ├── Requests/             # Domain FormRequests dan pagination
-    │   │   └── Resources/            # Customer/Pet, service/booking dan inventory Resources
-    │   ├── Models/                   # Akun/akses, customer/pet, service/booking, product/batch/movement
+    │   │   └── Resources/            # Customer/Pet, service/booking, inventory dan purchasing Resources
+    │   ├── Models/                   # Akun/akses, customer/pet, service/booking, inventory/purchasing
     │   ├── Enums/BookingStatus.php
-    │   ├── Policies/                 # Akun/customer/pet, service/booking dan inventory policies
+    │   ├── Policies/                 # Akun/customer/pet, service/booking, inventory/purchasing policies
     │   ├── Providers/AppServiceProvider.php
     │   ├── Services/                 # UserAccountService, AccessManagementService,
-    │   │                             # Customer/Pet, service/booking dan Inventory* services
+    │   │                             # Customer/Pet, service/booking, Inventory* dan purchasing services
     │   └── Support/                  # Pet/booking validation, BookingAccess/CodeGenerator, Inventory*
     ├── bootstrap/app.php             # Registrasi routes, middleware dan exception JSON API
     ├── config/                       # access.php, auth.php dan konfigurasi Laravel existing
     ├── database/
-    │   ├── migrations/               # 3 migration bawaan + 5 migration tambahan
-    │   ├── seeders/                  # DatabaseSeeder → AccessControlSeeder + ServiceBookingSeeder
+    │   ├── migrations/               # 3 migration bawaan + 7 migration tambahan
+    │   ├── seeders/                  # AccessControlSeeder, ServiceBookingSeeder, PurchasingSeeder, TransactionsPaymentsSeeder
     │   ├── factories/UserFactory.php # Data tes, bukan akun production default
     │   └── database.sqlite           # File existing; jangan dihapus/dipakai sebagai database tes destruktif
     ├── routes/                       # api.php, web.php, console.php
@@ -92,6 +92,10 @@ Filosovet/
     │   ├── Feature/CustomerPetManagementTest.php
     │   ├── Feature/ServiceBookingManagementTest.php
     │   ├── Feature/InventoryPharmacyManagementTest.php
+    │   ├── Feature/PurchasingSuppliersTest.php
+    │   ├── Feature/TransactionsPaymentsTest.php
+    │   ├── Support/TransactionsPaymentsMySqlProbe.php
+    │   ├── Support/PurchasingMySqlProbe.php
     │   ├── Feature/ExampleTest.php
     │   ├── Unit/ExampleTest.php
     │   └── Support/InMemoryDatabaseTestCase.php
@@ -105,13 +109,18 @@ Filosovet/
     │   ├── service-booking-management-plan.md
     │   ├── inventory-pharmacy-management.md
     │   ├── inventory-pharmacy-management-design.md
-    │   └── inventory-pharmacy-management-plan.md
+    │   ├── inventory-pharmacy-management-plan.md
+    │   ├── purchasing-suppliers.md
+    │   ├── purchasing-suppliers-plan.md
+    │   ├── transactions-payments.md
+    │   ├── transactions-payments-design.md
+    │   └── transactions-payments-plan.md
     ├── composer.json / composer.lock
     ├── package.json / vite.config.js
     └── phpunit.xml
 ```
 
-**Perbedaan dokumentasi yang sudah diketahui:** README root menyatakan tidak ada backend/database dan memuat rancangan database lama dengan `users.role_id`. Source serta MySQL kini menunjukkan backend Module 1–4 dan relasi multi-role melalui `user_roles`. Jangan menyalin rancangan lama sebagai schema aktual. Penyebutan delapan role di demo frontend merujuk peran workspace staf; backend mempunyai sembilan role termasuk Customer. Dokumen Module 1 merekam tahap historis sebelum endpoint Module 2 ditambahkan; kalimat “belum ada endpoint” pada dokumen tersebut bukan status backend keseluruhan saat ini. Dokumen lama tidak diubah oleh pembuatan master context ini.
+**Perbedaan dokumentasi yang sudah diketahui:** README root menyatakan tidak ada backend/database dan memuat rancangan database lama dengan `users.role_id`. Source serta MySQL kini menunjukkan backend Module 1–6 dan relasi multi-role melalui `user_roles`. Jangan menyalin rancangan lama sebagai schema aktual. Penyebutan delapan role di demo frontend merujuk peran workspace staf; backend mempunyai sembilan role termasuk Customer. Dokumen Module 1 merekam tahap historis sebelum endpoint Module 2 ditambahkan; kalimat “belum ada endpoint” pada dokumen tersebut bukan status backend keseluruhan saat ini. Dokumen lama tidak diubah oleh pembuatan master context ini.
 
 ## 4. Confirmed Business Decisions
 
@@ -149,14 +158,25 @@ Filosovet/
 - Produk nonaktif menolak batch/operasi stok normal baru. Type/unit membeku setelah batch/movement ada. Histori dilindungi FK RESTRICT; tidak ada DELETE API inventory.
 - Ledger immutable melalui API/event Eloquent; koreksi melalui compensating movement. Direct SQL/query-builder dapat melewati domain guards dan tidak boleh menjadi writer operasional.
 - Medicine expiry berlaku sampai akhir tanggal UTC; expired stock-out normal ditolak. Physical, usable dan expired dibedakan; low-stock berdasarkan usable < minimum_stock. Batch FEFO bersaldo positif diurut expiry/id, tanpa dispensing otomatis.
-- Rincian kontrak writer/locking, monitoring dan akses ada di dokumentasi Module 4; receiving, sale dan dispensing masih Planned.
+- Rincian kontrak writer/locking, monitoring dan akses ada di dokumentasi Module 4; receiving Implemented Module 5, sale Implemented Module 6; dispensing masih Planned.
 
-### Transaksi dan pembayaran
+### Purchasing — Implemented Module 5
 
-- Satu transaksi dapat berisi jasa dan produk; jenis item harus dapat dibedakan.
-- **DP dibayar untuk mengamankan slot booking**, kemudian sisa tagihan dilunasi setelah layanan selesai. Urutan ini merupakan kebutuhan bisnis, bukan fitur yang sudah tersedia.
-- Pembayaran booking masuk Module 6. Jangan menanamkan perhitungan DP atau pembayaran ke booking CRUD Module 3.
-- Riwayat pembayaran harus dipertahankan. Besaran DP, tenggat, refund dan detail pengamanan slot masih perlu ditetapkan.
+- Lifecycle `draft → ordered → partially_received → fully_received`; full receipt dapat langsung dari ordered. Cancel hanya draft/ordered sebelum receipt; hanya draft editable, boleh kosong sampai ordering.
+- Supplier nonaktif menolak PO/ordering baru, tetapi PO ordered tetap boleh diterima (**disetujui pengguna**). Medicine expired saat receiving ditolak; expiry hari ini UTC valid. Harga aktual receiving boleh berbeda, default harga PO, tanpa mengubah snapshot PO (**disetujui pengguna**).
+- Integer quantity; medicine wajib batch/expiry, general menolak batch. Split batch dan multiple receipts didukung. Over-receiving ditolak atas total per PO item.
+- Confirmation langsung final dan immutable, transaksi mencakup dokumen/batch/ledger/status. UUID idempotency_key global; retry payload sama mengembalikan dokumen awal, berbeda ditolak. PO row lock, current locking reads dan sorted product locks mencegah race pada jalur service.
+- Harga dihitung integer cents dan disimpan DECIMAL(18,2). Tidak ada approval, retur/reversal, pajak/diskon/ongkir, multi-currency atau pembayaran supplier. Lihat [kontrak lengkap](purchasing-suppliers.md).
+
+### Transaksi dan pembayaran — Implemented Module 6
+
+- Satu transaksi dapat berisi service/product gabungan. Selling_price product nullable ditambahkan additive, dikelola manage_products; Kasir tidak boleh override. Direct service memakai katalog, booked service memakai booking snapshot. Harga/nama/type/unit item snapshot historis. IDR; discount/tax0.
+- Lifecycle draft → confirmed → completed. Hanya draft editable; notes-only tidak mengambil ulang harga, replacement items sengaja mengambil snapshot terbaru. Stok berkurang atomik saat confirmed walau belum lunas, medicine FEFO multi-batch/nonexpired, general tanpa batch. Completed wajib lunas dan linked booking completed.
+- Satu booking satu transaksi aktif; cancellation sah melepas unique active_booking_id tanpa menghilangkan booking FK histori. Booking cancelled/no_show tidak dapat ditagihkan baru/dikonfirmasi; pembatalan booking existing tidak otomatis mengubah tagihan/payment.
+- **Confirmed Decisions terbaru:** DP manual sebagai partial payment, tanpa minimum persen, timeout, otomatisasi status atau pengamanan/pelepasan slot berdasarkan DP pada Module 6. Sasaran bisnis DP mengamankan slot tetap roadmap; lifecycle Module 3 dipertahankan sesuai persetujuan pengguna.
+- Payment manual cash/bank_transfer/qris/debit_card/credit_card/e_wallet; hanya succeeded dihitung, failed/cancelled historis. UUID replay idempotent, overpayment ditolak. Net paid/remaining diturunkan dari immutable payment/refund records.
+- Cancel hanya sebelum succeeded payment dan stock allocation (draft atau confirmed service-only unpaid). Refund uang immutable penuh/parsial wajib alasan dan cap per payment; tidak otomatis return stock, cancel booking atau reopen operational status.
+- Refund bukan credit note: total tetap; net paid berkurang dan remaining kembali muncul. Payment pengganti boleh pada confirmed/completed dengan remaining positif. Payment_status dan refund_status terpisah dari operational status. Tidak ada retur/reversal sale, gateway, tax/discount/multicurrency atau accounting. Kontrak lengkap: [Module 6](transactions-payments.md).
 
 ## 5. User Roles & Permission Architecture
 
@@ -170,20 +190,20 @@ Provider `active-eloquent` memfilter lookup credential, ID sesi, dan remember to
 
 ### Role dan mapping baseline
 
-MySQL aktual terverifikasi: **9 role, 27 permission, 69 role-permission grants**. Baseline legacy `backend/config/access.php` berisi 26 permission/68 grant; Module 3 menambahkan `manage_services` dan satu grant Admin lewat `ServiceBookingSeeder`, tanpa menimpa grant lama. Ini adalah baseline/snapshot, bukan alasan menimpa perubahan akses Admin di masa depan.
+MySQL aktual terverifikasi: **9 role, 31 permission, 76 role-permission grants**. Baseline legacy `backend/config/access.php` berisi 26 permission/68 grant; Module 3 menambahkan `manage_services` dan satu grant Admin lewat `ServiceBookingSeeder`, tanpa menimpa grant lama. Module 5 menambah dua permission/empat grant melalui PurchasingSeeder; Module 6 menambah dua permission/tiga grant melalui TransactionsPaymentsSeeder. Ini adalah baseline/snapshot, bukan alasan menimpa perubahan akses Admin di masa depan.
 
 Setiap role staf selain Admin menerima tambahan `view_own_profile` dan `update_own_profile` pada mapping di bawah. Hak tersebut tidak memberi izin mengubah data kepegawaian; StaffProfilePolicy tetap mensyaratkan `manage_users` untuk update.
 
 | Role | Slug aktual | Permission operasional awal | Total grant |
 | --- | --- | --- | --- |
-| Admin | `admin` | Semua 26 permission legacy + `manage_services` | 27 |
+| Admin | `admin` | Semua 26 permission legacy + `manage_services`, `manage_purchase_orders`, `receive_purchase_orders`, `manage_transactions`, `manage_refunds` | 31 |
 | Resepsionis | `resepsionis` | `manage_customers`, `manage_pets`, `view_bookings`, `manage_bookings` | 6 |
 | Dokter | `dokter` | `view_bookings`, `manage_medical_records`, `manage_prescriptions`, `view_medication_stock` | 6 |
 | Apoteker | `pharmacist` | `manage_prescriptions`, `dispense_prescriptions`, `view_medication_stock` | 5 |
-| Inventory Staff | `inventory` | `manage_inventory`, `manage_products`, `manage_suppliers`, `view_medication_stock` | 6 |
+| Inventory Staff | `inventory` | `manage_inventory`, `manage_products`, `manage_suppliers`, `view_medication_stock`, `manage_purchase_orders`, `receive_purchase_orders` | 8 |
 | Groomer | `groomer` | `view_bookings`, `manage_grooming` | 4 |
 | Pet Hotel Staff | `hotel` | `view_bookings`, `manage_hotel` | 4 |
-| Kasir | `kasir` | `view_transactions`, `process_payments` | 4 |
+| Kasir | `kasir` | `view_transactions`, `process_payments`, `manage_transactions` | 5 |
 | Customer | `customer` | Tujuh permission own-data di bawah | 7 |
 
 Katalog 26 permission legacy, dikelompokkan tanpa mengubah slug (ditambah `manage_services` oleh Module 3):
@@ -203,6 +223,10 @@ Module 4 tidak menambah permission/grant. `manage_products` mengelola katalog; `
 
 Permission yang sudah di-seed untuk modul masa depan tidak berarti fungsi tersebut sudah diimplementasikan. Dokter dan Apoteker sama-sama memiliki `manage_prescriptions`; modul klinis berikutnya tetap harus membedakan tindakan meresepkan, klarifikasi, penyiapan dan penyerahan lewat policy/business rules.
 
+Module 5 memakai `manage_suppliers` existing serta menambah `manage_purchase_orders` dan `receive_purchase_orders`. Grant awal hanya Admin/Inventory saat permission pertama dibuat; rerun tidak mengembalikan grant yang dicabut. Receive capability dapat berdiri sendiri tanpa manage_inventory; PO/receipt read mengizinkan salah satu capability purchasing. Embedded supplier hanya id/name bila pembaca tidak memiliki manage_suppliers, agar kontak/alamat/internal notes tidak bocor.
+
+Module 6 menambah `manage_transactions` (grant awal Admin/Kasir) dan `manage_refunds` (Admin saja), memakai view_transactions/process_payments/view_own_transactions existing. Payment-only tidak otomatis edit draft, lookup customer atau refund. Cashier lookup minimal terpisah dari Customer/Booking/Inventory Resources; Customer read own-only. Seeder baru memberi grant saat permission pertama dibuat, metode firstOrCreate; tidak mengembalikan grant dicabut.
+
 ### Service dan seeder yang harus dipertahankan
 
 - `AccessManagementService::syncUserRoles()` memerlukan `manage_roles`; `syncRolePermissions()` memerlukan `manage_permissions`; `setUserActive()` memerlukan `manage_users`.
@@ -217,7 +241,7 @@ Permission yang sudah di-seed untuk modul masa depan tidak berarti fungsi terseb
 
 ### Schema aktual — Implemented
 
-MySQL saat snapshot terkini mempunyai **23 tabel**: lima belas tabel domain di bawah, ditambah `migrations`, `password_reset_tokens`, `sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`.
+MySQL saat snapshot terkini mempunyai **34 tabel**: dua puluh enam tabel domain di bawah, ditambah `migrations`, `password_reset_tokens`, `sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`.
 
 | Tabel domain | Kolom / constraint penting |
 | --- | --- |
@@ -233,15 +257,30 @@ MySQL saat snapshot terkini mempunyai **23 tabel**: lima belas tabel domain di b
 | `services` | id, service_category_id FK RESTRICT, name/slug unique, nullable description/duration_minutes, price DECIMAL(12,2), is_active, timestamps. |
 | `bookings` | id, booking_code unique, customer/pet/service FK RESTRICT, scheduled_at/ends_at UTC, status, price_snapshot DECIMAL(12,2), customer_notes/staff_notes, created_by nullable FK users RESTRICT, timestamps. |
 | `product_categories` | id, name, slug unique, description nullable, is_active, timestamps. |
-| `products` | id, category FK nullable RESTRICT, sku unique, name/type/description/unit, minimum_stock unsigned integer, is_active, timestamps. Tanpa kolom stock/harga jual. |
+| `products` | id, category FK nullable RESTRICT, sku unique, name/type/description/unit, minimum_stock unsigned integer, is_active, timestamps. Module 6 menambah selling_price nullable DECIMAL(18,2); tanpa kolom stock mutable. |
 | `product_batches` | id, product FK RESTRICT, batch_number, expiry_date, received_date nullable, timestamps; unique product/batch_number dan product/id; FEFO indexes. |
 | `stock_movements` | id, product FK, nullable product_batch_id, movement_type/direction/quantity/reason, reference_type/id nullable, performed_by FK users, created_at saja. Composite FK product/batch ke product_batches; seluruh FK RESTRICT. |
+| `suppliers` | Identitas, kontak/alamat/notes nullable, is_active, timestamps; deactivate, tanpa DELETE API. |
+| `purchase_orders` | PO-ULID unique, supplier/creator FK, tanggal, status, notes, subtotal/total DECIMAL(18,2), timestamps. |
+| `purchase_order_items` | PO/product FK, name/type/unit/price snapshot, integer quantity_ordered, subtotal, timestamps; unique PO/product. |
+| `goods_receivings` | GR-ULID unique, PO/receiver FK, UUID idempotency_key unique, payload_hash, received_date/notes, timestamps. |
+| `goods_receiving_items` | Receiving/PO/item/product/batch FK, integer quantity, actual price/subtotal, unique movement FK, timestamps; composite FK menjaga konsistensi PO/product/batch. |
+| `transactions` | TX-ULID unique, customer/booking/creator FK, active_booking_id nullable unique untuk satu tagihan aktif, date/status/notes, subtotal/grand_total DECIMAL(18,2), timestamps. |
+| `transaction_items` | FK transaction/service/product; item_type, from_booking, name/description/type/unit/price snapshots, integer quantity/subtotal; unique transaction/service serta transaction/product dan id/product. |
+| `transaction_stock_allocations` | FK item/product/batch; composite FK item-product/batch-product; integer quantity; unique movement link yang terisi sebelum commit, timestamps. |
+| `payment_methods` | code unique, name, is_active, timestamps; enam metode manual awal. |
+| `payments` | PY-ULID unique, transaction/method/receiver FK, method_snapshot, UUID unique/hash, date/amount/status/reference/notes, timestamps; unique transaction/id. |
+| `payment_refunds` | RF-ULID unique, payment/transaction/actor FK; composite FK transaction/payment; UUID unique/hash, date/amount/reason, timestamps. |
 
-Terdapat **17 FK domain** yang telah diperiksa pada metadata MySQL. Bawaan Laravel `sessions.user_id` mempunyai index, tetapi migration existing tidak mendeklarasikan FK; jangan mengasumsikan semua kolom bernama user_id sudah ber-FK.
+Terdapat **48 FK domain** yang telah diperiksa pada metadata MySQL. Bawaan Laravel `sessions.user_id` mempunyai index, tetapi migration existing tidak mendeklarasikan FK; jangan mengasumsikan semua kolom bernama user_id sudah ber-FK.
 
 Relasi model: User belongsToMany Role; Role belongsToMany User dan Permission; Permission belongsToMany Role; User hasOne Customer dan StaffProfile; keduanya belongsTo User; Customer hasMany Pet; Pet belongsTo Customer. Pivot timestamp memakai `withTimestamps('created_at', false)` sesuai Laravel yang terpasang. ProductCategory hasMany Product; Product belongsTo category dan hasMany batches/movements; ProductBatch belongsTo Product dan hasMany movements; StockMovement belongsTo Product, batch dan performer User.
 
 Penghapusan user yang masih memiliki profil dibatasi; gunakan deaktivasi akun untuk mempertahankan profil. Customer yang memiliki pet, termasuk pet arsip, tidak dapat dihapus fisik begitu saja. Pemindahan pemilik dan pemulihan pet arsip belum mempunyai endpoint.
+
+Relasi purchasing: Supplier hasMany PurchaseOrder; PO belongsTo Supplier/User creator, hasMany items/receivings; PO item belongsTo PO/Product, hasMany receivingItems; Receiving belongsTo PO/User receiver, hasMany items; ReceivingItem belongsTo receiving/PO item/Product/batch/movement. Seluruh 13 FK purchasing RESTRICT. Quantity received/remaining diturunkan dari receipt items, tanpa saldo stok kedua. Movement link nullable hanya selama transaksi penyusunan dokumen dan terisi sebelum commit sukses.
+
+Relasi Module 6: Transaction belongsTo Customer/Booking/User creator, hasMany items/payments/refunds; Item belongsTo Transaction/Service/Product, hasMany allocations; Allocation belongsTo item/Product/Batch/Movement. Payment belongsTo Transaction/PaymentMethod/User receiver, hasMany refunds; Refund belongsTo Payment/Transaction/User actor. Seluruh 18 FK Module 6 RESTRICT. Tidak menyimpan saldo paid/remaining mutable; nilai tersebut dihitung dari histori.
 
 ### Migration aktual
 
@@ -255,8 +294,10 @@ Penghapusan user yang masih memiliki profil dibatasi; gunakan deaktivasi akun un
 | `2026_11_12_000003_create_pets_table` | 3 | Applied |
 | `2026_11_12_000004_create_service_booking_tables` | 4 | Applied |
 | `2026_11_12_000005_create_inventory_tables` | 5 | Applied |
+| `2026_11_13_000006_create_purchasing_tables` | 6 | Applied |
+| `2026_11_14_000007_create_transactions_payments_tables` | 7 | Applied |
 
-`is_active` ditambahkan lewat migration baru, bukan dengan mengedit migration users yang sudah dijalankan. Table customers berasal dari Module 1; Module 2 hanya menambahkan pets. Module 3 menambahkan service_categories, services dan bookings; satu booking tetap satu service. Module 4 menambahkan empat tabel inventory tanpa mengubah schema lama. Baca schema aktual sebelum menyusun migration berikutnya.
+`is_active` ditambahkan lewat migration baru, bukan dengan mengedit migration users yang sudah dijalankan. Table customers berasal dari Module 1; Module 2 hanya menambahkan pets. Module 3 menambahkan service_categories, services dan bookings; satu booking tetap satu service. Module 4 menambahkan empat tabel inventory tanpa mengubah schema lama. Module 5 menambah lima tabel purchasing tanpa mengubah schema lama. Module 6 menambah enam tabel transaksi/payment/refund serta nullable selling_price pada products, tanpa backfill atau perubahan migration applied. Baca schema aktual sebelum menyusun migration berikutnya.
 
 ### Kontrak data pet yang sudah berlaku
 
@@ -264,7 +305,7 @@ Penghapusan user yang masih memiliki profil dibatasi; gunakan deaktivasi akun un
 
 ### Schema Planned
 
-Tabel Module 5–8 pada roadmap masih desain konseptual, bukan schema final. Module 4 kini sudah mempunyai product_categories, products, product_batches dan stock_movements. `medicine_details` yang dahulu direncanakan ditunda karena belum ada field bisnis yang diminta; medicine dikenali dari products.type. Detail schema/lifecycle/referensi dokumen masa depan diputuskan saat tugas masing-masing, dengan memakai inventory/ledger existing.
+Tabel Module 7–8 pada roadmap masih desain konseptual, bukan schema final. Module 6 sudah mempunyai enam tabel keuangan operasional di atas. Module 5 sudah mempunyai lima tabel purchasing di atas. Module 4 kini sudah mempunyai product_categories, products, product_batches dan stock_movements. `medicine_details` yang dahulu direncanakan ditunda karena belum ada field bisnis yang diminta; medicine dikenali dari products.type. Detail schema/lifecycle/referensi dokumen masa depan diputuskan saat tugas masing-masing, dengan memakai inventory/ledger existing.
 
 ## 7. API Architecture & Conventions
 
@@ -286,7 +327,7 @@ Tabel Module 5–8 pada roadmap masih desain konseptual, bukan schema final. Mod
 
 Module 3 menambahkan 15 route (total historis setelah Module 3 **26 route API**): GET/POST `/service-categories`, GET/PATCH `/service-categories/{category}`, GET/POST `/services`, GET/PATCH `/services/{service}`, GET `/me/bookings`, GET/POST `/bookings`, GET/PATCH `/bookings/{booking}`, PATCH `/bookings/{booking}/status` dan PATCH `/bookings/{booking}/staff-notes`. Empat GET katalog hanya menampilkan data aktif bagi public/customer; `manage_services` dapat melihat/filter data nonaktif. Detail payload/filter: [Module 3](service-booking-management.md).
 
-Module 4 menambahkan **15 route**, sehingga total terkini **41 route API**: GET/POST `/product-categories`, PATCH `/product-categories/{category}`, GET/POST `/products`, GET/PATCH `/products/{product}`, GET/POST `/products/{product}/batches`, GET `/product-batches/{batch}`, GET `/inventory/balances`, `/inventory/low-stock`, `/inventory/expired-batches`, serta GET/POST `/stock-movements`. Seluruhnya internal auth + active, dengan scope medicine-only dan manage permissions yang terpisah. Tidak ada PATCH/DELETE ledger atau stock field writable. Detail filter/payload: [Module 4](inventory-pharmacy-management.md).
+Module 4 menambahkan **15 route**, sehingga total pada penyelesaian Module 4 **41 route API**: GET/POST `/product-categories`, PATCH `/product-categories/{category}`, GET/POST `/products`, GET/PATCH `/products/{product}`, GET/POST `/products/{product}/batches`, GET `/product-batches/{batch}`, GET `/inventory/balances`, `/inventory/low-stock`, `/inventory/expired-batches`, serta GET/POST `/stock-movements`. Seluruhnya internal auth + active, dengan scope medicine-only dan manage permissions yang terpisah. Tidak ada PATCH/DELETE ledger atau stock field writable. Detail filter/payload: [Module 4](inventory-pharmacy-management.md).
 
 Konvensi existing yang perlu dipertahankan:
 
@@ -301,6 +342,10 @@ Konvensi existing yang perlu dipertahankan:
 - List customer melakukan eager loading user; list pet dibatasi relasi customer yang sudah diotorisasi. Policy saja tidak otomatis membatasi query list.
 
 **Pending:** endpoint login/logout API, registrasi publik via HTTP, token/session integrasi frontend, email verification/reset flow dan mekanisme pengiriman akses awal. Method `registerCustomer()` di service bukan endpoint publik. Jangan membuat bypass identitas atau fake auth header agar endpoint dapat dipakai sebelum integrasi resmi.
+
+Module 5 menambahkan **12 route**, total pada penyelesaian Module 5 **53 endpoint API**: GET/POST `/suppliers`, GET/PATCH `/suppliers/{supplier}`, GET/POST `/purchase-orders`, GET/PATCH `/purchase-orders/{purchaseOrder}`, PATCH `/purchase-orders/{purchaseOrder}/status`, GET/POST `/purchase-orders/{purchaseOrder}/receivings`, GET `/goods-receivings/{receiving}`. Auth + active, pagination 20/max100, supplier search/active dan PO supplier/status/date filters. First receipt 201, replay identik 200, invalid transition/payload 422. Tidak ada receipt edit/delete. Payload dan matriks permission: [Module 5](purchasing-suppliers.md).
+
+Module 6 menambah **12 route declarations**, total terkini **65 API routes**: GET /billing/{kind} (customers/bookings/products/services/payment-methods), GET/POST /transactions, GET/PATCH /transactions/{transaction}, PATCH /transactions/{transaction}/status, GET /transactions/{transaction}/receipt, GET/POST /transactions/{transaction}/payments, GET /payments/{payment}, GET /payments/{payment}/receipt, POST /payments/{payment}/refunds. Auth+active, own/global scoped reads, pagination20/max100, transaction search nomor/customer/status/from/to; detail payload/permission: [Module 6](transactions-payments.md).
 
 ## 8. Security & Authorization Rules
 
@@ -328,12 +373,30 @@ Konvensi existing yang perlu dipertahankan:
 | Module 1 — User & Access Management | **Implemented** | Shared users, multi-role/permission, profil, provider akun aktif, Gates/Policies, access/account services, seeder dan tests. Bukan API autentikasi lengkap. |
 | Module 2 — Customer & Pet Management | **Implemented** | Customer retrieval/update/list/create staf, pet create/read/update/archive, ownership, FormRequests/Resources/services, 11 REST routes dan tests. |
 | Module 3 — Service & Booking | **Implemented** | Tiga tabel baru, kategori/katalog, booking ownership, price snapshot, status lifecycle, per-pet overlap, staff scope, 15 route baru dan 37 tests. |
-| Module 4 — Inventory & Pharmacy | **Completed / Implemented** | Empat tabel, katalog/batch, immutable ledger, opening/adjustments, stok nonnegatif, expiry/FEFO monitoring, 15 endpoint dan 46 tests. Tanpa receiving/sales/dispensing. |
-| Module 5–8 | **Planned** | Hanya master plan; katalog permission/fungsi simulasi frontend bukan implementasi backend modul-modul ini. |
+| Module 4 — Inventory & Pharmacy | **Completed / Implemented** | Empat tabel, katalog/batch, immutable ledger, opening/adjustments, stok nonnegatif, expiry/FEFO monitoring, 15 endpoint dan 46 tests. Receiving ditambahkan Module 5; sales/dispensing belum tersedia. |
+| Module 5 — Purchasing & Suppliers | **Completed / Implemented** | Lima tabel, supplier/PO lifecycle, partial/multiple receiving atomik, idempotensi, shared ledger, 12 endpoint dan 34 tests. |
+| Module 6 — Transactions & Payments | **Completed / Implemented** | Enam tabel, selling_price additive, combined transactions/booking, atomic FEFO sale, partial payments/refunds/receipt, minimal lookup, 12 routes dan 38 tests. |
+| Module 7–8 | **Planned** | Hanya master plan; katalog permission/fungsi simulasi frontend bukan implementasi backend modul-modul ini. |
 | Integrasi frontend ke backend | **Pending** | Frontend masih terpisah; belum ada alur login API/integrasi data yang selesai. |
 | Production deployment dan AI chatbot | **Open Decisions / Planned** | Belum diimplementasikan atau diverifikasi sebagai production. |
 
-### Hasil pemeriksaan penyelesaian Module 4 (terkini)
+### Hasil pemeriksaan penyelesaian Module 6 (terkini)
+
+- **234 tests /1.854 assertions lulus**: 38 Module 6 +196 regresi Module1–5. Pint, Composer validation, syntax183 PHP files, route count65 dan diff checks lulus.
+- MySQL8.4.13: **34 tabel /10 migration applied /48 FK domain /9 roles /31 permissions /76 grants**. Migration000007 batch7; seeder khusus diulang dua kali. Enam metode tersimpan, lima tabel dokumen keuangan dan stock operational kosong.
+- Fingerprint28 tabel lama terjaga selain authorized selling_price nullable tanpa backfill, satu migration row, dua permissions/tiga grants. Tidak ada demo operational records.
+- Probe actual services MySQL dua worker lulus: competing stock sale, payment cap, refund cap, same UUID payment/refund replay, duplicate booking billing, stale snapshot cancellation/replaced item, FK rejection dan stock/payment rollback. Physical stock scratch19 tepat; **33 scratch tables dibuat/dibersihkan**, tidak ada scratch tersisa. Ini skenario terkontrol, bukan exhaustive load/race proof.
+- Review independen memperbaiki read snapshot/receipt consistency, cancellation current reads, sale writer current reads serta immutable item parent, dengan regression evidence. Lihat [hasil lengkap](transactions-payments.md) dan [probe](../tests/Support/TransactionsPaymentsMySqlProbe.php).
+
+### Hasil pemeriksaan penyelesaian Module 5 (snapshot historis)
+
+- **196 tests / 1.520 assertions lulus**, termasuk 34 purchasing tests dan seluruh 162 tes Module 1–4. Pint, Composer, syntax **151 file PHP** dan git diff --check lulus; rincian ada di dokumen Module 5.
+- **53 endpoint API; 28 tabel; 9 migration applied; 30 FK domain; 9 role / 29 permission / 73 grants**. Migration000006 applied batch6; PurchasingSeeder dijalankan dua kali.
+- Fingerprint record/kolom/index/FK seluruh **23 tabel lama identik**, dengan pengecualian additive yang diotorisasi: satu migration record, dua permission, empat grants. Lima tabel purchasing kosong; tidak ada demo inventory operasional.
+- Probe MySQL8.4.13 memakai actual services pada 27 tabel scratch terisolasi, seluruhnya dibersihkan. Nested rollback dan FK rejection lulus. Dua worker menerima qty7 masing-masing terhadap PO10: satu sukses/satu ditolak. Dua worker UUID sama: satu dokumen, satu replay. Keduanya menunggu held PO lock; aggregate stock20 tepat. Ini bukti dua skenario terkontrol, bukan stress test semua race.
+- Review independen menemukan kebocoran embedded supplier; pembatasan resource dan regression test diterapkan. Tidak ada blocker review tersisa. Lihat [probe](../tests/Support/PurchasingMySqlProbe.php) dan [Module 5](purchasing-suppliers.md).
+
+### Hasil pemeriksaan penyelesaian Module 4 (snapshot historis)
 
 - Full suite: **162 tes / 1.230 assertions lulus**, termasuk **46 tes Module 4** serta seluruh 116 tes sebelumnya. Pint, Composer validation, syntax **122 file PHP** dan git diff --check lulus.
 - API **41 endpoint** (15 baru); MySQL **23 tabel, 8 migration applied, 17 FK domain**. Role/permission/grant tetap **9/27/69**, tanpa permission atau grant tambahan.
@@ -345,7 +408,7 @@ Konvensi existing yang perlu dipertahankan:
 
 - Runtime: Laravel **13.42.0**, PHP CLI **8.4.21**, MySQL **8.4.13**.
 - Full suite dijalankan ulang: **116 passed, 755 assertions, 0 failures/errors**.
-- Breakdown source tests: AccessManagementTest **46**, CustomerPetManagementTest **31**, ServiceBookingManagementTest **37**, dua ExampleTest **2**. Jumlah **48/177** yang dilaporkan setelah Module 1 adalah total suite historis sebelum Module 2; 79/377 adalah total setelah Module 2; jangan menjumlahkan total historis dengan total penyelesaian Module 3 116/755 atau total terkini Module 4 162/1230.
+- Breakdown source tests: AccessManagementTest **46**, CustomerPetManagementTest **31**, ServiceBookingManagementTest **37**, dua ExampleTest **2**. Jumlah **48/177** yang dilaporkan setelah Module 1 adalah total suite historis sebelum Module 2; 79/377 adalah total setelah Module 2; jangan menjumlahkan total historis dengan total penyelesaian Module 3 116/755 atau total historis Module 4 162/1230; total historis Module 5 adalah 196/1520; terkini Module 6 adalah 234/1854.
 - Terdapat **26 route API**, **7 migration applied**, **19 tabel MySQL**, **9 role**, **27 permission**, **69 grant**. FK/index domain dan kesesuaian mapping baseline dibaca langsung dari MySQL.
 - Pada implementasi Module 3, satu migration additive dan seeder khusus telah dijalankan. Fingerprint record/kolom pada 16 tabel existing tetap sama, dengan pengecualian penambahan yang diotorisasi: satu catatan migration, satu permission manage_services dan satu grant Admin. Tiga kategori ditambahkan; tidak ada akun/service/booking uji yang dimasukkan ke MySQL. Seeder diulang untuk verifikasi idempotensi. Tests menggunakan database in-memory, bukan MySQL existing.
 
@@ -371,9 +434,9 @@ Urutan berikut adalah roadmap yang ditetapkan pengguna, **bukan izin mengerjakan
 | 2. Customer & Pet Management | Completed / Implemented | pets dan customer/pet API | Memakai akun, profil dan policy Module 1. |
 | 3. Service & Booking Management | Completed / Implemented | service_categories, services, bookings; katalog umum dan lifecycle | Memakai customer/pet dan akses Module 1–2. Satu service per booking; tanpa pembayaran, rooms/stays hotel. |
 | 4. Inventory & Pharmacy Management | Completed / Implemented | product_categories, products, product_batches, stock_movements; medicine_details ditunda | Memakai otorisasi/staf; fondasi barang/obat untuk purchasing, penjualan dan resep. Integrasi resep penuh menunggu Module 7. |
-| 5. Purchasing & Suppliers Management | Planned, next (menunggu instruksi) | suppliers, purchase_orders, purchase_order_items; receiving | Memakai Module 1 dan katalog/batch/stock-movement Module 4; penerimaan tidak boleh memperbarui stok tanpa ledger. |
-| 6. Transactions & Payments Management | Planned | transactions, transaction_items, payments; DP dan pelunasan | Memakai Module 1, booking/service Module 3 dan produk/ledger Module 4; Module 5 bila analisis biaya diperlukan. Menyediakan kontrak tagihan bagi klinis/hotel. |
-| 7. Medical Records & Prescriptions | Planned | examinations, prescriptions, prescription_items; tabel klinis tambahan bila dibutuhkan | Memakai Module 1–4 dan kontrak biaya/transaksi Module 6 bila terkait biaya layanan/obat. Menyelesaikan alur resep/farmasi lintas modul. |
+| 5. Purchasing & Suppliers Management | Completed / Implemented | suppliers, purchase_orders, purchase_order_items, goods_receivings, goods_receiving_items | Memakai Module 1 dan katalog/batch/stock-movement Module 4; penerimaan tidak boleh memperbarui stok tanpa ledger. |
+| 6. Transactions & Payments Management | Completed / Implemented | transactions/items/stock_allocations, payment_methods/payments/refunds; DP manual/receipt | Memakai Module 1, booking/service Module 3 dan produk/ledger Module 4; Module 5 bila analisis biaya diperlukan. Menyediakan kontrak tagihan bagi klinis/hotel. |
+| 7. Medical Records & Prescriptions | Planned, next (menunggu instruksi) | examinations, prescriptions, prescription_items; tabel klinis tambahan bila dibutuhkan | Memakai Module 1–4 dan kontrak biaya/transaksi Module 6 bila terkait biaya layanan/obat. Menyelesaikan alur resep/farmasi lintas modul. |
 | 8. Pet Hotel Operations | Planned | hotel_rooms, hotel_stays; tabel perawatan bila dibutuhkan | Memakai Module 1–3 dan transaksi Module 6; Module 7 jika ada kesehatan/perawatan medis. Tidak membuat booking atau rekam medis kedua. |
 | Laporan dan konsolidasi alur operasional | Planned | Pelaporan lintas modul serta alur grooming/resepsionis/kasir yang relevan | Bergantung data operasional nyata. Scope dan penempatan rinci belum ditetapkan sebagai modul tersendiri. |
 | Integrasi frontend, autentikasi dan deployment | Pending / Planned | Koneksi frontend/API, guard, kontrak response/error, deployment, E2E | Keputusan hosting/topologi harus mendahului pilihan CORS/CSRF/cookie/token. Pekerjaan ini hanya dimulai setelah otorisasi fase integrasi. |
@@ -383,37 +446,25 @@ Dependensi lintas tahap tidak boleh diselesaikan dengan menggandakan data: Modul
 
 ### 10.1 Module 5 — Purchasing & Suppliers Management
 
-**Planned — tujuan dan scope:** pengadaan produk umum/obat terstruktur, terintegrasi dengan inventory Module 4. Supplier memuat identitas perusahaan, kontak/komunikasi, alamat, informasi tambahan dan status aktif. Supplier yang direferensikan histori pembelian dipertahankan; gunakan deaktivasi sesuai kebutuhan.
+**Completed / Implemented:** supplier management/deactivation, PO/items/harga snapshot, partial/multiple/full receiving serta integrasi ledger atomik. Schema final: suppliers, purchase_orders, purchase_order_items, goods_receivings, goods_receiving_items. Lifecycle final `draft → ordered → partially_received → fully_received`, bukan usulan submitted/approved sebelumnya; cancelled hanya sebelum receipt.
 
-Alur sasaran: buat purchase order → pilih supplier, produk, kuantitas dan harga beli → pengajuan/approval bila disepakati → pengiriman → penerimaan aktual → pencatatan selisih pesanan/penerimaan. Nomor PO unik dihasilkan server. Riwayat pembelian per supplier, receiving, perubahan harga beli, PO terbuka dan sisa barang harus dapat ditelusuri.
+**Confirmed Decisions:** supplier nonaktif boleh menerima PO yang sudah ordered; expired medicine ditolak; actual receipt price terpisah dan default PO snapshot. Integer quantity, medicine batch/expiry wajib, general tanpa batch. UUID replay, grouped remaining check, PO/product locks dan satu transaksi untuk receipt/ledger/status menjaga idempotensi serta atomisitas.
 
-**Confirmed Decisions untuk implementasi mendatang:** goods receiving merujuk PO dan dokumen penerimaan, mencatat kuantitas serta harga beli aktual, dan mempertahankan batch number/expiry date medicine. Receiving wajib menghasilkan stock movement ledger Module 4 dengan referensi dokumen; tidak menulis stok langsung atau membuat ledger baru.
+**Dependensi:** Module 1 untuk akses; Module 4 untuk product/batch/shared writer. Dua permission purchasing baru hanya diberi awal pada Admin/Inventory, tanpa reset grant lama. Detail API, constraints, batas harga, tests dan MySQL evidence: [Module 5](purchasing-suppliers.md).
 
-**Proposed:** lifecycle `draft → submitted → approved → partially_received → received`, dengan `cancelled` sesuai transisi yang kelak disetujui. Daftar ini belum menetapkan transisi final, approval wajib, maupun izin partial receiving.
-
-**Dependensi:** Module 1 untuk akun/akses; Module 4 untuk product, medicine batch dan stock movements. Histori pembelian menjadi masukan analisis pengeluaran/biaya bila diperlukan.
-
-**Di luar scope:** penjualan produk, transaksi layanan, pembayaran customer/invoice penjualan, rekam medis, resep/dispensing, serta supplier payment/account payable kompleks kecuali disepakati nanti.
-
-**Open Decisions:** approval PO; permission pembuat/pengaju/penyetuju/penerima; pencatatan pembayaran supplier versus status pembelian saja; partial receiving; retur supplier; metode pencatatan harga beli dan perubahannya. Detail schema, dokumen receiving dan lifecycle ditentukan pada spesifikasi Module 5.
+**Pending / di luar scope:** supplier return/reversal, approval tambahan, payments/AP, invoice reconciliation, costing, pajak/diskon/ongkir/multi-currency. Memerlukan spesifikasi baru; tidak otomatis masuk Module 6.
 
 ### 10.2 Module 6 — Transactions & Payments Management
 
-**Planned — tujuan dan scope:** menghubungkan layanan, booking, customer dan produk dalam transaksi multi-item. Satu transaksi dapat mencampur beberapa layanan dan produk, misalnya grooming serta shampoo. Gunakan katalog existing; batas satu service per booking Module 3 tetap berlaku dan tidak membatasi transaksi menjadi satu item.
+**Completed / Implemented:** combined service/product transactions, booking billing, selling_price nullable, immutable snapshots, draft/confirmed/completed/cancelled lifecycle, manual partial/full/DP payments, money-only refunds, cashier lookup dan receipt data. Schema/lifecycle final ada di [Module 6](transactions-payments.md).
 
-Setiap transaction item menyimpan snapshot nama, kuantitas, harga satuan, subtotal dan referensi produk/service. Perubahan katalog tidak boleh mengubah histori transaksi. Kontrak harga harus merekonsiliasi snapshot booking Module 3 dan harga produk secara konsisten, bukan menghitung ulang histori dari harga terbaru.
+**Confirmed Decisions terbaru:** stok dipotong atomik saat confirmed, FEFO medicine split batch, completed wajib lunas dan linked booking completed. Satu booking satu transaksi aktif; cancellation hanya sebelum succeeded payment dan stock allocation. DP nominal manual tanpa minimum/timeout/booking automation sudah disetujui eksplisit untuk tahap ini. Booking lifecycle Module 3 tetap.
 
-**Confirmed Decisions:** DP mengamankan slot booking dan sisa tagihan dibayar setelah layanan. Implementasi pembayaran masih Planned: catat DP, sisa tagihan, pelunasan, riwayat/status payment serta referensi booking/transaksi. Detail pengamanan slot belum diimplementasikan pada lifecycle Module 3.
+**Confirmed Decisions keuangan:** IDR, tax/discount0, no cashier price override; service booking menggunakan snapshot. Net paid/remaining dihitung dari payment/refund, bukan kolom balance. Refund tidak credit grand total/return stock/cancel booking/reopen status; replacement payment dapat dicatat pada completed bila refund menimbulkan remaining. Hanya Admin mendapat grant awal manage_refunds; Admin/Kasir manage_transactions, grant lama dipertahankan.
 
-**Planned:** pencatatan cash/transfer bank, serta metode digital jika disetujui, dengan waktu, jumlah, status dan nomor referensi bila tersedia. Pembayaran manual dapat menjadi tahap awal; integrasi gateway bukan prasyarat wajib. Fondasi laporan membedakan pendapatan layanan, penjualan produk, pembayaran diterima, riwayat transaksi serta piutang/sisa pembayaran bila dibutuhkan.
+**Dependensi:** Module1–4; Module5 tetap sumber purchasing history saja, tidak menentukan selling price. Shared inventory writer diperluas sale dan allocation references. Kontrak invoice/receipt/partial payment menjadi fondasi Module7–8, tetapi belum mempunyai klinis/hotel billing otomatis.
 
-**Confirmed Decisions untuk integrasi stok:** penjualan menghasilkan stock movement Module 4 dengan referensi transaksi, tanpa stok negatif. Medicine memakai batch tersedia, valid dan belum kedaluwarsa. Transaksi bisnis dan pengurangan stok harus atomik; desain final wajib mencegah transaksi tersimpan tanpa movement atau movement tertinggal saat transaksi gagal, serta menetapkan kompensasi bila relevan.
-
-**Dependensi:** Module 1, Module 3 dan Module 4; Module 5 jika histori purchasing diperlukan untuk analisis biaya. Kontrak tagihan menjadi fondasi Module 7 dan Module 8.
-
-**Di luar scope:** akuntansi double-entry/general ledger, pajak/pelaporan perpajakan kompleks, gateway wajib, payroll dan AI financial forecasting.
-
-**Open Decisions:** format invoice/nomor transaksi; DP persentase atau nominal dan variasi kategori; expiry booking tanpa DP; waktu pembayaran; cicilan lebih dari dua kali; refund/pembatalan dan dampaknya ke DP; metode pembayaran aktual; partial payment/pelunasan; reversal transaksi; retur produk; pajak/diskon; desain teknis atomisitas stok/transaksi; apakah satu booking boleh terkait beberapa transaksi. Keharusan konsistensi atomik sudah ditetapkan, mekanismenya belum final.
+**Pending / Open Decisions untuk perluasan:** pengamanan slot berbasis minimum DP/deadline, gateway/reconciliation, credit note/retur/reversal, discount/tax/cash tender/change, harga hotel per durasi final serta hubungan biaya klinis. Tidak otomatis diimplementasikan tanpa spesifikasi baru. Tidak ada AP/accounting/payroll/reporting kompleks.
 
 ### 10.3 Module 7 — Medical Records & Prescriptions
 
@@ -459,25 +510,29 @@ Alur sasaran: booking hotel → verifikasi staf → check-in/alokasi kamar → c
 
 ### 10.5 Aturan arsitektur lintas Module 5–8
 
-**Confirmed Decisions untuk implementasi mendatang; belum berarti fitur tersedia:**
+**Confirmed Decisions lintas modul; receiving dan penjualan sudah tersedia, dispensing masih mendatang:**
 
-- Receiving Module 5, penjualan Module 6 dan dispensing Module 7 memakai stock movement ledger Module 4 dengan referensi dokumen sumber yang dapat ditelusuri. Jangan mengubah stok langsung atau menggandakan medicine/batch/ledger.
+- Receiving Module 5 dan penjualan Module 6 sudah memakai; dispensing Module 7 wajib memakai stock movement ledger Module 4 dengan referensi dokumen sumber yang dapat ditelusuri. Jangan mengubah stok langsung atau menggandakan medicine/batch/ledger.
 - Module 6 memakai katalog product/service existing. Module 7 memakai medicine/batch yang sama. Module 8 memakai booking Pet Hotel Module 3 dan transaksi Module 6.
 - Pisahkan rekam medis Module 7 dari catatan operasional hotel Module 8; referensikan data klinis ketika dibutuhkan.
 - Pertahankan referensi historis transaksi, stok, booking, medis dan stay meski entitas katalog/pet/akun dinonaktifkan atau diarsipkan. Snapshot dan koreksi berjejak harus dirancang sesuai domain, tanpa penghapusan histori.
 - Gunakan permission, Policy/Gate, FormRequest, Resource, domain service serta testing/regresi existing; permission baru harus additive dan tidak mereset grant manual. Pertahankan kontrak transaksi/locking booking ketika modul lain menulis booking.
-- Nama tabel pada roadmap adalah **Proposed**, bukan schema final. Tentukan schema, lifecycle, atomisitas dan authorization rinci pada prompt spesifik tiap modul setelah memeriksa hasil final Module 4.
-- **Module 4 sudah Completed / Implemented.** Module 5–8 tetap hanya konteks roadmap; master plan ini tidak mengotorisasi implementasi, migration, seeding atau perubahan source code.
+- Nama tabel Module 7–8 pada roadmap adalah **Proposed**, bukan schema final. Tentukan schema, lifecycle, atomisitas dan authorization rinci pada prompt spesifik tiap modul setelah memeriksa hasil final Module 1–6.
+- **Module 1–6 sudah Completed / Implemented.** Module 7–8 tetap hanya konteks roadmap; master plan ini tidak mengotorisasi implementasi, migration, seeding atau perubahan source code.
 
 ## 11. Core Business Workflows
 
-### Implemented: akun, customer, pet dan inventory
+### Implemented: akun, customer, pet, inventory, purchasing dan transaksi
 
 Staf dengan `manage_customers` → validasi identitas/akses awal customer → `UserAccountService` membuat akun, profil dan role customer dalam satu transaksi → customer memiliki profil login sendiri. Endpoint publik registrasi belum tersedia.
 
 Customer yang sudah terautentikasi → policy profil sendiri → ubah name/email/phone/address sesuai field rule → create/list/show/update/archive pet milik sendiri. Pengelola pet yang berizin dapat bekerja lintas customer; role lain tidak memperoleh akses tersebut secara otomatis.
 
 Staf dengan manage_products membuat katalog → manage_inventory membuat batch medicine bila diperlukan → opening/adjustment melalui InventoryService → ledger immutable → monitoring physical/usable/expired dan FEFO candidates. Dokter/Apoteker membaca stok medicine melalui permission existing; belum menjalankan dispensing.
+
+Staf dengan manage_suppliers mengelola supplier → manage_purchase_orders membuat draft/item snapshot → ordered → receive_purchase_orders mengonfirmasi satu atau beberapa receiving dengan UUID → batch medicine/ledger purchase_receipt/status PO disimpan atomik → histori received/remaining tersedia. Supplier inactive tidak memutus PO ordered. Tidak ada pembayaran supplier.
+
+Kasir lookup customer/booking/katalog minimal → draft gabungan dengan harga server → confirmed membekukan invoice dan memotong stock FEFO atomik → payment succeeded penuh/parsial/DP manual → remaining dihitung → completed setelah lunas dan linked booking completed → receipt/history. Refund uang append-only tidak memodifikasi stock/booking/status operasional; net paid dan remaining disajikan eksplisit.
 
 ### Confirmed Decisions / Planned: alur bisnis akhir
 
@@ -531,16 +586,16 @@ git diff --check
 
 Untuk implementasi yang diotorisasi, `php artisan test --compact` juga merupakan perintah suite existing. Jangan menjalankan setup/install/build/config-cache secara membabi buta: beberapa Composer scripts dapat memasang dependency, membuat konfigurasi atau menjalankan migration. Baca command sebelum menjalankannya, terutama saat scope hanya dokumentasi.
 
-**Hasil aktual terkini setelah Module 4:** 162 tes / 1.230 assertions lulus (46 tes inventory + 116 sebelumnya). Hasil 116/755 pada pembaruan master plan adalah snapshot historis, bukan total terkini. Coverage mencakup inventory catalog/batch/ledger/expiry/integer/negative-stock/monitoring, serta multi-role/permission, perubahan grant, seeder berulang tanpa mengembalikan pencabutan, constraint duplikat/orphan, akun nonaktif/login/session/remember lookup, customer/pet ownership, HTTP validation/resources, arsip dan larangan eskalasi akses.
+**Hasil aktual terkini setelah Module 6:** **234 tests /1.854 assertions**, terdiri dari38 transactions/payments +196 sebelumnya. Coverage mencakup financial/stock/booking/rbac/own-only/immutable/monetary/rollback serta snapshot regressions. Total196/1520 Module5, 162/1230 Module4 dan116/755 Module3 adalah snapshot historis, jangan dijumlahkan ulang.
 
-**Batas bukti:** HTTP feature tests memakai kernel Laravel dan `actingAs`; ini bukan pengujian login frontend/Vercel atau browser E2E. Constraint-write tests berjalan pada SQLite in-memory. MySQL schema/index/FK dibaca langsung, tetapi suite ini bukan suite konkurensi/integrasi-write MySQL. Style, syntax (122 file PHP) dan Composer lulus pada penyelesaian Module 4; jangan menyebutnya baru dijalankan jika sesi selanjutnya hanya menjalankan tes tertentu. Browser acceptance, CI/CD, production load/concurrency dan integrasi pembayaran belum dapat diklaim selesai.
+**Batas bukti:** feature tests memakai kernel Laravel/actingAs dan SQLite in-memory, bukan browser/login frontend. [Probe Module6](../tests/Support/TransactionsPaymentsMySqlProbe.php) memakai MySQL8.4 actual services/two workers, membuktikan cap stock/payment/refund, UUID replay, duplicate booking, stale snapshot dan rollback/FK pada data scratch. Seluruh33 scratch dibersihkan; jangan run pada production atau paralel prefix sama. Bukti ini bukan load/deadlock fuzz seluruh lintas-modul, CI/deployment atau E2E production.
 
 ## 14. Development Rules & Restrictions
 
 Aturan ini berlaku untuk tugas berikutnya, dengan instruksi terbaru pengguna sebagai pembatas scope:
 
 - Kerjakan hanya modul/fase yang ditugaskan. Selesai satu modul → verifikasi → dokumentasikan → laporkan → berhenti menunggu prompt berikutnya.
-- Jangan otomatis mengerjakan Module 5 atau tahap berikutnya hanya karena tercantum sebagai next. Master context sendiri bukan perintah implementasi.
+- Jangan otomatis mengerjakan Module 7 atau tahap berikutnya hanya karena tercantum sebagai next. Master context sendiri bukan perintah implementasi.
 - Pertahankan seluruh perubahan existing, termasuk file baru yang masih untracked. Jangan mengasumsikan file uncommitted boleh dibuat ulang/dihapus.
 - Jangan commit, push, merge, reset atau membuang perubahan kecuali diperintahkan eksplisit.
 - Jangan mengubah frontend selama implementasi backend. Migrasi framework frontend dan integrasi dilakukan hanya pada fase yang diotorisasi.
@@ -554,13 +609,13 @@ Aturan ini berlaku untuk tugas berikutnya, dengan instruksi terbaru pengguna seb
 - Jika verifikasi gagal atau koneksi tidak tersedia, laporkan batas bukti. Jangan menyatakan migration/test berhasil berdasarkan perkiraan.
 - Dokumentasi harus membedakan actual implementation, kebutuhan bisnis yang confirmed, roadmap dan keputusan terbuka. Jangan menyalin state demo frontend menjadi jaminan backend.
 
-Batas satu-file saat pembuatan awal master context bersifat historis. Setiap tugas baru mengikuti scope pengguna saat itu; pembaruan Module 3–4 mencakup implementasi, migration additive dan dokumentasi yang diotorisasi. Keberadaan dokumen ini sendiri tidak memberi izin perubahan tambahan.
+Batas satu-file saat pembuatan awal master context bersifat historis. Setiap tugas baru mengikuti scope pengguna saat itu; pembaruan Module 3–6 mencakup implementasi, migration additive dan dokumentasi yang diotorisasi. Keberadaan dokumen ini sendiri tidak memberi izin perubahan tambahan.
 
 ## 15. Open Decisions & Known Limitations
 
 ### Open Decisions
 
-Keputusan khusus Module 5–8 dicatat di bagian 10.1–10.4 (PO/receiving, billing/DP, klinis/dispensing dan room/stay); semuanya harus ditinjau pada spesifikasi modul terkait. Daftar berikut tetap menjadi keputusan lintas proyek.
+Aturan purchasing Module5 dan transaksi/payment Module6 sudah ditetapkan di bagian10.1–10.2. Perluasan billing/DP dan keputusan Module7–8 dicatat di bagian10.2–10.4; tinjau pada spesifikasi modul terkait. Daftar berikut tetap menjadi keputusan lintas proyek.
 
 - Backend hosting, domain/topologi frontend–backend, HTTPS/reverse proxy dan proses deployment.
 - Guard autentikasi API, session/cookie versus token, kebutuhan CORS/CSRF, expiry/revocation, login/logout dan integrasi frontend.
@@ -573,15 +628,16 @@ Keputusan khusus Module 5–8 dicatat di bagian 10.1–10.4 (PO/receiving, billi
 
 ### Known Limitations — Implemented boundaries
 
-- Backend terverifikasi mencakup Module 1–4. Module 5–8 masih Planned; pet hotel sudah menggunakan booking umum tanpa rooms/stays.
+- Backend terverifikasi mencakup Module 1–6. Module 7–8 masih Planned; pet hotel sudah menggunakan booking umum tanpa rooms/stays.
+- Module6 belum memiliki credit notes/stock returns/reversal, automatic DP slot gating, gateway, tax/discount, cash change, multicurrency atau accounting. Selling_price existing tetap null hingga operator mengisinya. Refund mengembalikan remaining tanpa mengubah completed; lihat kontrak keuangan.
 - Route API sudah terlindungi, tetapi klien eksternal belum memiliki alur login API. `actingAs` pada tes bukan mekanisme integrasi pengguna production.
 - Frontend localStorage tidak sinkron dengan MySQL; tidak ada migrasi data demo frontend ke akun backend.
 - Tidak ada endpoint restore/transfer pemilik pet atau penghapusan customer. Microchip unik tetap berlaku setelah pet diarsipkan.
 - Seed permission tidak otomatis memperluas akses role existing ketika katalog ditambah. Ini disengaja untuk menjaga perubahan Admin.
 - Booking sudah memiliki transisi dasar dan scope kategori; assignment staf rinci serta kontrol transisi modul klinis/farmasi/hotel belum diimplementasikan.
 - README root masih mengandung klaim dan ERD lama. Verifikasi source serta live schema; tandai perbedaan dan jangan diam-diam menganggap satu dokumen selalu benar.
-- Verifikasi schema/query MySQL dan SQLite tests tidak membuktikan kesiapan production, browser integration atau konkurensi MySQL. Inventory masih kosong di database operasional; pengujian write berdata dilakukan pada SQLite terisolasi.
-- Module 4 belum menyediakan disposal expired/inactive stock, unit conversion, audited batch correction, reserved stock atau medicine_details. Tipe purchase_receipt/sale/medicine_dispensing masih ditolak API awal; perlu perluasan writer bersama pada modul terkait.
+- Verifikasi SQLite serta MySQL dua-worker untuk receiving, stock sale, payment/refund/booking/replay bukan bukti kesiapan production atau semua kombinasi konkurensi lintas modul. Inventory operasional tetap kosong; data pengujian write berada pada SQLite in-memory dan scratch MySQL yang sudah dibersihkan.
+- Module 4 belum menyediakan disposal expired/inactive stock, unit conversion, audited batch correction, reserved stock atau medicine_details. Public stock-movements API tetap menolak purchase_receipt/sale/medicine_dispensing sebagai input. Trusted purchase receipt dan sale writers sudah tersedia Module5–6; dispensing menunggu Module7.
 
 ## 16. Instructions for Future Codex Sessions
 

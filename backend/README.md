@@ -8,6 +8,10 @@ Modul 3 Service & Booking Management tersedia. Lihat [dokumentasi layanan dan bo
 
 Modul 4 Inventory & Pharmacy Management tersedia. Lihat [dokumentasi inventory dan ledger](docs/inventory-pharmacy-management.md) untuk katalog, batch, stok, permission, API dan hasil verifikasi.
 
+Modul 5 Purchasing & Suppliers tersedia. Lihat [dokumentasi purchasing dan receiving](docs/purchasing-suppliers.md) untuk supplier, PO lifecycle, penerimaan atomik, permission dan hasil verifikasi MySQL.
+
+Modul 6 Transactions & Payments tersedia. Lihat [dokumentasi transaksi dan pembayaran](docs/transactions-payments.md) untuk combined billing, FEFO sale, DP manual, refund uang, receipts dan bukti QA MySQL.
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
 
 <p align="center">

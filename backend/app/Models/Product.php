@@ -7,14 +7,14 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
-#[Fillable(['product_category_id', 'sku', 'name', 'type', 'description', 'unit', 'minimum_stock', 'is_active'])]
+#[Fillable(['product_category_id', 'sku', 'name', 'type', 'description', 'unit', 'minimum_stock', 'is_active', 'selling_price'])]
 class Product extends Model
 {
     protected $attributes = ['is_active' => true, 'minimum_stock' => 0];
 
     protected function casts(): array
     {
-        return ['is_active' => 'boolean', 'minimum_stock' => 'integer'];
+        return ['is_active' => 'boolean', 'minimum_stock' => 'integer', 'selling_price' => 'decimal:2'];
     }
 
     public function category(): BelongsTo

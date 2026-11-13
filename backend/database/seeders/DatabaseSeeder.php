@@ -10,5 +10,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AccessControlSeeder::class);
         $this->call(ServiceBookingSeeder::class);
+        $this->call(PurchasingSeeder::class);
+        $this->call(TransactionsPaymentsSeeder::class);
     }
 }

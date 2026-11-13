@@ -1,13 +1,19 @@
 <?php
 
+use App\Http\Controllers\Api\BillingLookupController;
 use App\Http\Controllers\Api\BookingController;
 use App\Http\Controllers\Api\CustomerController;
+use App\Http\Controllers\Api\GoodsReceivingController;
 use App\Http\Controllers\Api\InventoryCatalogController;
 use App\Http\Controllers\Api\InventoryController;
+use App\Http\Controllers\Api\PaymentController;
 use App\Http\Controllers\Api\PetController;
+use App\Http\Controllers\Api\PurchaseOrderController;
 use App\Http\Controllers\Api\ServiceCategoryController;
 use App\Http\Controllers\Api\ServiceController;
 use App\Http\Controllers\Api\StockMovementController;
+use App\Http\Controllers\Api\SupplierController;
+use App\Http\Controllers\Api\TransactionController;
 use App\Models\Customer;
 use Illuminate\Support\Facades\Route;
 
@@ -72,4 +78,34 @@ Route::prefix('v1')->middleware(['auth', 'active'])->controller(InventoryControl
     Route::get('inventory/low-stock', 'lowStock');
     Route::get('inventory/expired-batches', 'expiredBatches');
     Route::get('stock-movements', 'movements')->name('inventory.movements');
+});
+
+Route::prefix('v1')->middleware(['auth', 'active'])->group(function () {
+    Route::get('suppliers', [SupplierController::class, 'index'])->name('purchasing.suppliers');
+    Route::post('suppliers', [SupplierController::class, 'store']);
+    Route::get('suppliers/{supplier}', [SupplierController::class, 'show'])->whereNumber('supplier');
+    Route::patch('suppliers/{supplier}', [SupplierController::class, 'update'])->whereNumber('supplier');
+    Route::get('purchase-orders', [PurchaseOrderController::class, 'index']);
+    Route::post('purchase-orders', [PurchaseOrderController::class, 'store']);
+    Route::get('purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'show'])->whereNumber('purchaseOrder');
+    Route::patch('purchase-orders/{purchaseOrder}', [PurchaseOrderController::class, 'update'])->whereNumber('purchaseOrder');
+    Route::patch('purchase-orders/{purchaseOrder}/status', [PurchaseOrderController::class, 'status'])->whereNumber('purchaseOrder');
+    Route::get('purchase-orders/{purchaseOrder}/receivings', [GoodsReceivingController::class, 'index'])->whereNumber('purchaseOrder');
+    Route::post('purchase-orders/{purchaseOrder}/receivings', [GoodsReceivingController::class, 'store'])->whereNumber('purchaseOrder');
+    Route::get('goods-receivings/{receiving}', [GoodsReceivingController::class, 'show'])->whereNumber('receiving');
+});
+
+Route::prefix('v1')->middleware(['auth', 'active'])->group(function () {
+    Route::get('billing/{kind}', [BillingLookupController::class, 'index'])->whereIn('kind', ['customers', 'bookings', 'products', 'services', 'payment-methods']);
+    Route::get('transactions', [TransactionController::class, 'index']);
+    Route::post('transactions', [TransactionController::class, 'store']);
+    Route::get('transactions/{transaction}', [TransactionController::class, 'show'])->whereNumber('transaction');
+    Route::patch('transactions/{transaction}', [TransactionController::class, 'update'])->whereNumber('transaction');
+    Route::patch('transactions/{transaction}/status', [TransactionController::class, 'status'])->whereNumber('transaction');
+    Route::get('transactions/{transaction}/receipt', [TransactionController::class, 'show'])->whereNumber('transaction');
+    Route::get('transactions/{transaction}/payments', [PaymentController::class, 'index'])->whereNumber('transaction');
+    Route::post('transactions/{transaction}/payments', [PaymentController::class, 'store'])->whereNumber('transaction');
+    Route::get('payments/{payment}', [PaymentController::class, 'show'])->whereNumber('payment');
+    Route::get('payments/{payment}/receipt', [PaymentController::class, 'show'])->whereNumber('payment');
+    Route::post('payments/{payment}/refunds', [PaymentController::class, 'refund'])->whereNumber('payment');
 });

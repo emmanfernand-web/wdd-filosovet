@@ -18,7 +18,7 @@ class InventoryMonitorRequest extends PaginationRequest
     {
         return parent::rules() + ['product_id' => ['sometimes', 'integer', 'exists:products,id'], 'product_batch_id' => ['sometimes', 'integer', 'exists:product_batches,id'],
             'product_category_id' => ['sometimes', 'integer', 'exists:product_categories,id'], 'type' => ['sometimes', Rule::in(['general', 'medicine'])], 'is_active' => ['sometimes', 'boolean'],
-            'movement_type' => ['sometimes', Rule::in(['opening_stock', 'adjustment_in', 'adjustment_out'])],
+            'movement_type' => ['sometimes', Rule::in(['opening_stock', 'adjustment_in', 'adjustment_out', 'purchase_receipt', 'sale'])],
             'from' => ['sometimes', 'date_format:Y-m-d'], 'to' => ['sometimes', 'date_format:Y-m-d', 'after_or_equal:from']];
     }
 }

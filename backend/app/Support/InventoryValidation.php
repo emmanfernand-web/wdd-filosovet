@@ -37,6 +37,7 @@ class InventoryValidation
             'sku' => [...$required, 'string', 'max:100', Rule::unique('products')->ignore($product?->id)],
             'name' => [...$required, 'string', 'max:255'], 'type' => [...$required, Rule::in(['general', 'medicine'])],
             'description' => ['nullable', 'string', 'max:10000'], 'unit' => [...$required, 'string', 'max:50'],
+            'selling_price' => ['sometimes', 'nullable', 'regex:/^(0|[1-9][0-9]{0,8})(?:\.[0-9]{1,2})?$/D'],
             'minimum_stock' => ['sometimes', ...self::integerQuantity(0)], 'is_active' => ['sometimes', 'boolean']]
             + array_fill_keys(['stock', 'quantity', 'balance', 'price', 'id', 'created_at', 'updated_at'], ['missing']);
     }
